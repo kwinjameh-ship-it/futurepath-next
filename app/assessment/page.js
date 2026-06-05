@@ -232,6 +232,8 @@ export default function AssessmentPage() {
             } else {
               aiResult = fallback;
             }
+          }
+        }
       } catch { aiResult = fallback; }
     }
 
