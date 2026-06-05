@@ -1,0 +1,315 @@
+/* ── Tailwind ── */
+@import "tailwindcss";
+
+/* ── Design Tokens ──────────────────────────────────────── */
+:root {
+  --glass-bg:           rgba(255, 255, 255, 0.06);
+  --glass-bg-hover:     rgba(255, 255, 255, 0.10);
+  --glass-border:       rgba(255, 255, 255, 0.11);
+  --glass-border-hover: rgba(255, 255, 255, 0.24);
+  --accent-color:       #00f2fe;
+  --accent-dim:         rgba(0, 242, 254, 0.18);
+  --accent-glow:        rgba(0, 242, 254, 0.32);
+  --secondary-color:    #ff0080;
+  --secondary-dim:      rgba(255, 0, 128, 0.18);
+  --secondary-glow:     rgba(255, 0, 128, 0.32);
+  --text-main:          #f0f4ff;
+  --text-sub:           rgba(220, 230, 255, 0.65);
+  --text-muted:         rgba(200, 210, 240, 0.38);
+  --body-bg:            #0c0a22;
+  --nav-h:              64px;
+  --ease-smooth:        cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out:           cubic-bezier(0.0, 0, 0.2, 1);
+  --r-sm:  10px;
+  --r-md:  18px;
+  --r-lg:  26px;
+  --r-xl:  36px;
+  --r-pill: 999px;
+}
+
+/* ── Reset ──────────────────────────────────────────────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'Kanit', sans-serif !important;
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  background: linear-gradient(135deg, #0c0a22 0%, #12102e 45%, #0e1438 100%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*, *::before, *::after {
+  font-family: inherit;
+}
+
+/* ── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+  color: var(--text-main);
+}
+
+p { color: var(--text-sub); font-weight: 400; line-height: 1.7; }
+
+a { font-family: 'Kanit', sans-serif; }
+
+input, textarea, button, select, label {
+  font-family: 'Kanit', sans-serif;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--accent-color), var(--secondary-color));
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--secondary-color); }
+
+/* ── Ambient Blobs ──────────────────────────────────────── */
+.blob {
+  position: fixed;
+  width: 750px;
+  height: 750px;
+  filter: blur(130px);
+  border-radius: 50%;
+  z-index: 0;
+  opacity: 0.10;
+  animation: blobMove 32s infinite alternate ease-in-out;
+  pointer-events: none;
+}
+.blob-1 { top: -220px; left: -220px; background: var(--accent-color); }
+.blob-2 { bottom: -220px; right: -220px; background: var(--secondary-color); animation-delay: -11s; }
+
+@keyframes blobMove {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(100px, 70px) scale(1.18); }
+}
+
+/* ── Glass Menu Overlay ─────────────────────────────────── */
+.glass-menu {
+  position: fixed; inset: 0;
+  /* ── Dark opaque background so page content is hidden under blur ── */
+  background: rgba(5, 3, 16, 0.82);
+  backdrop-filter: blur(60px) saturate(200%) brightness(0.55);
+  -webkit-backdrop-filter: blur(60px) saturate(200%) brightness(0.55);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 940;
+  clip-path: circle(0% at calc(100% - 22px) 32px);
+  transition: clip-path 0.85s var(--ease-smooth), visibility 0.85s var(--ease-smooth);
+  visibility: hidden;
+  pointer-events: none;
+}
+.glass-menu.active {
+  clip-path: circle(150% at calc(100% - 22px) 32px);
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nav-item {
+  margin: 16px 0;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: all 0.7s var(--ease-smooth);
+}
+.glass-menu.active .nav-item { opacity: 1; transform: translateY(0); }
+
+.nav-link {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-family: 'Kanit', sans-serif;
+  /* ── Bright enough to read against dark overlay ── */
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  transition: all 0.45s var(--ease-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+.nav-link:hover {
+  color: #ffffff;
+  letter-spacing: 9px;
+  text-shadow: 0 0 28px var(--accent-color), 0 0 60px var(--accent-color);
+}
+
+/* ── Utility: Input field ────────────────────────────────── */
+.fp-input {
+  width: 100%;
+  padding: 14px 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  color: var(--text-main);
+  font-family: 'Kanit', sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  outline: none;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.fp-input::placeholder { color: var(--text-muted); }
+.fp-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* ── Utility: Buttons ────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: var(--r-pill);
+  font-family: 'Kanit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: #0c0a22;
+  background: linear-gradient(135deg, var(--accent-color), #00a8ff);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease, opacity 0.25s ease;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px var(--accent-glow); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: var(--r-pill);
+  font-family: 'Kanit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  color: var(--accent-color);
+  background: transparent;
+  border: 1.5px solid var(--accent-color);
+  cursor: pointer;
+  transition: all 0.25s var(--ease-out);
+}
+.btn-outline:hover {
+  background: var(--accent-color);
+  color: #0c0a22;
+  box-shadow: 0 4px 20px var(--accent-glow);
+  transform: translateY(-2px);
+}
+
+/* ── Utility: Section label ──────────────────────────────── */
+.section-eyebrow {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+  opacity: 0.85;
+}
+
+/* ── Animations ──────────────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.tab-active { animation: slideIn 0.4s var(--ease-smooth); }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity: 0; transform: scale(0.94) translateY(22px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.fade-in-scale { animation: fadeInScale 0.9s var(--ease-smooth) both; }
+
+/* ── Range Slider ────────────────────────────────────────── */
+input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
+
+/* ── Typing dots ─────────────────────────────────────────── */
+@keyframes blink {
+  0%   { opacity: 0.2; transform: scale(0.8); }
+  20%  { opacity: 1;   transform: scale(1.2); }
+  100% { opacity: 0.2; transform: scale(0.8); }
+}
+.dot {
+  width: 7px; height: 7px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: blink 1.4s infinite both;
+  display: inline-block;
+}
+.dot:nth-child(1) { animation-delay: 0.15s; }
+.dot:nth-child(2) { animation-delay: 0.3s;  }
+.dot:nth-child(3) { animation-delay: 0.45s; }
+
+/* ── Mic Pulse ───────────────────────────────────────────── */
+@keyframes micPulse {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 8, 68, 0.65); }
+  70%  { transform: scale(1.1);  box-shadow: 0 0 0 22px rgba(255, 8, 68, 0); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(255, 8, 68, 0); }
+}
+.mic-recording { animation: micPulse 1.5s infinite; }
+
+/* ── Print ───────────────────────────────────────────────── */
+@media print {
+  @page { size: A4 portrait; margin: 15mm; }
+  
+  :root {
+    --body-bg: #ffffff;
+    --text-main: #000000 !important;
+    --text-sub: #222222 !important;
+    --text-muted: #555555 !important;
+    --glass-bg: #fdfdfd !important;
+    --glass-border: #cccccc !important;
+    --accent-color: #0056b3 !important;
+    --accent-dim: #f0f8ff !important;
+    --secondary-color: #a8005b !important;
+  }
+
+  body { 
+    background: #fff !important; 
+    color: #000 !important; 
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .no-print, .blob, header, nav, video, button, a.btn-outline { 
+    display: none !important; 
+  }
+
+  main { 
+    max-width: 100% !important; 
+    padding: 0 !important; 
+    margin: 0 !important;
+  }
+
+  * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* Specific Assessment Layout Overrides for Print */
+  .grid { display: block !important; }
+  .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; }
+}

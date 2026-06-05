@@ -1,0 +1,113 @@
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import Link from 'next/link';
+
+const GOOGLE_SCRIPT_URL = process.env.NEXT_PUBLIC_GOOGLE_SCRIPT_URL;
+
+export default function AdminLayout({ children }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const email = localStorage.getItem('futurepath_user_email');
+    if (!email) {
+      alert('คุณต้องเข้าสู่ระบบก่อน');
+      router.push('/login');
+      return;
+    }
+
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'cors',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'admin_check', email })
+    })
+      .then(r => r.json())
+      .then(data => {
+        if (data.status === 'success' && data.isAdmin) {
+          setIsAdmin(true);
+        } else {
+          alert('คุณไม่มีสิทธิ์เข้าถึงหน้า Admin\\nอีเมลที่เช็ค: ' + email + '\\nสิ่งที่ระบบตอบกลับ: ' + JSON.stringify(data));
+          router.push('/home');
+        }
+      })
+      .catch((error) => {
+        alert('เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
+        router.push('/home');
+      })
+      .finally(() => setLoading(false));
+  }, [router]);
+
+  if (loading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <i className="fas fa-spinner fa-spin mr-3" style={{ color: 'var(--accent-color)', fontSize: '2rem' }} /> กำลังตรวจสอบสิทธิ์...
+      </div>
+    );
+  }
+
+  if (!isAdmin) return null;
+
+  const navs = [
+    { name: 'แดชบอร์ด', path: '/admin', icon: 'fa-chart-pie' },
+    { name: 'ผลการประเมิน', path: '/admin/results', icon: 'fa-table-list' },
+    { name: 'จัดการแอดมิน', path: '/admin/settings', icon: 'fa-users-gear' },
+    { name: 'กลับสู่หน้าหลัก', path: '/home', icon: 'fa-house' }
+  ];
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#334155', fontFamily: "'Kanit', sans-serif" }}>
+      {/* Sidebar */}
+      <aside style={{
+        width: '260px',
+        background: '#ffffff',
+        borderRight: '1px solid #e2e8f0',
+        padding: '24px 0',
+        boxShadow: '4px 0 24px rgba(0,0,0,0.02)'
+      }}>
+        <div style={{ padding: '0 24px', marginBottom: '40px', textAlign: 'center' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0284c7', letterSpacing: '0.05em' }}>
+            <i className="fa-solid fa-shield-halved mr-2" />
+            ADMIN PANEL
+          </h2>
+        </div>
+        
+        <ul style={{ listStyle: 'none', padding: '0 12px' }}>
+          {navs.map(nav => {
+            const isActive = pathname === nav.path;
+            return (
+              <li key={nav.path} style={{ marginBottom: '8px' }}>
+                <Link
+                  href={nav.path}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '14px 20px',
+                    borderRadius: '8px',
+                    background: isActive ? '#e0f2fe' : 'transparent',
+                    color: isActive ? '#0369a1' : '#64748b',
+                    textDecoration: 'none',
+                    fontWeight: isActive ? 700 : 500,
+                    transition: 'all 0.2s ease'
+                  }}
+                >
+                  <i className={`fa-solid ${nav.icon}`} style={{ width: '20px', textAlign: 'center' }} />
+                  {nav.name}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </aside>
+
+      {/* Main Content */}
+      <main style={{ flex: 1, padding: '32px 48px', overflowY: 'auto', height: '100vh' }}>
+        {children}
+      </main>
+    </div>
+  );
+}
