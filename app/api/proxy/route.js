@@ -39,7 +39,7 @@ export async function POST(request) {
   } else if (action === 'chat') {
     // แปลง Gemini format → OpenAI format
     messages = (input.history || []).map(msg => ({
-      role: msg.role === 'model' ? 'assistant' : 'user',
+      role: msg.role === 'model' ? 'assistant' : (msg.role === 'system' ? 'system' : 'user'),
       content: msg.parts?.[0]?.text || '',
     }));
 
