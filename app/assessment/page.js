@@ -206,9 +206,32 @@ export default function AssessmentPage() {
           if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
             let txt = data.candidates[0].content.parts[0].text
               .replace(/```json/g, '').replace(/```/g, '').trim();
-            aiResult = JSON.parse(txt);
-          }
-        }
+            let parsed = JSON.parse(txt);
+            let extracted = parsed.Profile || parsed.profile || parsed;
+            
+            if (extracted && (extracted.Title || extracted.title)) {
+              const formatArr = (arr) => {
+                if (!Array.isArray(arr)) return null;
+                return arr.map(e => ({
+                  t: e.t || e.type || e.name || e.Title || e.title || '',
+                  d: e.d || e.description || e.desc || e.Desc || e.Description || ''
+                })).filter(e => e.t && e.d);
+              };
+
+              aiResult = {
+                Title: extracted.Title || extracted.title || fallback.Title,
+                Desc: extracted.Desc || extracted.Description || extracted.desc || extracted.description || fallback.Desc,
+                Edu: formatArr(extracted.Edu || extracted.Education || extracted.edu || extracted.education) || fallback.Edu,
+                Jobs: formatArr(extracted.Jobs || extracted.jobs) || fallback.Jobs,
+                Dev: formatArr(extracted.Dev || extracted.Development || extracted.dev || extracted.development) || fallback.Dev
+              };
+              
+              if (aiResult.Edu.length === 0) aiResult.Edu = fallback.Edu;
+              if (aiResult.Jobs.length === 0) aiResult.Jobs = fallback.Jobs;
+              if (aiResult.Dev.length === 0) aiResult.Dev = fallback.Dev;
+            } else {
+              aiResult = fallback;
+            }
       } catch { aiResult = fallback; }
     }
 
