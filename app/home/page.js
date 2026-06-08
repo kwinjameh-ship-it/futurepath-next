@@ -12,7 +12,12 @@ const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby8Is6dQueTovR
 export default function HomePage() {
   const { user, loading } = useAuth();
   const [stats, setStats] = useState({ users: '...', assess: '...', satisfaction: '...' });
-  const [activeToggles, setActiveToggles] = useState({ f1: true, f2: true, f3: false });
+  const [activeToggles, setActiveToggles] = useState({
+    f1: true,
+    f2: false,
+    f3: false,
+    f4: false
+  });
   const usageRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -182,73 +187,76 @@ export default function HomePage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ฟีเจอร์เด่นของเรา</h3>
               
+              {/* 1. วิเคราะห์ศักยภาพ */}
               <div style={{...(activeToggles.f1 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-chart-pie" style={{ fontSize: '1.5rem', opacity: activeToggles.f1 ? 1 : 0.6 }} />
+                  <i className="fa-solid fa-brain" style={{ fontSize: '1.5rem', opacity: activeToggles.f1 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f1} onChange={() => setActiveToggles(p => ({...p, f1: !p.f1}))} />
                 </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Data-Driven Insights</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วิเคราะห์จุดแข็งอย่างแม่นยำด้วยฐานข้อมูล</p>
-                
+                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Potential Assessment</h4>
+                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วิเคราะห์ศักยภาพ</p>
+
                 <div style={{
-                  maxHeight: activeToggles.f1 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  maxHeight: activeToggles.f1 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
                   opacity: activeToggles.f1 ? 1 : 0, marginTop: activeToggles.f1 ? '16px' : '0', paddingTop: activeToggles.f1 ? '16px' : '0',
                   borderTop: activeToggles.f1 ? '1px solid rgba(255,255,255,0.2)' : 'none'
                 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
                       <i className="fa-solid fa-chart-pie" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>เปรียบเทียบทักษะของคุณกับฐานข้อมูลอาชีพกว่า 10,000 รูปแบบ</span>
+                      <span>ประเมินทักษะและความถนัดของคุณอย่างแม่นยำ</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-chart-line" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>วิเคราะห์แนวโน้มตลาดแรงงานแบบเรียลไทม์</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                       <i className="fa-solid fa-bullseye" style={{ color: '#ffb347', marginTop: '4px' }}></i>
                       <span>ค้นหาจุดแข็งที่ซ่อนอยู่เพื่อสร้างข้อได้เปรียบ</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-handshake" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>จับคู่กับสายงานที่เหมาะสมกับคุณที่สุด</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
+              {/* 2. AI Chatbot */}
               <div style={{...(activeToggles.f2 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-rocket" style={{ fontSize: '1.5rem', opacity: activeToggles.f2 ? 1 : 0.6 }} />
+                  <i className="fa-solid fa-robot" style={{ fontSize: '1.5rem', opacity: activeToggles.f2 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f2} onChange={() => setActiveToggles(p => ({...p, f2: !p.f2}))} />
                 </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Future-Proof Careers</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>แนะนำอาชีพแห่งอนาคตที่ไม่ถูกแทนที่</p>
+                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>AI Chatbot</h4>
+                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>แชทบอทที่ปรึกษาอาชีพ</p>
 
                 <div style={{
-                  maxHeight: activeToggles.f2 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  maxHeight: activeToggles.f2 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
                   opacity: activeToggles.f2 ? 1 : 0, marginTop: activeToggles.f2 ? '16px' : '0', paddingTop: activeToggles.f2 ? '16px' : '0',
                   borderTop: activeToggles.f2 ? '1px solid rgba(255,255,255,0.2)' : 'none'
                 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-shield-halved" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ค้นพบอาชีพที่มีความเสี่ยงต่ำต่อการถูก AI แทนที่</span>
+                      <i className="fa-solid fa-comments" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ปรึกษาและไขข้อข้องใจเรื่องสายอาชีพได้ 24 ชั่วโมง</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-fire" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>เจาะลึกสายงานมาแรง (Trending Jobs) ในทศวรรษหน้า</span>
+                      <i className="fa-solid fa-user-astronaut" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>รับคำแนะนำที่ปรับแต่งตามโปรไฟล์ของคุณ</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
                       <i className="fa-solid fa-lightbulb" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ทักษะที่ตลาดต้องการสูง (High-Demand Skills)</span>
+                      <span>แลกเปลี่ยนแนวคิดและวางแผนอนาคตกับ AI</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
+              {/* 3. จำลองการสัมภาษณ์ */}
               <div style={{...(activeToggles.f3 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-map" style={{ fontSize: '1.5rem', opacity: activeToggles.f3 ? 1 : 0.6 }} />
+                  <i className="fa-solid fa-microphone" style={{ fontSize: '1.5rem', opacity: activeToggles.f3 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f3} onChange={() => setActiveToggles(p => ({...p, f3: !p.f3}))} />
                 </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Personalized Roadmap</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วางแผนการเรียนรู้แบบเฉพาะตัว</p>
+                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Mock Interview</h4>
+                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>จำลองการสัมภาษณ์</p>
 
                 <div style={{
                   maxHeight: activeToggles.f3 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
@@ -257,16 +265,47 @@ export default function HomePage() {
                 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-route" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>สร้างแผนการเรียนรู้ที่เหมาะกับคุณโดยเฉพาะ</span>
+                      <i className="fa-solid fa-user-tie" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ฝึกซ้อมตอบคำถามสัมภาษณ์งานกับ AI แบบเรียลไทม์</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-graduation-cap" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>แนะนำคอร์สเรียนเพื่ออัปสกิล (Up-Skill) อย่างตรงจุด</span>
+                      <i className="fa-solid fa-clipboard-check" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>รับ Feedback เพื่อปรับปรุงจุดอ่อนและเสริมความมั่นใจ</span>
                     </li>
                     <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-building" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>จำลองสถานการณ์จริงจากบริษัทยอดฮิต</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* 4. ทดลองงานในฝัน */}
+              <div style={{...(activeToggles.f4 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                  <i className="fa-solid fa-briefcase" style={{ fontSize: '1.5rem', opacity: activeToggles.f4 ? 1 : 0.6 }} />
+                  <Toggle active={activeToggles.f4} onChange={() => setActiveToggles(p => ({...p, f4: !p.f4}))} />
+                </div>
+                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Dream Job Simulation</h4>
+                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>ทดลองงานในฝัน</p>
+
+                <div style={{
+                  maxHeight: activeToggles.f4 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  opacity: activeToggles.f4 ? 1 : 0, marginTop: activeToggles.f4 ? '16px' : '0', paddingTop: activeToggles.f4 ? '16px' : '0',
+                  borderTop: activeToggles.f4 ? '1px solid rgba(255,255,255,0.2)' : 'none'
+                }}>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-vr-cardboard" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>สัมผัสประสบการณ์จำลองการทำงานจริงในสายอาชีพต่างๆ</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
                       <i className="fa-solid fa-list-check" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ติดตามความก้าวหน้าทีละสเต็ปอย่างชัดเจน</span>
+                      <span>ทำภารกิจและแก้ไขปัญหาที่มักพบในสายงานนั้น</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-star" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ประเมินความชอบและความถนัดก่อนตัดสินใจจริง</span>
                     </li>
                   </ul>
                 </div>
