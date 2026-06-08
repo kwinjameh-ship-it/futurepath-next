@@ -6,7 +6,7 @@ export default function LandingPage() {
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
 
       {/* Image Background & Corner Gradients (Same as Home) */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
           backgroundImage: "url('/img/bg-room.jpg')", 

@@ -264,7 +264,7 @@ export default function AssessmentPage() {
   if (showResult && resultData) return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
           backgroundImage: "url('/img/bg-room.jpg')", 
@@ -277,7 +277,7 @@ export default function AssessmentPage() {
         <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
       </div>
       <GlassNav />
-      <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px' }}>
+      <main style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
         <UserBar name={user.name} email={user.email} />
 
         {/* Match Score */}
@@ -427,7 +427,7 @@ export default function AssessmentPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
           backgroundImage: "url('/img/bg-room.jpg')", 
@@ -441,7 +441,7 @@ export default function AssessmentPage() {
       </div>
       <GlassNav />
 
-      <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px' }}>
+      <main style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
         <UserBar name={user.name} email={user.email} />
 
         {/* API Status */}
