@@ -272,7 +272,7 @@ export default function AssessmentPage() {
   if (showResult && resultData) return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
           backgroundImage: "url('/img/bg-room.jpg')", 
@@ -492,7 +492,7 @@ export default function AssessmentPage() {
   return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
           backgroundImage: "url('/img/bg-room.jpg')", 

@@ -355,23 +355,30 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
   :root {
     --body-bg: #ffffff;
     --text-main: #000000 !important;
-    --text-sub: #222222 !important;
-    --text-muted: #555555 !important;
+    --text-sub: #333333 !important;
+    --text-muted: #666666 !important;
     --glass-bg: #fdfdfd !important;
-    --glass-border: #cccccc !important;
-    --accent-color: #0056b3 !important;
-    --accent-dim: #f0f8ff !important;
-    --secondary-color: #a8005b !important;
+    --glass-border: #bbbbbb !important;
+    --card-bg: #ffffff !important;
+    --card-border: #bbbbbb !important;
+    --accent-color: #000000 !important;
+    --accent-dim: #eeeeee !important;
+    --accent-glow: transparent !important;
+    --secondary-color: #444444 !important;
+    --secondary-dim: #f5f5f5 !important;
+    --secondary-glow: transparent !important;
   }
 
   body { 
-    background: #fff !important; 
-    color: #000 !important; 
+    background: #ffffff !important; 
+    color: #000000 !important; 
+    filter: grayscale(100%) !important;
+    -webkit-filter: grayscale(100%) !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
-  .no-print, .blob, header, nav, video, button, a.btn-outline { 
+  .no-print, .blob, header, nav, video, button, a.btn-outline, .glass-menu { 
     display: none !important; 
   }
 
@@ -379,15 +386,27 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     max-width: 100% !important; 
     padding: 0 !important; 
     margin: 0 !important;
+    background: #ffffff !important;
   }
 
   * {
     text-shadow: none !important;
     box-shadow: none !important;
     backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* Force background colors of cards to be white for printing */
+  .hover-lift, div[style*="background"] {
+    background: #ffffff !important;
+  }
+  
+  div[style*="linear-gradient"] {
+    background: #ffffff !important;
   }
 
   /* Specific Assessment Layout Overrides for Print */
   .grid { display: block !important; }
-  .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; }
+  .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; border: 1px solid #ddd !important; }
 }
+
