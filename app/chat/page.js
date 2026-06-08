@@ -108,10 +108,10 @@ export default function ChatPage() {
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
-          background: 'rgba(16, 12, 36, 0.70)',
-          backdropFilter: 'blur(32px)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
           border: '1px solid var(--glass-border)',
-          boxShadow: '0 24px 60px rgba(0,0,0,0.55)',
+          boxShadow: '0 24px 60px var(--shadow-color)',
           position: 'relative',
           zIndex: 10,
         }}
@@ -124,7 +124,7 @@ export default function ChatPage() {
             alignItems: 'center',
             padding: '18px 28px',
             borderBottom: '1px solid var(--glass-border)',
-            background: 'rgba(0,0,0,0.25)',
+            background: 'transparent',
             flexShrink: 0,
           }}
         >
@@ -241,7 +241,7 @@ export default function ChatPage() {
             gap: '12px',
             padding: '16px 24px',
             borderTop: '1px solid var(--glass-border)',
-            background: 'rgba(0,0,0,0.3)',
+            background: 'transparent',
             flexShrink: 0,
           }}
         >
