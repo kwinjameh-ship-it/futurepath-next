@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
   { href: '/home',       label: 'หน้าหลัก',                       icon: 'fa-house' },
@@ -9,157 +10,89 @@ const navLinks = [
   { href: '/chat',       label: 'AI ChatBot',                      icon: 'fa-comments' },
   { href: '/interview',  label: 'จำลองสัมภาษณ์เสียง',              icon: 'fa-microphone' },
   { href: '/simulation', label: 'ทดลองงานในฝัน',                   icon: 'fa-briefcase' },
-  { href: '/feedback',   label: 'ประเมินความพึงพอใจ',               icon: 'fa-star' },
 ];
 
 export default function GlassNav() {
-  const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // ล็อก scroll ตอนเมนูเปิด
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
-
-  // ปิดเมื่อกด Escape
-  useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') setOpen(false); };
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, []);
-
   return (
-    <>
-      {/* ── Fixed Top Navbar ───────────────────────────── */}
-      <header
-        className="fixed top-0 left-0 right-0 z-[950] flex items-center justify-between"
-        style={{
-          height: '64px',
-          padding: '0 24px',
-          background: 'var(--glass-bg)',
-          backdropFilter: 'blur(30px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(30px) saturate(180%)',
-          borderBottom: '1px solid var(--glass-border)',
-          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
-        }}
-      >
-        {/* Logo */}
-        <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-          <img
-            src="/img/logo1.png"
-            alt="FuturePath AI"
-            style={{ width: '36px', height: '36px', objectFit: 'contain', borderRadius: '8px' }}
-            onError={(e) => { e.target.style.display = 'none'; }}
-          />
-          <span style={{
-            fontFamily: "'Kanit', sans-serif",
-            fontWeight: 900, fontSize: '1.1rem', letterSpacing: '0.15em',
-            color: 'var(--accent-color)', textShadow: '0 0 14px var(--accent-glow)',
-          }}>
-            FUTUREPATH AI
-          </span>
-        </Link>
+    <nav 
+      className="fixed z-[950] flex items-center justify-between md:justify-center p-3 md:py-6 md:px-3
+                 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-6"
+      style={{
+        background: 'var(--glass-bg)',
+        backdropFilter: 'blur(40px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(40px) saturate(180%)',
+        border: '1px solid var(--glass-border)',
+        borderRadius: '40px',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)'
+      }}
+    >
+      {/* Logo (Hidden on very small mobile, visible on desktop) */}
+      <Link href="/home" className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden shrink-0" title="FuturePath AI">
+        <img
+          src="/img/logo1.png"
+          alt="FuturePath AI"
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          onError={(e) => { e.target.style.display = 'none'; }}
+        />
+      </Link>
 
-        {/* Right Actions */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {mounted && (
-            <button
-              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              aria-label="Toggle Theme"
+      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
+
+      {/* Nav Links */}
+      <div className="flex md:flex-col items-center justify-around w-full md:w-auto gap-2 md:gap-6">
+        {navLinks.map((link) => {
+          const isActive = pathname === link.href;
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              title={link.label}
+              className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 relative group"
               style={{
-                width: '40px', height: '40px', borderRadius: '50%',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer',
-                border: '1px solid var(--glass-border)',
-                background: 'var(--glass-bg)',
-                color: 'var(--text-main)',
-                transition: 'all 0.3s ease',
+                color: isActive ? '#fff' : 'var(--text-sub)',
+                background: isActive ? 'linear-gradient(135deg, #ff7a00, #ff4b00)' : 'transparent',
+                boxShadow: isActive ? '0 4px 12px rgba(255,107,0,0.4)' : 'none',
+                textDecoration: 'none'
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-color)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; }}
             >
-              <i className={theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} style={{ fontSize: '1.1rem', color: theme === 'light' ? '#6b7280' : '#fbbf24' }} />
-            </button>
-          )}
+              <i className={`fa-solid ${link.icon} text-lg md:text-xl transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 group-hover:text-[var(--accent-color)]'}`} />
+              
+              {/* Tooltip on Desktop */}
+              <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg">
+                {link.label}
+              </span>
+            </Link>
+          );
+        })}
+      </div>
 
-          {/* Hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            aria-label="Toggle Menu"
-            style={{
-              width: '44px', height: '44px', borderRadius: '50%',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer',
-              border: `1px solid ${open ? 'var(--accent-color)' : 'var(--glass-border)'}`,
-              background: open ? 'var(--accent-dim)' : 'var(--glass-bg)',
-              transition: 'all 0.3s ease', flexShrink: 0,
-              zIndex: 960,
-              position: 'relative',
-            }}
-          >
-            <i
-              className={open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'}
-              style={{
-                fontSize: '1.25rem',
-                color: open ? 'var(--accent-color)' : 'var(--text-main)',
-                transition: 'color 0.2s ease',
-              }}
-            />
-          </button>
-        </div>
-      </header>
-
-      {/* ── Full-Screen Overlay Menu ── */}
-      <nav className={`glass-menu ${open ? 'active' : ''}`}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          
-          {/* Brand */}
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <img
-              src="/img/logo1.png"
-              alt="Logo"
-              style={{ width: '72px', height: '72px', objectFit: 'contain', borderRadius: '16px', margin: '0 auto 14px' }}
-              onError={(e) => { e.target.style.display = 'none'; }}
-            />
-            <div style={{
-              fontFamily: "'Kanit', sans-serif",
-              fontWeight: 900,
-              fontSize: '1.8rem',
-              letterSpacing: '0.2em',
-              color: 'var(--accent-color)',
-            }}>
-              FUTUREPATH AI
-            </div>
-          </div>
-
-          {/* Nav Links */}
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {navLinks.map((link, i) => (
-              <li
-                key={link.href}
-                className="nav-item"
-                style={{ transitionDelay: open ? `${(i + 1) * 0.07}s` : '0s' }}
-              >
-                <Link
-                  href={link.href}
-                  className="nav-link"
-                  onClick={() => setOpen(false)}
-                >
-                  <i className={`fa-solid ${link.icon}`} />
-                  <span>{link.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-
-        </div>
-      </nav>
-    </>
+      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
+      
+      {/* Settings / Theme Toggle */}
+      {mounted && (
+        <button
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          title="สลับโหมดสว่าง/มืด"
+          className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
+          style={{
+            color: 'var(--text-sub)',
+            background: 'transparent',
+          }}
+        >
+          <i className={`${theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[var(--accent-color)]`} />
+          <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg">
+            สลับโหมดสี
+          </span>
+        </button>
+      )}
+    </nav>
   );
 }

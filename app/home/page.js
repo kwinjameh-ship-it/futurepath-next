@@ -128,7 +128,7 @@ export default function HomePage() {
         <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '1000px', height: '1000px', background: 'radial-gradient(circle, rgba(255,60,0,0.3) 0%, transparent 60%)', filter: 'blur(100px)' }} />
       </div>
 
-      <main style={{ position: 'relative', zIndex: 10, padding: '100px 24px 60px', display: 'flex', justifyContent: 'center' }}>
+      <main className="relative z-10 flex justify-center w-full pt-[80px] pb-[120px] px-4 md:pl-[120px] md:pr-8 md:py-[60px]">
         <div style={{ ...glassPanel, width: '100%', maxWidth: '1280px', padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
           
           {/* Header Row (Hero Content) */}
