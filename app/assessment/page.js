@@ -462,40 +462,60 @@ export default function AssessmentPage() {
         )}
 
         {/* Header + Progress */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <p className="section-eyebrow" style={{ marginBottom: '8px' }}>แบบทดสอบทักษะ {currentTab + 1} / {skillsData.length}</p>
+        <div 
+          className="fade-in-scale"
+          style={{ 
+            textAlign: 'center', 
+            marginBottom: '36px',
+            background: 'rgba(255, 255, 255, 0.08)',
+            backdropFilter: 'blur(40px)',
+            WebkitBackdropFilter: 'blur(40px)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: '32px',
+            padding: '40px 32px',
+            boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 24px 64px rgba(0, 0, 0, 0.4)'
+          }}
+        >
+          <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#ffb347', opacity: 0.9, marginBottom: '12px' }}>
+            แบบทดสอบทักษะ {currentTab + 1} / {skillsData.length}
+          </p>
           <h1
             style={{
-              fontSize: 'clamp(1.6rem, 4vw, 2.2rem)',
+              fontSize: 'clamp(1.8rem, 4.5vw, 2.5rem)',
               fontWeight: 900,
-              letterSpacing: '0.1em',
-              color: '#fff',
-              textShadow: '0 0 20px rgba(255,122,0,0.8), 0 0 40px rgba(255,122,0,0.4)',
-              marginBottom: '20px',
+              letterSpacing: '0.12em',
+              background: 'linear-gradient(135deg, #fff 0%, #ffb347 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+              marginBottom: '28px',
+              textShadow: '0 4px 24px rgba(255,122,0,0.3)',
             }}
           >
             FUTUREPATH AI ASSESSMENT
           </h1>
 
           {/* Progress Bar */}
-          <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 500 }}>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '12px', fontWeight: 600 }}>
               {skillsData.map((sk, i) => (
                 <span key={sk.id} style={{ 
                   color: i <= currentTab ? '#fff' : 'rgba(255,255,255,0.4)', 
                   fontWeight: i === currentTab ? 800 : 500,
-                  textShadow: i === currentTab ? '0 0 10px rgba(255,122,0,1)' : 'none'
+                  textShadow: i === currentTab ? '0 0 12px rgba(255,122,0,0.8)' : 'none',
+                  transition: 'color 0.3s ease'
                 }}>
                   {sk.th}
                 </span>
               ))}
             </div>
-            <div style={{ height: '6px', borderRadius: '6px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+            <div style={{ height: '8px', borderRadius: '8px', background: 'rgba(0,0,0,0.4)', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div style={{
-                height: '100%', borderRadius: '6px',
+                height: '100%', borderRadius: '8px',
                 width: `${progress}%`,
-                background: 'linear-gradient(90deg, var(--accent-color), var(--secondary-color))',
-                transition: 'width 0.5s var(--ease-out)',
+                background: 'linear-gradient(90deg, #ff7a00, #ffb347)',
+                boxShadow: '0 0 10px rgba(255,122,0,0.8)',
+                transition: 'width 0.6s cubic-bezier(0.65, 0, 0.35, 1)',
               }} />
             </div>
           </div>
@@ -609,8 +629,12 @@ export default function AssessmentPage() {
                 setCurrentTab(t => t + 1);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="btn-outline"
-              style={{ flex: 1, padding: '13px', fontSize: '1rem' }}
+              className="hover-glow-btn"
+              style={{ 
+                flex: 1, padding: '15px', fontSize: '1.05rem', borderRadius: '30px',
+                background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', color: '#fff', border: 'none',
+                fontWeight: 700, boxShadow: '0 8px 32px rgba(255,107,0,0.4)', cursor: 'pointer'
+              }}
             >
               ถัดไป <i className="fa-solid fa-arrow-right ml-2" />
             </button>
