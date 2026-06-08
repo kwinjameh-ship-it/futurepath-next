@@ -330,6 +330,7 @@ export default function AssessmentPage() {
             style={{
               padding: '36px', borderRadius: 'var(--r-lg)',
               background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
+              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
               textAlign: 'center',
             }}
           >
@@ -343,6 +344,7 @@ export default function AssessmentPage() {
             style={{
               padding: '36px', borderRadius: 'var(--r-lg)',
               background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
+              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
             }}
           >
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-sub)', marginBottom: '24px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
@@ -373,8 +375,9 @@ export default function AssessmentPage() {
             className="hover-lift"
             style={{
               padding: '36px', borderRadius: 'var(--r-xl)',
-              background: 'linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))', 
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))', 
               border: '1px solid var(--glass-border)',
+              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
               marginBottom: '24px',
               textAlign: 'center'
             }}
@@ -401,6 +404,7 @@ export default function AssessmentPage() {
               style={{
                 padding: '32px 28px', borderRadius: 'var(--r-xl)',
                 background: 'var(--card-bg)', border: '1px solid var(--card-border)',
+                backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
                 boxShadow: '0 4px 12px var(--shadow-color)', 
               }}
             >
@@ -448,6 +452,7 @@ export default function AssessmentPage() {
             style={{
               padding: '32px 28px', borderRadius: 'var(--r-xl)',
               background: 'var(--card-bg)', border: '1px dashed var(--glass-border)',
+              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
               marginBottom: '32px'
             }}
           >
