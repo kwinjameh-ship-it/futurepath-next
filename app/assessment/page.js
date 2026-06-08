@@ -469,10 +469,8 @@ export default function AssessmentPage() {
               fontSize: 'clamp(1.6rem, 4vw, 2.2rem)',
               fontWeight: 900,
               letterSpacing: '0.1em',
-              background: 'linear-gradient(135deg, var(--text-gradient-start) 0%, var(--text-gradient-end) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
+              color: '#fff',
+              textShadow: '0 0 20px rgba(255,122,0,0.8), 0 0 40px rgba(255,122,0,0.4)',
               marginBottom: '20px',
             }}
           >
@@ -483,7 +481,11 @@ export default function AssessmentPage() {
           <div style={{ maxWidth: '500px', margin: '0 auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '8px', fontWeight: 500 }}>
               {skillsData.map((sk, i) => (
-                <span key={sk.id} style={{ color: i <= currentTab ? 'var(--accent-color)' : 'var(--text-muted)', fontWeight: i === currentTab ? 700 : 400 }}>
+                <span key={sk.id} style={{ 
+                  color: i <= currentTab ? '#fff' : 'rgba(255,255,255,0.4)', 
+                  fontWeight: i === currentTab ? 800 : 500,
+                  textShadow: i === currentTab ? '0 0 10px rgba(255,122,0,1)' : 'none'
+                }}>
                   {sk.th}
                 </span>
               ))}
