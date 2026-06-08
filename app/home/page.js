@@ -128,7 +128,7 @@ export default function HomePage() {
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
 
       {/* Image Background & Corner Gradients */}
-      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: -1, pointerEvents: 'none', overflow: 'hidden' }}>
         {/* Main Sci-Fi Image */}
         <div style={{ 
           position: 'absolute', inset: 0, 
