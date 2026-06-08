@@ -36,17 +36,17 @@ export default function GlassNav() {
 
   return (
     <>
-      {/* ── Fixed Top Navbar ── */}
+      {/* ── Fixed Top Navbar ───────────────────────────── */}
       <header
         className="fixed top-0 left-0 right-0 z-[950] flex items-center justify-between"
         style={{
           height: '64px',
           padding: '0 24px',
-          background: 'var(--card-bg)',
-          backdropFilter: 'blur(24px) saturate(160%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(160%)',
+          background: 'var(--glass-bg)',
+          backdropFilter: 'blur(30px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(30px) saturate(180%)',
           borderBottom: '1px solid var(--glass-border)',
-          boxShadow: '0 2px 24px rgba(0,0,0,0.1)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
         }}
       >
         {/* Logo */}
