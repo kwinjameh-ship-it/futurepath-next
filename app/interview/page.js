@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
+import Script from 'next/script';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
 
@@ -104,26 +105,47 @@ export default function InterviewPage() {
 
   /* ── TTS ── */
   function speakText(text) {
-    if (!('speechSynthesis' in window)) return;
-    window.speechSynthesis.cancel();
-    const clean = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*/g, '').replace(/<br>/g, ' ');
-    const u = new SpeechSynthesisUtterance(clean);
+    const clean = text
+      .replace(/\*\*(.*?)\*\*/g, '$1')
+      .replace(/\*/g, '')
+      .replace(/<br>/g, ' ')
+      .replace(/<[^>]+>/g, '')
+      .trim();
+    if (!clean) return;
 
-    // ใช้เสียงที่เลือกไว้ หรือ fallback ไป th-TH
+    setSpeaking(true);
+    startMouthAnim();
+
+    // ── ResponsiveVoice (Thai Male) ──
+    if (typeof window !== 'undefined' && window.responsiveVoice && window.responsiveVoice.voiceSupport()) {
+      window.responsiveVoice.cancel();
+      window.responsiveVoice.speak(clean, 'Thai Male', {
+        rate: 0.9,
+        pitch: 0.8,
+        volume: 1,
+        onstart: () => { setSpeaking(true); startMouthAnim(); },
+        onend:   () => { setSpeaking(false); stopMouthAnim(); },
+        onerror: () => { setSpeaking(false); stopMouthAnim(); },
+      });
+      return;
+    }
+
+    // ── Fallback: Web Speech API ──
+    if (!('speechSynthesis' in window)) { setSpeaking(false); stopMouthAnim(); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(clean);
     if (selectedVoiceRef.current) {
       u.voice = selectedVoiceRef.current;
       u.lang  = selectedVoiceRef.current.lang;
     } else {
       u.lang = 'th-TH';
     }
-    u.rate  = 0.95;   // พูดช้านิดให้ฟังชัด
-    u.pitch = 0.85;   // เสียงต่ำลง ดูเป็นผู้ชาย
+    u.rate   = 0.92;
+    u.pitch  = 0.85;
     u.volume = 1.0;
-
     u.onstart = () => { setSpeaking(true);  startMouthAnim(); };
     u.onend   = () => { setSpeaking(false); stopMouthAnim();  };
     u.onerror = () => { setSpeaking(false); stopMouthAnim();  };
-
     window.speechSynthesis.speak(u);
   }
 
@@ -201,6 +223,12 @@ export default function InterviewPage() {
       <div style={{ position: 'fixed', bottom: '10%', right: '5%', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,0,128,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
 
       <GlassNav />
+
+      {/* ResponsiveVoice TTS — เสียงภาษาไทย */}
+      <Script
+        src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"
+        strategy="afterInteractive"
+      />
 
       <main style={{ maxWidth: '900px', margin: '0 auto', padding: '28px 20px 60px', position: 'relative', zIndex: 1 }}>
 
