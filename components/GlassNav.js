@@ -12,7 +12,7 @@ const navLinks = [
   { href: '/simulation', label: 'ทดลองงานในฝัน',                   icon: 'fa-briefcase' },
 ];
 
-export default function GlassNav() {
+export default function GlassNav({ inline = false }) {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
@@ -21,17 +21,20 @@ export default function GlassNav() {
     setMounted(true);
   }, []);
 
+  const navClasses = inline
+    ? "flex flex-col items-center justify-between py-6 px-3 h-full shrink-0"
+    : "fixed z-[950] flex items-center justify-between md:justify-center p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-6";
+
   return (
     <nav 
-      className="fixed z-[950] flex items-center justify-between md:justify-center p-3 md:py-6 md:px-3
-                 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-6"
+      className={navClasses}
       style={{
         background: 'var(--glass-bg)',
         backdropFilter: 'blur(40px) saturate(180%)',
         WebkitBackdropFilter: 'blur(40px) saturate(180%)',
         border: '1px solid var(--glass-border)',
         borderRadius: '40px',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)'
+        boxShadow: inline ? 'none' : '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)'
       }}
     >
       {/* Logo (Hidden on very small mobile, visible on desktop) */}

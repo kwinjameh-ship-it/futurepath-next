@@ -89,6 +89,7 @@ export default function HomePage() {
     boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1)',
     padding: '24px',
     display: 'flex', flexDirection: 'column', position: 'relative', overflow: 'hidden',
+    transition: 'all 0.3s ease-out',
   };
 
   const activeCard = {
@@ -120,7 +121,6 @@ export default function HomePage() {
 
   return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
-      <GlassNav />
 
       {/* Warm Glowing Background */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
@@ -128,8 +128,14 @@ export default function HomePage() {
         <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '1000px', height: '1000px', background: 'radial-gradient(circle, rgba(255,60,0,0.3) 0%, transparent 60%)', filter: 'blur(100px)' }} />
       </div>
 
-      <main className="relative z-10 flex justify-center w-full pt-[80px] pb-[120px] px-4 md:pl-[120px] md:pr-8 md:py-[60px]">
-        <div style={{ ...glassPanel, width: '100%', maxWidth: '1280px', padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8">
+          
+          {/* Desktop Attached Nav */}
+          <div className="hidden md:block shrink-0">
+            <GlassNav inline={true} />
+          </div>
+
+          <div style={{ ...glassPanel, flex: 1, padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
           
           {/* Header Row (Hero Content) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '24px', alignItems: 'center' }}>
@@ -232,19 +238,31 @@ export default function HomePage() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ภาพรวมสถิติระบบ</h3>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}>
+                <div 
+                  style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                >
                   <i className="fa-solid fa-users" style={{ color: '#ffb347', fontSize: '1.5rem', marginBottom: '8px' }} />
                   <h3 style={{ fontSize: '1.8rem', fontWeight: 700, lineHeight: 1 }}>{stats.users}</h3>
                   <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>ผู้ใช้งานทั้งหมด</p>
                 </div>
-                <div style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}>
+                <div 
+                  style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                >
                   <i className="fa-solid fa-file-signature" style={{ color: '#ff4b00', fontSize: '1.5rem', marginBottom: '8px' }} />
                   <h3 style={{ fontSize: '1.8rem', fontWeight: 700, lineHeight: 1 }}>{stats.assess}</h3>
                   <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>การประเมินศักยภาพ</p>
                 </div>
               </div>
 
-              <div style={{ ...glassCard, flex: 1, padding: '32px 24px' }}>
+              <div 
+                style={{ ...glassCard, flex: 1, padding: '32px 24px' }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+              >
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 500 }}>ระดับความพึงพอใจ</h3>
                 </div>
@@ -277,7 +295,11 @@ export default function HomePage() {
             {/* Column 3: Monthly Usage Chart */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>กราฟสถิติรายเดือน</h3>
-              <div style={{ ...glassCard, flex: 1, padding: '24px' }}>
+              <div 
+                style={glassCard}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
+              >
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#ffb347', marginBottom: '20px' }}>การลงทะเบียน (ผู้ใช้ใหม่)</h4>
                 <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 40px)', minHeight: '220px' }}>
                   <canvas ref={usageRef} />
