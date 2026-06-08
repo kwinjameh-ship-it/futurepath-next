@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
 
 const navLinks = [
   { href: '/home',       label: 'หน้าหลัก',                       icon: 'fa-house' },
@@ -13,6 +14,12 @@ const navLinks = [
 
 export default function GlassNav() {
   const [open, setOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // ล็อก scroll ตอนเมนูเปิด
   useEffect(() => {
@@ -35,11 +42,11 @@ export default function GlassNav() {
         style={{
           height: '64px',
           padding: '0 24px',
-          background: 'rgba(10, 8, 30, 0.85)',
+          background: 'var(--card-bg)',
           backdropFilter: 'blur(24px) saturate(160%)',
           WebkitBackdropFilter: 'blur(24px) saturate(160%)',
           borderBottom: '1px solid var(--glass-border)',
-          boxShadow: '0 2px 24px rgba(0,0,0,0.45)',
+          boxShadow: '0 2px 24px rgba(0,0,0,0.1)',
         }}
       >
         {/* Logo */}
@@ -53,36 +60,59 @@ export default function GlassNav() {
           <span style={{
             fontFamily: "'Kanit', sans-serif",
             fontWeight: 900, fontSize: '1.1rem', letterSpacing: '0.15em',
-            color: 'var(--accent-color)', textShadow: '0 0 14px rgba(0,242,254,0.45)',
+            color: 'var(--accent-color)', textShadow: '0 0 14px var(--accent-glow)',
           }}>
             FUTUREPATH AI
           </span>
         </Link>
 
-        {/* Hamburger */}
-        <button
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle Menu"
-          style={{
-            width: '44px', height: '44px', borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer',
-            border: `1px solid ${open ? 'var(--accent-color)' : 'var(--glass-border)'}`,
-            background: open ? 'rgba(0,242,254,0.10)' : 'var(--glass-bg)',
-            transition: 'all 0.3s ease', flexShrink: 0,
-            zIndex: 960,
-            position: 'relative',
-          }}
-        >
-          <i
-            className={open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'}
+        {/* Right Actions */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+              aria-label="Toggle Theme"
+              style={{
+                width: '40px', height: '40px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer',
+                border: '1px solid var(--glass-border)',
+                background: 'var(--glass-bg)',
+                color: 'var(--text-main)',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--accent-color)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; }}
+            >
+              <i className={theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} style={{ fontSize: '1.1rem', color: theme === 'light' ? '#6b7280' : '#fbbf24' }} />
+            </button>
+          )}
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle Menu"
             style={{
-              fontSize: '1.25rem',
-              color: open ? 'var(--accent-color)' : '#ffffff',
-              transition: 'color 0.2s ease',
+              width: '44px', height: '44px', borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              border: `1px solid ${open ? 'var(--accent-color)' : 'var(--glass-border)'}`,
+              background: open ? 'var(--accent-dim)' : 'var(--glass-bg)',
+              transition: 'all 0.3s ease', flexShrink: 0,
+              zIndex: 960,
+              position: 'relative',
             }}
-          />
-        </button>
+          >
+            <i
+              className={open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'}
+              style={{
+                fontSize: '1.25rem',
+                color: open ? 'var(--accent-color)' : 'var(--text-main)',
+                transition: 'color 0.2s ease',
+              }}
+            />
+          </button>
+        </div>
       </header>
 
       {/* ── Blurred backdrop (คลิกปิดเมนูได้) ── */}

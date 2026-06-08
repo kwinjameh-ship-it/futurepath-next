@@ -3,6 +3,7 @@
 
 /* ── Design Tokens ──────────────────────────────────────── */
 :root {
+  /* Default Dark Mode (or fallback) */
   --glass-bg:           rgba(255, 255, 255, 0.06);
   --glass-bg-hover:     rgba(255, 255, 255, 0.10);
   --glass-border:       rgba(255, 255, 255, 0.11);
@@ -16,7 +17,21 @@
   --text-main:          #f0f4ff;
   --text-sub:           rgba(220, 230, 255, 0.65);
   --text-muted:         rgba(200, 210, 240, 0.38);
-  --body-bg:            #0c0a22;
+  --body-bg-start:      #0c0a22;
+  --body-bg-mid:        #12102e;
+  --body-bg-end:        #0e1438;
+  --card-bg:            rgba(255, 255, 255, 0.03);
+  --card-border:        rgba(255, 255, 255, 0.08);
+  --shadow-color:       rgba(0, 0, 0, 0.5);
+  --text-gradient-start: #ffffff;
+  --text-gradient-end:  var(--accent-color);
+  
+  --avatar-bg:          linear-gradient(135deg, #1c2a4a, #0d1f3c);
+  --status-warn:        #fed330;
+  --status-ok:          #26de81;
+  --bubble-ai:          linear-gradient(135deg, rgba(0,100,255,0.08), rgba(0,242,254,0.06));
+  --bubble-user:        linear-gradient(135deg, rgba(255,0,128,0.10), rgba(0,242,254,0.06));
+
   --nav-h:              64px;
   --ease-smooth:        cubic-bezier(0.65, 0, 0.35, 1);
   --ease-out:           cubic-bezier(0.0, 0, 0.2, 1);
@@ -25,6 +40,36 @@
   --r-lg:  26px;
   --r-xl:  36px;
   --r-pill: 999px;
+}
+
+:root[data-theme='light'] {
+  --glass-bg:           rgba(255, 255, 255, 0.65);
+  --glass-bg-hover:     rgba(255, 255, 255, 0.85);
+  --glass-border:       rgba(0, 0, 0, 0.08);
+  --glass-border-hover: rgba(0, 0, 0, 0.15);
+  --accent-color:       #0084ff;
+  --accent-dim:         rgba(0, 132, 255, 0.12);
+  --accent-glow:        rgba(0, 132, 255, 0.25);
+  --secondary-color:    #d10068;
+  --secondary-dim:      rgba(209, 0, 104, 0.12);
+  --secondary-glow:     rgba(209, 0, 104, 0.25);
+  --text-main:          #111827;
+  --text-sub:           #4b5563;
+  --text-muted:         #9ca3af;
+  --body-bg-start:      #f8fafc;
+  --body-bg-mid:        #f1f5f9;
+  --body-bg-end:        #e2e8f0;
+  --card-bg:            rgba(255, 255, 255, 0.8);
+  --card-border:        rgba(0, 0, 0, 0.05);
+  --shadow-color:       rgba(0, 0, 0, 0.08);
+  --text-gradient-start: var(--accent-color);
+  --text-gradient-end:  #0056b3;
+
+  --avatar-bg:          linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  --status-warn:        #f59e0b;
+  --status-ok:          #10b981;
+  --bubble-ai:          linear-gradient(135deg, rgba(59,130,246,0.1), rgba(59,130,246,0.05));
+  --bubble-user:        linear-gradient(135deg, rgba(236,72,153,0.1), rgba(236,72,153,0.05));
 }
 
 /* ── Reset ──────────────────────────────────────────────── */
@@ -37,7 +82,7 @@ body {
   font-weight: 400;
   font-style: normal;
   letter-spacing: 0.01em;
-  background: linear-gradient(135deg, #0c0a22 0%, #12102e 45%, #0e1438 100%);
+  background: linear-gradient(135deg, var(--body-bg-start) 0%, var(--body-bg-mid) 45%, var(--body-bg-end) 100%);
   background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
@@ -45,6 +90,7 @@ body {
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 *, *::before, *::after {
@@ -140,15 +186,14 @@ input, textarea, button, select, label {
 
 /* Inner card */
 .glass-menu-inner {
-  background: linear-gradient(160deg,
-    rgba(10, 6, 32, 0.92) 0%,
-    rgba(6, 3, 20, 0.96) 100%);
-  border: 1px solid rgba(0, 242, 254, 0.15);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border);
   border-radius: 28px;
   box-shadow:
-    0 40px 100px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(0,242,254,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+    0 20px 60px rgba(0, 0, 0, 0.25),
+    0 0 0 1px var(--accent-dim);
   padding: 48px 56px;
   min-width: 360px;
   max-width: 480px;
@@ -202,10 +247,10 @@ input, textarea, button, select, label {
   width: 100%;
 }
 .nav-link:hover {
-  color: #ffffff;
-  background: rgba(0,242,254,0.08);
+  color: var(--text-main);
+  background: var(--accent-dim);
   letter-spacing: 5px;
-  text-shadow: 0 0 18px rgba(0,242,254,0.55);
+  text-shadow: 0 0 18px var(--accent-glow);
   padding-left: 26px;
 }
 .nav-link:hover i {

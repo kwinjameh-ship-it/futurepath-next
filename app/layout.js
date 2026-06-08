@@ -1,5 +1,6 @@
 import './globals.css';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
+import ThemeProvider from '@/components/ThemeProvider';
 
 export const metadata = {
   title: 'FUTUREPATH AI | ระบบวิเคราะห์ศักยภาพและแนะแนวอาชีพ',
@@ -9,7 +10,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="th">
+    <html lang="th" suppressHydrationWarning>
       <head>
         {/* ── Preconnect to speed up Google Fonts ── */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,8 +27,10 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body style={{ fontFamily: "'Kanit', sans-serif" }}>
-        <AnalyticsTracker />
-        {children}
+        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
+          <AnalyticsTracker />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

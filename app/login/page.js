@@ -69,13 +69,13 @@ export default function LoginPage() {
         <div
           className="fade-in-scale w-full"
           style={{
-            maxWidth: '440px',
-            background: 'rgba(255,255,255,0.04)',
-            backdropFilter: 'blur(28px)',
-            border: '1px solid var(--glass-border)',
-            borderRadius: 'var(--r-xl)',
-            padding: '52px 44px',
-            boxShadow: '0 32px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)',
+            width: '100%', maxWidth: '420px',
+            padding: '40px 32px', borderRadius: 'var(--r-lg)',
+            background: 'var(--card-bg)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            border: '1px solid var(--card-border)',
+            boxShadow: '0 32px 80px var(--shadow-color), inset 0 1px 0 rgba(255,255,255,0.08)',
           }}
         >
           {/* Header */}
@@ -83,10 +83,8 @@ export default function LoginPage() {
             <p className="section-eyebrow" style={{ marginBottom: '10px' }}>FUTUREPATH AI</p>
             <h1
               style={{
-                fontSize: '2rem',
-                fontWeight: 800,
-                letterSpacing: '0.06em',
-                background: 'linear-gradient(135deg, #fff 30%, var(--accent-color) 100%)',
+                fontSize: '1.8rem', fontWeight: 900,
+                background: 'linear-gradient(135deg, var(--text-gradient-start) 30%, var(--text-gradient-end) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',

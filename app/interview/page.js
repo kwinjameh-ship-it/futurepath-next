@@ -259,8 +259,8 @@ export default function InterviewPage() {
         <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '20px', alignItems: 'start' }}>
 
           {/* ── HR Avatar Panel ── */}
-          <div style={{ position: 'sticky', top: '88px' }}>
-            <div style={{ borderRadius: '20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '24px 16px', textAlign: 'center', backdropFilter: 'blur(12px)' }}>
+          <div className="fade-in-up" style={{ animationDelay: '0.1s' }}>
+            <div style={{ borderRadius: '20px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '24px 16px', textAlign: 'center', backdropFilter: 'blur(12px)' }}>
               {/* ── Animated Avatar ── */}
               <div style={{ position: 'relative', marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
 
@@ -270,7 +270,7 @@ export default function InterviewPage() {
                     position: 'absolute', top: '50%', left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '110px', height: '110px', borderRadius: '50%',
-                    border: '2px solid rgba(0,242,254,0.5)',
+                    border: '2px solid var(--accent-color)',
                     animation: 'ping 1s cubic-bezier(0,0,0.2,1) infinite',
                     pointerEvents: 'none',
                   }} />
@@ -279,12 +279,9 @@ export default function InterviewPage() {
                 {/* Face circle */}
                 <div style={{
                   width: '90px', height: '90px', borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #1c2a4a, #0d1f3c)',
-                  border: `3px solid ${speaking ? '#00f2fe' : 'rgba(0,242,254,0.25)'}`,
+                  background: 'var(--avatar-bg)',
+                  border: `3px solid ${speaking ? 'var(--accent-color)' : 'var(--accent-dim)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: speaking
-                    ? '0 0 28px rgba(0,242,254,0.55), inset 0 1px 0 rgba(255,255,255,0.08)'
-                    : '0 0 10px rgba(0,242,254,0.12), inset 0 1px 0 rgba(255,255,255,0.05)',
                   transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
                   position: 'relative', flexDirection: 'column', gap: '0',
                 }}>
@@ -324,9 +321,8 @@ export default function InterviewPage() {
                 <div style={{
                   position: 'absolute', bottom: '2px', right: 'calc(50% - 48px)',
                   width: '14px', height: '14px', borderRadius: '50%',
-                  background: status === 'processing' ? '#fed330' : speaking ? '#00f2fe' : '#26de81',
-                  border: '2px solid #080618',
-                  boxShadow: `0 0 6px ${status === 'processing' ? '#fed330' : speaking ? '#00f2fe' : '#26de81'}`,
+                  background: status === 'processing' ? 'var(--status-warn)' : speaking ? 'var(--accent-color)' : 'var(--status-ok)',
+                  border: '2px solid var(--body-bg-start)',
                   transition: 'all 0.3s ease',
                 }} />
               </div>
@@ -339,7 +335,7 @@ export default function InterviewPage() {
                 {[0.6, 1, 0.7, 1.3, 0.5, 1.1, 0.8].map((h, i) => (
                   <div key={i} style={{
                     width: '4px', borderRadius: '2px',
-                    background: speaking ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)',
+                    background: speaking ? 'var(--accent-color)' : 'var(--card-border)',
                     height: speaking ? `${h * 18}px` : '4px',
                     transition: 'height 0.15s ease, background 0.3s ease',
                     animation: speaking ? `soundBar 0.5s ease ${i * 0.07}s infinite alternate` : 'none',
@@ -348,12 +344,12 @@ export default function InterviewPage() {
               </div>
 
               {/* Status text */}
-              <div style={{ fontSize: '0.72rem', color: status === 'processing' ? '#fed330' : speaking ? 'var(--accent-color)' : 'var(--text-muted)', transition: 'all 0.3s ease', marginBottom: '16px' }}>
+              <div style={{ fontSize: '0.72rem', color: status === 'processing' ? 'var(--status-warn)' : speaking ? 'var(--accent-color)' : 'var(--text-muted)', transition: 'all 0.3s ease', marginBottom: '16px' }}>
                 {status === 'processing' ? '⏳ กำลังคิดคำถาม...' : speaking ? '🔊 กำลังพูด...' : status === 'recording' ? '🎙️ กำลังฟัง...' : '🟢 พร้อมรับฟัง'}
               </div>
 
               {/* Tips */}
-              <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(0,242,254,0.04)', border: '1px solid rgba(0,242,254,0.1)', textAlign: 'left' }}>
+              <div style={{ padding: '12px', borderRadius: '12px', background: 'var(--accent-dim)', border: '1px solid var(--card-border)', textAlign: 'left' }}>
                 <div style={{ fontSize: '0.67rem', color: 'var(--accent-color)', fontWeight: 700, marginBottom: '8px', letterSpacing: '0.06em' }}>💡 เคล็ดลับ</div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                   {['ตอบให้ชัดเจนตรงประเด็น', 'ยกตัวอย่างจากประสบการณ์', 'แสดงความคิดเชิงบวก'].map((tip, i) => (
@@ -374,13 +370,13 @@ export default function InterviewPage() {
               style={{
                 height: '55vh', overflowY: 'auto',
                 borderRadius: '20px',
-                background: 'rgba(8,6,22,0.7)',
+                background: 'var(--card-bg)',
                 backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid var(--card-border)',
                 padding: '24px',
                 display: 'flex', flexDirection: 'column', gap: '16px',
                 scrollbarWidth: 'thin',
-                scrollbarColor: 'rgba(0,242,254,0.2) transparent',
+                scrollbarColor: 'var(--accent-dim) transparent',
               }}
             >
               {messages.map((msg, i) => (
@@ -389,13 +385,13 @@ export default function InterviewPage() {
                   <div style={{
                     width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
                     background: msg.sender === 'ai'
-                      ? 'linear-gradient(135deg, #1a1a3a, #0d2040)'
+                      ? 'var(--card-bg)'
                       : 'linear-gradient(135deg, var(--accent-color), #00a8ff)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: msg.sender === 'ai' ? '0.9rem' : '0.85rem',
-                    fontWeight: 900, color: msg.sender === 'ai' ? 'white' : '#0c0a22',
-                    border: msg.sender === 'ai' ? '1px solid rgba(0,242,254,0.3)' : 'none',
-                    boxShadow: msg.sender === 'ai' ? '0 0 8px rgba(0,242,254,0.2)' : 'none',
+                    fontWeight: 900, color: msg.sender === 'ai' ? 'var(--text-main)' : 'var(--body-bg-start)',
+                    border: msg.sender === 'ai' ? '1px solid var(--accent-dim)' : 'none',
+                    boxShadow: msg.sender === 'ai' ? '0 0 8px var(--accent-dim)' : 'none',
                   }}>
                     {msg.sender === 'ai' ? '👔' : user.name?.charAt(0)}
                   </div>
@@ -408,11 +404,11 @@ export default function InterviewPage() {
                       borderRadius: msg.sender === 'ai' ? '4px 18px 18px 18px' : '18px 4px 18px 18px',
                       fontSize: '0.93rem', lineHeight: 1.75,
                       background: msg.sender === 'ai'
-                        ? 'linear-gradient(135deg, rgba(0,100,255,0.08), rgba(0,242,254,0.06))'
-                        : 'linear-gradient(135deg, rgba(255,0,128,0.10), rgba(0,242,254,0.06))',
+                        ? 'var(--bubble-ai)'
+                        : 'var(--bubble-user)',
                       border: msg.sender === 'ai'
-                        ? '1px solid rgba(0,242,254,0.2)'
-                        : '1px solid rgba(255,0,128,0.25)',
+                        ? '1px solid var(--accent-dim)'
+                        : '1px solid var(--accent-dim)',
                       color: 'var(--text-main)',
                     }}
                     dangerouslySetInnerHTML={{ __html: formatMsg(msg.text) }}
@@ -423,8 +419,8 @@ export default function InterviewPage() {
               {/* Typing indicator */}
               {status === 'processing' && (
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg, #1a1a3a, #0d2040)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', border: '1px solid rgba(0,242,254,0.3)' }}>👔</div>
-                  <div style={{ padding: '14px 20px', borderRadius: '4px 18px 18px 18px', background: 'rgba(0,242,254,0.06)', border: '1px solid rgba(0,242,254,0.2)', display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--card-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem', border: '1px solid var(--accent-dim)' }}>👔</div>
+                  <div style={{ padding: '14px 20px', borderRadius: '4px 18px 18px 18px', background: 'var(--bubble-ai)', border: '1px solid var(--accent-dim)', display: 'flex', gap: '6px', alignItems: 'center' }}>
                     {[0, 1, 2].map(i => (
                       <div key={i} style={{
                         width: '8px', height: '8px', borderRadius: '50%',
@@ -453,8 +449,8 @@ export default function InterviewPage() {
                   style={{
                     width: '100%', boxSizing: 'border-box',
                     padding: '14px 18px', borderRadius: '16px',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: `1px solid ${status === 'recording' ? 'rgba(255,8,68,0.5)' : 'rgba(255,255,255,0.12)'}`,
+                    background: 'var(--card-bg)',
+                    border: `1px solid ${status === 'recording' ? 'var(--status-warn)' : 'var(--card-border)'}`,
                     color: 'var(--text-main)', fontSize: '0.95rem', lineHeight: 1.6,
                     fontFamily: 'Kanit,sans-serif', resize: 'none', outline: 'none',
                     backdropFilter: 'blur(8px)',
@@ -464,7 +460,7 @@ export default function InterviewPage() {
                 {status === 'recording' && (
                   <div style={{ position: 'absolute', top: '50%', right: '14px', transform: 'translateY(-50%)', display: 'flex', gap: '3px', alignItems: 'center' }}>
                     {[0, 1, 2, 1, 0].map((h, i) => (
-                      <div key={i} style={{ width: '3px', height: `${8 + h * 6}px`, borderRadius: '2px', background: '#ff0844', animation: `wave 0.6s ease ${i * 0.1}s infinite alternate` }} />
+                      <div key={i} style={{ width: '3px', height: `${8 + h * 6}px`, borderRadius: '2px', background: 'var(--status-warn)', animation: `wave 0.6s ease ${i * 0.1}s infinite alternate` }} />
                     ))}
                   </div>
                 )}
@@ -479,13 +475,13 @@ export default function InterviewPage() {
                   width: '50px', height: '50px', borderRadius: '50%', flexShrink: 0,
                   border: 'none', cursor: status === 'processing' ? 'not-allowed' : 'pointer',
                   background: status === 'recording'
-                    ? 'linear-gradient(135deg, #ff0844, #ff6b6b)'
-                    : 'rgba(255,255,255,0.06)',
-                  border: `1px solid ${status === 'recording' ? 'rgba(255,8,68,0.5)' : 'rgba(255,255,255,0.12)'}`,
-                  color: status === 'recording' ? '#fff' : 'var(--text-sub)',
+                    ? 'var(--status-warn)'
+                    : 'var(--card-bg)',
+                  border: `1px solid ${status === 'recording' ? 'var(--status-warn)' : 'var(--card-border)'}`,
+                  color: status === 'recording' ? 'var(--text-main)' : 'var(--text-sub)',
                   fontSize: '1.2rem',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: status === 'recording' ? '0 0 16px rgba(255,8,68,0.4)' : 'none',
+                  boxShadow: status === 'recording' ? '0 0 16px var(--status-warn)' : 'none',
                   transition: 'all 0.3s ease',
                   opacity: status === 'processing' ? 0.4 : 1,
                 }}
@@ -501,13 +497,13 @@ export default function InterviewPage() {
                   height: '50px', padding: '0 20px', borderRadius: '16px', flexShrink: 0,
                   border: 'none', cursor: (!inputText.trim() || status === 'processing') ? 'not-allowed' : 'pointer',
                   background: inputText.trim() && status !== 'processing'
-                    ? 'linear-gradient(135deg, var(--accent-color), #4facfe)'
-                    : 'rgba(255,255,255,0.05)',
-                  color: inputText.trim() && status !== 'processing' ? '#0c0a22' : 'var(--text-muted)',
+                    ? 'var(--accent-color)'
+                    : 'var(--card-bg)',
+                  color: inputText.trim() && status !== 'processing' ? 'var(--body-bg-start)' : 'var(--text-muted)',
                   fontFamily: 'Kanit,sans-serif', fontWeight: 700, fontSize: '0.9rem',
                   display: 'flex', alignItems: 'center', gap: '8px',
                   transition: 'all 0.3s ease',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  border: '1px solid var(--card-border)',
                 }}
               >
                 <i className="fa-solid fa-paper-plane" />

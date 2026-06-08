@@ -286,7 +286,7 @@ export default function AssessmentPage() {
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               width: '110px', height: '110px', borderRadius: '50%',
               border: '4px solid var(--accent-color)',
-              background: 'rgba(0,0,0,0.4)',
+              background: 'var(--card-bg)',
               boxShadow: '0 0 28px var(--accent-glow)',
               marginBottom: '20px',
               flexDirection: 'column',
@@ -354,8 +354,8 @@ export default function AssessmentPage() {
               key={sec.title}
               style={{
                 padding: '32px 28px', borderRadius: 'var(--r-xl)',
-                background: 'rgba(255,255,255,0.02)', border: '1px solid var(--glass-border)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05) ', 
+                background: 'var(--card-bg)', border: '1px solid var(--card-border)',
+                boxShadow: '0 4px 12px var(--shadow-color)', 
                 marginTop: '24px',
               }}
             >
@@ -445,7 +445,7 @@ export default function AssessmentPage() {
               fontSize: 'clamp(1.6rem, 4vw, 2.2rem)',
               fontWeight: 900,
               letterSpacing: '0.1em',
-              background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
+              background: 'linear-gradient(135deg, var(--text-gradient-start) 0%, var(--text-gradient-end) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -515,8 +515,8 @@ export default function AssessmentPage() {
                   style={{
                     padding: '20px 22px',
                     borderRadius: 'var(--r-md)',
-                    background: 'rgba(255,255,255,0.025)',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    background: 'var(--card-bg)',
+                    border: '1px solid var(--card-border)',
                   }}
                 >
                   <div style={{ marginBottom: '12px' }}>

@@ -201,7 +201,7 @@ export default function HomePage() {
                 fontSize: 'clamp(2.4rem, 5vw, 3.5rem)',
                 fontWeight: 900,
                 letterSpacing: '0.08em',
-                background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
+                background: 'linear-gradient(135deg, var(--text-gradient-start) 0%, var(--text-gradient-end) 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -268,7 +268,7 @@ export default function HomePage() {
             style={{
               fontSize: '2rem',
               fontWeight: 800,
-              background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
+              background: 'linear-gradient(135deg, var(--text-gradient-start) 0%, var(--text-gradient-end) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -340,7 +340,7 @@ export default function HomePage() {
             style={{
               fontSize: '2rem',
               fontWeight: 800,
-              background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
+              background: 'linear-gradient(135deg, var(--text-gradient-start) 0%, var(--text-gradient-end) 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',

@@ -55,7 +55,7 @@ export default function SimulationPage() {
   const stepLabels = ['เลือกตำแหน่งงาน', 'ทำโจทย์', 'ดูผลลัพธ์'];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#000', paddingTop: '64px' }}>
+    <div style={{ minHeight: '100vh', paddingTop: '64px' }}>
       {/* Video BG */}
       <div className="fixed inset-0" style={{ zIndex: -1 }}>
         <video autoPlay muted loop playsInline
@@ -82,7 +82,7 @@ export default function SimulationPage() {
               fontSize: 'clamp(2rem, 5vw, 3.2rem)',
               fontWeight: 900,
               letterSpacing: '0.08em',
-              background: 'linear-gradient(to right, #00f2fe, #fa709a)',
+              background: 'linear-gradient(to right, var(--accent-color), var(--secondary-color))',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               backgroundClip: 'text',
@@ -101,8 +101,8 @@ export default function SimulationPage() {
             width: '100%', maxWidth: '800px',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center',
             padding: '12px 20px', borderRadius: 'var(--r-pill)', marginBottom: '20px',
-            background: 'rgba(20,18,42,0.55)', backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            background: 'var(--card-bg)', backdropFilter: 'blur(16px)',
+            border: '1px solid var(--card-border)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -111,7 +111,7 @@ export default function SimulationPage() {
                 width: '40px', height: '40px', borderRadius: '50%',
                 background: 'linear-gradient(135deg, var(--accent-color), #00a8ff)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 900, fontSize: '1rem', color: '#0c0a22',
+                fontWeight: 900, fontSize: '1rem', color: 'var(--body-bg-start)',
                 boxShadow: '0 0 12px var(--accent-glow)', flexShrink: 0,
               }}
             >
@@ -126,8 +126,8 @@ export default function SimulationPage() {
             onClick={() => { if (confirm('ออกจากระบบ?')) { localStorage.clear(); window.location.href = '/'; } }}
             style={{
               padding: '7px 18px', borderRadius: 'var(--r-pill)',
-              background: 'transparent', border: '1px solid #fa709a',
-              color: '#fa709a', cursor: 'pointer',
+              background: 'transparent', border: '1px solid var(--secondary-color)',
+              color: 'var(--secondary-color)', cursor: 'pointer',
               fontFamily: 'Kanit,sans-serif', fontWeight: 600, fontSize: '0.85rem',
               display: 'flex', alignItems: 'center', gap: '6px',
             }}
@@ -174,12 +174,12 @@ export default function SimulationPage() {
         <div
           style={{
             width: '100%', maxWidth: '800px',
-            background: 'rgba(8, 6, 22, 0.65)',
+            background: 'var(--card-bg)',
             backdropFilter: 'blur(22px)',
-            border: '1px solid rgba(255,255,255,0.12)',
+            border: '1px solid var(--card-border)',
             borderRadius: 'var(--r-xl)',
             padding: '36px',
-            boxShadow: '0 24px 60px rgba(0,0,0,0.5)',
+            boxShadow: '0 24px 60px var(--shadow-color)',
           }}
         >
           {/* ── Step 1 ── */}
@@ -229,12 +229,12 @@ export default function SimulationPage() {
                 style={{
                   padding: '20px 22px',
                   borderRadius: 'var(--r-md)',
-                  background: 'rgba(0,242,254,0.06)',
+                  background: 'var(--card-bg)',
                   borderLeft: '3px solid var(--accent-color)',
-                  border: '1px solid rgba(0,242,254,0.2)',
+                  border: '1px solid var(--card-border)',
                 }}
               >
-                <p style={{ fontSize: '0.82rem', fontWeight: 700, color: '#fa709a', marginBottom: '10px', letterSpacing: '0.05em' }}>
+                <p style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--secondary-color)', marginBottom: '10px', letterSpacing: '0.05em' }}>
                   <i className="fa-solid fa-user-tie mr-2" />ข้อความจาก Senior Director:
                 </p>
                 <p
@@ -278,15 +278,15 @@ export default function SimulationPage() {
                 </h2>
                 <div
                   style={{
-                    width: '110px', height: '110px', borderRadius: '50%',
+                    width: '120px', height: '120px', borderRadius: '50%',
+                    border: '4px solid var(--secondary-color)',
+                    boxShadow: '0 0 24px var(--secondary-glow)',
+                    background: 'var(--card-bg)',
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                     margin: '0 auto 10px',
-                    border: '4px solid #fa709a',
-                    boxShadow: '0 0 24px rgba(250,112,154,0.4)',
-                    background: 'rgba(0,0,0,0.4)',
                   }}
                 >
-                  <span style={{ fontSize: '2.4rem', fontWeight: 900, color: '#fa709a', lineHeight: 1 }}>{evaluation.score}</span>
+                  <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--secondary-color)', lineHeight: 1 }}>{evaluation.score}</span>
                   <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>/ 100</span>
                 </div>
               </div>
@@ -294,10 +294,10 @@ export default function SimulationPage() {
               <div
                 style={{
                   padding: '20px 22px', borderRadius: 'var(--r-md)',
-                  background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.10)',
+                  background: 'var(--card-bg)', border: '1px solid var(--card-border)',
                 }}
               >
-                <h3 style={{ fontWeight: 700, marginBottom: '10px', color: '#fa709a', fontSize: '0.95rem' }}>
+                <h3 style={{ fontWeight: 700, marginBottom: '10px', color: 'var(--secondary-color)', fontSize: '0.95rem' }}>
                   <i className="fa-solid fa-comment-dots mr-2" />ความคิดเห็นจากผู้บริหาร
                 </h3>
                 <p style={{ fontSize: '0.93rem', lineHeight: 1.75, color: 'var(--text-sub)', fontWeight: 400 }}>
