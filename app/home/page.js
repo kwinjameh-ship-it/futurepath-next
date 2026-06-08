@@ -163,31 +163,67 @@ export default function HomePage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ฟีเจอร์เด่นของเรา</h3>
               
-              <div style={activeToggles.f1 ? activeCard : glassCard}>
+              <div style={{...(activeToggles.f1 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-chart-pie" style={{ fontSize: '1.5rem', opacity: activeToggles.f1 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f1} onChange={() => setActiveToggles(p => ({...p, f1: !p.f1}))} />
                 </div>
                 <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Data-Driven Insights</h4>
                 <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วิเคราะห์จุดแข็งอย่างแม่นยำด้วยฐานข้อมูล</p>
+                
+                <div style={{
+                  maxHeight: activeToggles.f1 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  opacity: activeToggles.f1 ? 1 : 0, marginTop: activeToggles.f1 ? '16px' : '0', paddingTop: activeToggles.f1 ? '16px' : '0',
+                  borderTop: activeToggles.f1 ? '1px solid rgba(255,255,255,0.2)' : 'none'
+                }}>
+                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
+                    • เปรียบเทียบทักษะของคุณกับฐานข้อมูลอาชีพกว่า 10,000 รูปแบบ<br/>
+                    • วิเคราะห์แนวโน้มตลาดแรงงานแบบเรียลไทม์<br/>
+                    • ค้นหาจุดแข็งที่ซ่อนอยู่เพื่อสร้างข้อได้เปรียบ
+                  </p>
+                </div>
               </div>
 
-              <div style={activeToggles.f2 ? activeCard : glassCard}>
+              <div style={{...(activeToggles.f2 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-rocket" style={{ fontSize: '1.5rem', opacity: activeToggles.f2 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f2} onChange={() => setActiveToggles(p => ({...p, f2: !p.f2}))} />
                 </div>
                 <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Future-Proof Careers</h4>
                 <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>แนะนำอาชีพแห่งอนาคตที่ไม่ถูกแทนที่</p>
+
+                <div style={{
+                  maxHeight: activeToggles.f2 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  opacity: activeToggles.f2 ? 1 : 0, marginTop: activeToggles.f2 ? '16px' : '0', paddingTop: activeToggles.f2 ? '16px' : '0',
+                  borderTop: activeToggles.f2 ? '1px solid rgba(255,255,255,0.2)' : 'none'
+                }}>
+                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
+                    • ค้นพบอาชีพที่มีความเสี่ยงต่ำต่อการถูก AI แทนที่<br/>
+                    • เจาะลึกสายงานมาแรง (Trending Jobs) ในทศวรรษหน้า<br/>
+                    • ทักษะที่ตลาดต้องการสูง (High-Demand Skills)
+                  </p>
+                </div>
               </div>
 
-              <div style={activeToggles.f3 ? activeCard : glassCard}>
+              <div style={{...(activeToggles.f3 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-map" style={{ fontSize: '1.5rem', opacity: activeToggles.f3 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f3} onChange={() => setActiveToggles(p => ({...p, f3: !p.f3}))} />
                 </div>
                 <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Personalized Roadmap</h4>
                 <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วางแผนการเรียนรู้แบบเฉพาะตัว</p>
+
+                <div style={{
+                  maxHeight: activeToggles.f3 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  opacity: activeToggles.f3 ? 1 : 0, marginTop: activeToggles.f3 ? '16px' : '0', paddingTop: activeToggles.f3 ? '16px' : '0',
+                  borderTop: activeToggles.f3 ? '1px solid rgba(255,255,255,0.2)' : 'none'
+                }}>
+                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
+                    • รับแผนการเรียนรู้ (Learning Path) แบบ Step-by-Step<br/>
+                    • แนะนำคอร์สเรียนเพื่ออัปสกิล (Upskill & Reskill) ให้ตรงจุด<br/>
+                    • ติดตามความก้าวหน้าสู่เป้าหมายอาชีพในฝัน
+                  </p>
+                </div>
               </div>
             </div>
 
