@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import GlassNav from '@/components/GlassNav';
-import UserBar from '@/components/UserBar';
 import useAuth from '@/lib/useAuth';
 import {
   Chart, LineElement, PointElement, LineController,
@@ -19,44 +18,35 @@ Chart.register(
 const SHEET_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycby8Is6dQueTovRqsEbn90Yn-pYMBvXH3dNqDNwvodSMK7G0sRc-jTQm46y6c3vm6ij6/exec';
 
-/* ── Reusable card style ─── */
-const card = {
-  background: 'var(--glass-bg)',
-  backdropFilter: 'blur(16px)',
-  WebkitBackdropFilter: 'blur(16px)',
-  border: '1px solid var(--glass-border)',
-  borderRadius: 'var(--r-lg)',
+// ── Purple palette ──────────────────────────────────────────
+const P = {
+  darkest:  '#2D1B3D',  // กระดานเข้มสุด
+  dark:     '#4A1F6E',  // ม่วงเข้ม
+  mid:      '#7B3DB8',  // ม่วงกลาง
+  light:    '#9B6BC0',  // ม่วงอ่อน
+  pale:     '#C4A0D8',  // ม่วงซีด
+  // accent glow
+  glow:     'rgba(123,61,184,0.35)',
+  glowSoft: 'rgba(123,61,184,0.12)',
+  border:   'rgba(155,107,192,0.2)',
+  borderHv: 'rgba(155,107,192,0.45)',
 };
 
-/* ── Feature data ─── */
 const features = [
-  {
-    img: '/img/ai1.png',
-    icon: 'fa-chart-bar',
-    title: 'Data-Driven Insights',
-    desc: 'วิเคราะห์จุดแข็งและทักษะของคุณอย่างแม่นยำด้วยฐานข้อมูลขนาดใหญ่',
-  },
-  {
-    img: '/img/ai2.png',
-    icon: 'fa-rocket',
-    title: 'Future-Proof Careers',
-    desc: 'แนะนำอาชีพดาวรุ่งแห่งอนาคตที่ไม่ถูกแทนที่ด้วยเทคโนโลยี',
-  },
-  {
-    img: '/img/ai3.png',
-    icon: 'fa-map',
-    title: 'Personalized Roadmap',
-    desc: 'วางแผนการเรียนรู้ (Upskill & Reskill) แบบเฉพาะตัว เพื่อก้าวสู่เป้าหมาย',
-  },
+  { icon: 'fa-brain',          label: 'วิเคราะห์ศักยภาพ', desc: 'AI วิเคราะห์ทักษะและแนะนำอาชีพที่เหมาะสมที่สุด',       href: '/assessment' },
+  { icon: 'fa-comments',       label: 'AI ChatBot',       desc: 'ปรึกษา AI ได้ทุกเรื่องเกี่ยวกับการวางแผนอาชีพ',         href: '/chat'       },
+  { icon: 'fa-microphone',     label: 'ฝึกสัมภาษณ์',      desc: 'จำลองการสัมภาษณ์งานจริงกับ AI HR มืออาชีพ',            href: '/interview'  },
+  { icon: 'fa-briefcase',      label: 'ทดลองทำงาน',       desc: 'ลองทำงานจริงในสายอาชีพที่ฝันก่อนตัดสินใจ',            href: '/simulation' },
 ];
 
 export default function HomePage() {
   const { user, loading } = useAuth();
-  const usageRef = useRef(null);
-  const satRef   = useRef(null);
-  const usageChartRef = useRef(null);
-  const satChartRef   = useRef(null);
+  const usageRef    = useRef(null);
+  const satRef      = useRef(null);
+  const usageChart  = useRef(null);
+  const satChart    = useRef(null);
   const [stats, setStats] = useState({ users: '—', assess: '—', satisfaction: '—' });
+  const [hovered, setHovered] = useState(null);
 
   useEffect(() => {
     if (!loading && user.name) fetchDashboard();
@@ -67,402 +57,233 @@ export default function HomePage() {
       const res  = await fetch(SHEET_WEBAPP_URL, { method: 'POST', body: JSON.stringify({ action: 'getDashboardData' }) });
       const data = await res.json();
       if (data.status === 'success') {
-        setStats({
-          users:        data.totalUsers.toLocaleString(),
-          assess:       data.totalAssessments.toLocaleString(),
-          satisfaction: data.avgSatisfaction + ' / 5',
-        });
+        setStats({ users: data.totalUsers.toLocaleString(), assess: data.totalAssessments.toLocaleString(), satisfaction: data.avgSatisfaction + ' / 5' });
         renderCharts(data.monthlyUsage, data.satDistribution);
       }
-    } catch {
-      setStats({ users: 'Error', assess: 'Error', satisfaction: 'Error' });
-    }
+    } catch {}
   }
 
   function renderCharts(monthlyUsage, satDistribution) {
     if (!usageRef.current || !satRef.current) return;
-
-    Chart.defaults.color      = 'rgba(220,230,255,0.65)';
+    Chart.defaults.color       = 'rgba(196,160,216,0.65)';
     Chart.defaults.font.family = "'Kanit', sans-serif";
     Chart.defaults.font.size   = 12;
+    if (usageChart.current) usageChart.current.destroy();
+    if (satChart.current)   satChart.current.destroy();
 
-    if (usageChartRef.current) usageChartRef.current.destroy();
-    if (satChartRef.current)   satChartRef.current.destroy();
-
-    usageChartRef.current = new Chart(usageRef.current, {
+    usageChart.current = new Chart(usageRef.current, {
       type: 'line',
       data: {
         labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],
-        datasets: [{
-          label: 'ผู้ลงทะเบียน',
-          data: monthlyUsage,
-          borderColor: '#00f2fe',
-          backgroundColor: 'rgba(0,242,254,0.12)',
-          borderWidth: 2.5,
-          tension: 0.45,
-          fill: true,
-          pointBackgroundColor: '#ff0080',
-          pointBorderColor: '#fff',
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          pointHoverRadius: 6,
-        }],
+        datasets: [{ label: 'ผู้ลงทะเบียน', data: monthlyUsage,
+          borderColor: P.light, backgroundColor: P.glowSoft,
+          borderWidth: 2, tension: 0.45, fill: true,
+          pointBackgroundColor: P.pale, pointBorderColor: P.darkest, pointBorderWidth: 2, pointRadius: 4 }],
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
+        responsive: true, maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: { grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { font: { family: 'Kanit' } } },
-          x: { grid: { display: false },                  ticks: { font: { family: 'Kanit' } } },
+          y: { grid: { color: 'rgba(155,107,192,0.1)' }, ticks: { color: 'rgba(196,160,216,0.6)' } },
+          x: { grid: { display: false },                 ticks: { color: 'rgba(196,160,216,0.6)' } },
         },
       },
     });
 
-    satChartRef.current = new Chart(satRef.current, {
+    satChart.current = new Chart(satRef.current, {
       type: 'doughnut',
       data: {
         labels: ['มากที่สุด (5)','มาก (4)','ปานกลาง (3)','น้อย (2)','น้อยที่สุด (1)'],
-        datasets: [{
-          data: satDistribution,
-          backgroundColor: ['#00f2fe','#00c3ff','#ff0080','#ff5e00','#ff0040'],
-          borderWidth: 0,
-          hoverOffset: 8,
-        }],
+        datasets: [{ data: satDistribution,
+          backgroundColor: [P.mid, P.light, P.pale, '#6B2D8B', P.darkest],
+          borderWidth: 0, hoverOffset: 8 }],
       },
       options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '72%',
-        plugins: {
-          legend: {
-            position: 'bottom',
-            labels: { padding: 14, usePointStyle: true, color: 'rgba(220,230,255,0.7)', font: { family: 'Kanit', size: 11 } },
-          },
-        },
+        responsive: true, maintainAspectRatio: false, cutout: '72%',
+        plugins: { legend: { position: 'bottom', labels: { padding: 14, usePointStyle: true, color: 'rgba(196,160,216,0.7)', font: { family: 'Kanit', size: 11 } } } },
       },
     });
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Kanit,sans-serif', color: 'var(--text-sub)' }}>
-      <i className="fas fa-spinner fa-spin mr-3" style={{ color: 'var(--accent-color)' }} /> กำลังโหลด...
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Kanit,sans-serif', background: '#1A0D2E', color: P.pale }}>
+      <i className="fas fa-spinner fa-spin" style={{ marginRight: 10, color: P.light }} /> กำลังโหลด...
     </div>
   );
 
   return (
-    <div style={{ minHeight: '100vh' }}>
-      <div className="blob blob-1" /><div className="blob blob-2" />
+    <div style={{ minHeight: '100vh', background: `linear-gradient(160deg, #1A0D2E 0%, #0F0820 50%, #1A0D2E 100%)`, fontFamily: 'Kanit,sans-serif' }}>
+
+      {/* ── Ambient circles ── */}
+      <div style={{ position: 'fixed', top: '-200px', left: '-200px',  width: '600px', height: '600px', borderRadius: '50%', background: `radial-gradient(circle, ${P.glowSoft} 0%, transparent 70%)`, pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', bottom: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: `radial-gradient(circle, rgba(74,31,110,0.15) 0%, transparent 70%)`, pointerEvents: 'none', zIndex: 0 }} />
+
       <GlassNav />
 
-      {/* ── Video banner below navbar ── */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '22vh',
-          marginTop: '64px',
-          overflow: 'hidden',
-          maskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 40%, transparent 100%)',
-        }}
-      >
-        <video autoPlay muted loop playsInline
-          style={{ position: 'absolute', top: '50%', left: '50%', minWidth: '100%', minHeight: '100%', transform: 'translate(-50%,-50%)', objectFit: 'cover', zIndex: -1, opacity: 0.55 }}
-        >
-          <source src="/vdo/vdobg2.mp4" type="video/mp4" />
-        </video>
-      </div>
+      <main style={{ maxWidth: '1100px', margin: '0 auto', padding: '100px 24px 80px', position: 'relative', zIndex: 1 }}>
 
-      {/* ── Main content ── */}
-      <main
-        style={{
-          maxWidth: '1140px',
-          margin: '-40px auto 0',
-          padding: '0 24px 80px',
-          position: 'relative',
-          zIndex: 10,
-        }}
-      >
-        <UserBar name={user.name} email={user.email} />
+        {/* ─────────── HERO ─────────── */}
+        <section style={{ textAlign: 'center', marginBottom: '80px' }}>
 
-        {/* ── Hero Section ── */}
-        <section
-          className="flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-12"
-          style={{
-            ...card,
-            padding: '48px 32px',
-          }}
-        >
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <p className="section-eyebrow" style={{ marginBottom: '12px' }}>ยินดีต้อนรับสู่</p>
-            <h1
-              style={{
-                fontSize: 'clamp(2.4rem, 5vw, 3.5rem)',
-                fontWeight: 900,
-                letterSpacing: '0.08em',
-                background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                marginBottom: '14px',
-              }}
-            >
-              FUTUREPATH AI
-            </h1>
-            <h2
-              style={{
-                fontSize: '1.2rem',
-                fontWeight: 600,
-                color: 'var(--text-main)',
-                marginBottom: '14px',
-                lineHeight: 1.5,
-              }}
-            >
-              ปลดล็อกศักยภาพที่ซ่อนอยู่ &mdash; ค้นพบ &ldquo;อาชีพที่ใช่&rdquo; ด้วย AI แห่งอนาคต
-            </h2>
-            <p
-              style={{
-                fontSize: '0.97rem',
-                color: 'var(--text-sub)',
-                lineHeight: 1.8,
-                marginBottom: '28px',
-              }}
-            >
-              ไม่มั่นใจว่าทักษะที่คุณมีเหมาะกับงานแบบไหน?<br />
-              ให้ระบบ AI อัจฉริยะช่วยวิเคราะห์ตัวตน เจาะลึกศักยภาพ<br />
-              และแนะนำสายงานที่ตรงกับคุณที่สุด
-            </p>
-            <a
-              href="/assessment"
-              className="btn-primary"
-              style={{ textDecoration: 'none', fontSize: '1rem' }}
-            >
-              <i className="fa-solid fa-wand-magic-sparkles" />
-              เริ่มต้นวิเคราะห์ศักยภาพ ฟรี!
-            </a>
+          {/* Eyebrow */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', borderRadius: '999px', border: `1px solid ${P.border}`, background: 'rgba(123,61,184,0.08)', marginBottom: '28px' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: P.light, display: 'inline-block', animation: 'pulse 2s infinite' }} />
+            <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', color: P.pale, fontWeight: 600, textTransform: 'uppercase' }}>
+              AI-Powered Career Platform
+            </span>
           </div>
 
-          <div
-            className="w-full md:w-[420px] shrink-0"
-            style={{
-              borderRadius: 'var(--r-lg)',
-              overflow: 'hidden',
-              border: '1px solid var(--glass-border)',
-              boxShadow: '0 8px 40px rgba(0,242,254,0.12)',
+          {/* Headline */}
+          <h1 style={{
+            fontSize: 'clamp(2.8rem, 6vw, 5rem)',
+            fontWeight: 900, letterSpacing: '0.06em', lineHeight: 1.1,
+            background: `linear-gradient(135deg, #fff 0%, ${P.pale} 40%, ${P.light} 100%)`,
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+            marginBottom: '20px',
+          }}>
+            FUTUREPATH AI
+          </h1>
+
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: P.pale, maxWidth: '560px', margin: '0 auto 40px', lineHeight: 1.8, opacity: 0.85 }}>
+            ค้นพบอาชีพที่ใช่ ฝึกทักษะที่ต้องการ<br />และเดินหน้าสู่อนาคตที่คุณออกแบบเอง
+          </p>
+
+          {/* CTA row */}
+          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Link href="/assessment" style={{
+              padding: '14px 36px', borderRadius: '999px',
+              background: `linear-gradient(135deg, ${P.dark}, ${P.mid})`,
+              color: '#fff', textDecoration: 'none', fontWeight: 700, fontSize: '1rem',
+              boxShadow: `0 8px 32px ${P.glow}`,
+              transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
             }}
-          >
-            <img
-              src="/img/AIbanner.png"
-              alt="AI Banner"
-              style={{ width: '100%', display: 'block' }}
-              onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500'; }}
-            />
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = `0 12px 40px ${P.glow}`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = `0 8px 32px ${P.glow}`; }}
+            >
+              <i className="fa-solid fa-wand-magic-sparkles" /> เริ่มวิเคราะห์ฟรี
+            </Link>
+            <Link href="/chat" style={{
+              padding: '14px 32px', borderRadius: '999px',
+              background: 'transparent', border: `1.5px solid ${P.border}`,
+              color: P.pale, textDecoration: 'none', fontWeight: 600, fontSize: '1rem',
+              transition: 'all 0.25s ease',
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = P.light; e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = P.glowSoft; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = P.border; e.currentTarget.style.color = P.pale; e.currentTarget.style.background = 'transparent'; }}
+            >
+              <i className="fa-solid fa-comments" /> คุยกับ AI
+            </Link>
+          </div>
+
+          {/* Welcome pill */}
+          <div style={{ marginTop: '36px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `linear-gradient(135deg, ${P.dark}, ${P.mid})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, color: '#fff' }}>
+              {user.name?.charAt(0)}
+            </div>
+            <span style={{ fontSize: '0.85rem', color: 'rgba(196,160,216,0.6)' }}>
+              ยินดีต้อนรับ, <strong style={{ color: P.pale }}>{user.name}</strong>
+            </span>
           </div>
         </section>
 
-        {/* ── Features ── */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <p className="section-eyebrow" style={{ marginBottom: '8px' }}>สิ่งที่เราทำได้</p>
-          <h2
-            style={{
-              fontSize: '2rem',
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            ฟีเจอร์เด่นของเรา
-          </h2>
-        </div>
+        {/* ─────────── FEATURES GRID ─────────── */}
+        <section style={{ marginBottom: '80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <p style={{ fontSize: '0.7rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: P.light, fontWeight: 700, marginBottom: '8px' }}>ฟีเจอร์</p>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff', margin: 0 }}>สิ่งที่คุณทำได้กับเรา</h2>
+          </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '20px',
-            marginBottom: '56px',
-          }}
-        >
-          {features.map((f) => (
-            <div
-              key={f.title}
-              style={{
-                ...card,
-                padding: '36px 28px',
-                textAlign: 'center',
-                transition: 'transform 0.3s var(--ease-out), box-shadow 0.3s ease, border-color 0.3s ease',
-                cursor: 'default',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform    = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow    = '0 16px 40px rgba(0,0,0,0.35)';
-                e.currentTarget.style.borderColor  = 'var(--glass-border-hover)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform    = '';
-                e.currentTarget.style.boxShadow    = '';
-                e.currentTarget.style.borderColor  = '';
-              }}
-            >
-              <div
-                style={{
-                  width: '64px', height: '64px', borderRadius: '18px',
-                  background: 'var(--accent-dim)', border: '1px solid var(--glass-border)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 20px',
-                }}
-              >
-                <img
-                  src={f.img}
-                  alt={f.title}
-                  style={{ width: '36px', height: '36px', objectFit: 'contain' }}
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = `<i class="fa-solid ${f.icon}" style="font-size:1.6rem;color:var(--accent-color)"></i>`;
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+            {features.map((f, i) => (
+              <Link key={f.href} href={f.href} style={{ textDecoration: 'none' }}>
+                <div
+                  onMouseEnter={() => setHovered(i)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{
+                    padding: '32px 24px',
+                    borderRadius: '20px',
+                    border: `1px solid ${hovered === i ? P.borderHv : P.border}`,
+                    background: hovered === i ? `linear-gradient(135deg, rgba(74,31,110,0.25), rgba(123,61,184,0.15))` : 'rgba(255,255,255,0.02)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    transform: hovered === i ? 'translateY(-6px)' : 'translateY(0)',
+                    boxShadow: hovered === i ? `0 16px 48px ${P.glow}` : 'none',
                   }}
-                />
-              </div>
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '10px' }}>
-                {f.title}
-              </h3>
-              <p style={{ fontSize: '0.9rem', color: 'var(--text-sub)', lineHeight: 1.7 }}>{f.desc}</p>
-            </div>
-          ))}
-        </div>
+                >
+                  <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: hovered === i ? `linear-gradient(135deg, ${P.dark}, ${P.mid})` : `rgba(123,61,184,0.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', transition: 'all 0.3s ease' }}>
+                    <i className={`fa-solid ${f.icon}`} style={{ fontSize: '1.3rem', color: hovered === i ? '#fff' : P.light }} />
+                  </div>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>{f.label}</h3>
+                  <p style={{ fontSize: '0.85rem', color: 'rgba(196,160,216,0.65)', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
+                  <div style={{ marginTop: '16px', fontSize: '0.78rem', color: P.light, display: 'flex', alignItems: 'center', gap: '4px', opacity: hovered === i ? 1 : 0.4, transition: 'opacity 0.3s ease' }}>
+                    เริ่มต้น <i className="fa-solid fa-arrow-right" style={{ fontSize: '0.7rem' }} />
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
 
-        {/* ── Stats ── */}
-        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
-          <p className="section-eyebrow" style={{ marginBottom: '8px' }}>ข้อมูลแบบเรียลไทม์</p>
-          <h2
-            style={{
-              fontSize: '2rem',
-              fontWeight: 800,
-              background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            <i className="fa-solid fa-chart-line mr-2" style={{ fontSize: '1.4rem' }} />
-            ภาพรวมสถิติระบบ
-          </h2>
-        </div>
-
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-            gap: '16px',
-            marginBottom: '32px',
-          }}
-        >
-          {[
-            { icon: 'fa-users',         label: 'ผู้เข้าใช้งานทั้งหมด',  value: stats.users        },
-            { icon: 'fa-file-signature', label: 'ประเมินศักยภาพแล้ว',    value: stats.assess       },
-            { icon: 'fa-star',           label: 'ความพึงพอใจเฉลี่ย',     value: stats.satisfaction },
-          ].map((s) => (
-            <div
-              key={s.label}
-              style={{
-                ...card,
-                padding: '28px 20px',
-                textAlign: 'center',
-                transition: 'transform 0.25s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = ''; }}
-            >
-              <i
-                className={`fa-solid ${s.icon}`}
-                style={{ fontSize: '1.8rem', color: 'var(--accent-color)', marginBottom: '12px', display: 'block' }}
-              />
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: 500, letterSpacing: '0.04em' }}>
-                {s.label}
-              </p>
-              <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '0.02em', lineHeight: 1 }}>
-                {s.value}
+        {/* ─────────── STATS ─────────── */}
+        <section style={{ marginBottom: '80px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
+            {[
+              { icon: 'fa-users',         label: 'ผู้ใช้งานทั้งหมด', value: stats.users        },
+              { icon: 'fa-file-signature', label: 'ประเมินแล้ว',       value: stats.assess       },
+              { icon: 'fa-star',           label: 'ความพึงพอใจ',       value: stats.satisfaction },
+            ].map((s) => (
+              <div key={s.label} style={{ padding: '28px 24px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.02)', textAlign: 'center' }}>
+                <i className={`fa-solid ${s.icon}`} style={{ fontSize: '1.4rem', color: P.light, marginBottom: '12px', display: 'block' }} />
+                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#fff', lineHeight: 1, marginBottom: '6px' }}>{s.value}</div>
+                <p style={{ fontSize: '0.78rem', color: 'rgba(196,160,216,0.55)', margin: 0, letterSpacing: '0.04em' }}>{s.label}</p>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </section>
 
-        {/* ── Charts ── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {[
-            { title: 'สถิติการลงทะเบียน (รายเดือน)', ref: usageRef },
-            { title: 'ระดับความพึงพอใจ',              ref: satRef   },
-          ].map((c) => (
-            <div
-              key={c.title}
-              style={{
-                ...card,
-                padding: '28px 24px',
-                height: '340px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <h3
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  color: 'var(--text-sub)',
-                  marginBottom: '16px',
-                  textAlign: 'center',
-                  letterSpacing: '0.04em',
-                }}
-              >
-                {c.title}
-              </h3>
-              <div style={{ flex: 1, position: 'relative' }}>
-                <canvas ref={c.ref} />
+        {/* ─────────── CHARTS ─────────── */}
+        <section>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
+            {[
+              { title: 'สถิติการลงทะเบียน (รายเดือน)', ref: usageRef },
+              { title: 'ระดับความพึงพอใจ',              ref: satRef   },
+            ].map((c) => (
+              <div key={c.title} style={{ padding: '28px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.02)', height: '320px', display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'rgba(196,160,216,0.7)', marginBottom: '16px', textAlign: 'center', letterSpacing: '0.06em' }}>
+                  {c.title}
+                </h3>
+                <div style={{ flex: 1, position: 'relative' }}>
+                  <canvas ref={c.ref} />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </section>
       </main>
 
-      {/* Admin Floating Button */}
-      <Link
-        href="/admin"
-        style={{
-          position: 'fixed',
-          bottom: '24px',
-          right: '24px',
-          width: '44px',
-          height: '44px',
-          borderRadius: '50%',
-          background: 'rgba(255, 255, 255, 0.05)',
-          border: '1px solid var(--glass-border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--text-muted)',
-          zIndex: 999,
-          textDecoration: 'none',
-          backdropFilter: 'blur(10px)',
-          transition: 'all 0.3s ease',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.color = 'var(--accent-color)';
-          e.currentTarget.style.background = 'rgba(0, 242, 254, 0.1)';
-          e.currentTarget.style.borderColor = 'var(--accent-color)';
-          e.currentTarget.style.transform = 'translateY(-2px)';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.color = 'var(--text-muted)';
-          e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-          e.currentTarget.style.borderColor = 'var(--glass-border)';
-          e.currentTarget.style.transform = 'none';
-        }}
-        title="ผู้ดูแลระบบ (Admin)"
+      {/* Admin FAB */}
+      <Link href="/admin" title="Admin" style={{
+        position: 'fixed', bottom: '24px', right: '24px',
+        width: '40px', height: '40px', borderRadius: '50%',
+        background: 'rgba(255,255,255,0.03)', border: `1px solid ${P.border}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: 'rgba(196,160,216,0.35)', textDecoration: 'none', zIndex: 999,
+        backdropFilter: 'blur(10px)', transition: 'all 0.3s ease',
+      }}
+        onMouseEnter={e => { e.currentTarget.style.color = P.light; e.currentTarget.style.borderColor = P.border; }}
+        onMouseLeave={e => { e.currentTarget.style.color = 'rgba(196,160,216,0.35)'; }}
       >
-        <i className="fa-solid fa-lock" style={{ fontSize: '1rem' }} />
+        <i className="fa-solid fa-lock" style={{ fontSize: '0.9rem' }} />
       </Link>
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.5; transform: scale(0.8); }
+        }
+      `}</style>
     </div>
   );
 }
