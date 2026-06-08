@@ -158,9 +158,20 @@ export default function HomePage() {
           {/* Header Row (Hero Content) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '24px', alignItems: 'center' }}>
             <div style={{ maxWidth: '60%' }}>
-              <p style={{ color: '#ff9d4d', fontWeight: 600, letterSpacing: '2px', marginBottom: '8px', textTransform: 'uppercase', fontSize: '0.9rem' }}>
-                ยินดีต้อนรับคุณ {user.name?.split(' ')[0]} สู่
-              </p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
+                <div style={{
+                  width: '56px', height: '56px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #ff7a00, #ff4b00)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontSize: '1.5rem', fontWeight: 700,
+                  boxShadow: '0 4px 16px rgba(255,107,0,0.4)'
+                }}>
+                  {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                </div>
+                <p style={{ color: '#ff9d4d', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.9rem', margin: 0 }}>
+                  ยินดีต้อนรับคุณ {user.name?.split(' ')[0]} สู่
+                </p>
+              </div>
               <h1 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '16px' }}>
                 ปลดล็อกศักยภาพที่ซ่อนอยู่ <br />
                 <span style={{ color: '#ffb347' }}>ค้นพบ &ldquo;อาชีพที่ใช่&rdquo;</span> ด้วย AI
