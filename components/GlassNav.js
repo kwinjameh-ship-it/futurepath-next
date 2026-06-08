@@ -115,60 +115,49 @@ export default function GlassNav() {
         </div>
       </header>
 
-      {/* ── Blurred backdrop (คลิกปิดเมนูได้) ── */}
-      <div
-        className={`glass-menu-backdrop ${open ? 'active' : ''}`}
-        onClick={() => setOpen(false)}
-      />
-
-      {/* ── Centered Menu ── */}
+      {/* ── Full-Screen Overlay Menu ── */}
       <nav className={`glass-menu ${open ? 'active' : ''}`}>
-        <div className="glass-menu-inner">
-
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          
           {/* Brand */}
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <img
               src="/img/logo1.png"
               alt="Logo"
-              style={{ width: '52px', height: '52px', objectFit: 'contain', borderRadius: '12px', margin: '0 auto 10px' }}
+              style={{ width: '72px', height: '72px', objectFit: 'contain', borderRadius: '16px', margin: '0 auto 14px' }}
               onError={(e) => { e.target.style.display = 'none'; }}
             />
             <div style={{
-              fontFamily: "'Kanit', sans-serif", fontWeight: 900,
-              fontSize: '0.95rem', letterSpacing: '0.18em', color: 'var(--accent-color)',
-              textShadow: '0 0 20px rgba(0,242,254,0.45)',
+              fontFamily: "'Kanit', sans-serif",
+              fontWeight: 900,
+              fontSize: '1.8rem',
+              letterSpacing: '0.2em',
+              color: 'var(--accent-color)',
             }}>
               FUTUREPATH AI
             </div>
-            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,242,254,0.3), transparent)', marginTop: '18px' }} />
           </div>
 
           {/* Nav Links */}
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {navLinks.map((link, i) => (
               <li
                 key={link.href}
                 className="nav-item"
-                style={{ transitionDelay: open ? `${(i + 1) * 0.06}s` : '0s' }}
+                style={{ transitionDelay: open ? `${(i + 1) * 0.07}s` : '0s' }}
               >
                 <Link
                   href={link.href}
                   className="nav-link"
                   onClick={() => setOpen(false)}
                 >
-                  <i className={`fa-solid ${link.icon}`} style={{ color: 'var(--accent-color)', fontSize: '0.95rem', width: '20px', textAlign: 'center', flexShrink: 0 }} />
+                  <i className={`fa-solid ${link.icon}`} />
                   <span>{link.label}</span>
                 </Link>
               </li>
             ))}
           </ul>
 
-          {/* Footer */}
-          <div style={{ marginTop: '20px', paddingTop: '16px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>
-              © 2025 FuturePath AI
-            </span>
-          </div>
         </div>
       </nav>
     </>

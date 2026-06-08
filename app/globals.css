@@ -143,91 +143,38 @@ input, textarea, button, select, label {
   to   { transform: translate(100px, 70px) scale(1.18); }
 }
 
-/* ── Glass Menu Overlay ─────────────────────────────────── */
-
-/* Overlay backdrop — blurs the page content behind it */
-.glass-menu-backdrop {
-  position: fixed; inset: 0;
-  z-index: 939;
-  background: rgba(4, 2, 14, 0.75);
-  backdrop-filter: blur(40px) saturate(120%) brightness(0.45);
-  -webkit-backdrop-filter: blur(40px) saturate(120%) brightness(0.45);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.45s ease, visibility 0.45s ease;
-  pointer-events: none;
-}
-.glass-menu-backdrop.active {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-/* Centered fullscreen menu panel */
+/* ── Glass Menu Overlay ── */
 .glass-menu {
-  position: fixed;
-  inset: 0;
+  position: fixed; inset: 0;
+  background: var(--card-bg);
+  backdrop-filter: blur(40px) saturate(120%) brightness(0.65);
+  -webkit-backdrop-filter: blur(40px) saturate(120%) brightness(0.65);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
   z-index: 940;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 0;
+  clip-path: circle(0% at calc(100% - 46px) 32px);
+  transition: clip-path 0.85s var(--ease-smooth), visibility 0.85s var(--ease-smooth);
   visibility: hidden;
-  transform: scale(0.96);
-  transition: opacity 0.40s ease, transform 0.40s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.40s ease;
   pointer-events: none;
 }
 .glass-menu.active {
-  opacity: 1;
+  clip-path: circle(150% at calc(100% - 46px) 32px);
   visibility: visible;
-  transform: scale(1);
   pointer-events: auto;
 }
 
-/* Inner menu container (full screen) */
-.glass-menu-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-/* Decorative glows inside card */
-.glass-menu-inner::before {
-  content: '';
-  position: absolute;
-  top: -80px; right: -80px;
-  width: 280px; height: 280px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,242,254,0.09) 0%, transparent 70%);
-  pointer-events: none;
-}
-.glass-menu-inner::after {
-  content: '';
-  position: absolute;
-  bottom: -80px; left: -60px;
-  width: 240px; height: 240px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,0,128,0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-
 .nav-item {
-  margin: 6px 0;
+  margin: 16px 0;
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(28px);
+  transition: all 0.7s var(--ease-smooth);
 }
 .glass-menu.active .nav-item { opacity: 1; transform: translateY(0); }
 
 .nav-link {
-  font-size: 0.95rem;
+  font-size: 1.25rem;
   font-weight: 700;
   font-family: 'Kanit', sans-serif;
-  color: rgba(220, 230, 255, 0.72);
+  color: var(--text-sub);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 4px;
