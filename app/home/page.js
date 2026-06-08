@@ -170,10 +170,10 @@ export default function HomePage() {
               </p>
             </div>
             <div>
-              <Link href="/assessment" style={{
+              <Link href="/assessment" className="hover-glow-btn" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '16px 32px', borderRadius: '30px',
                 background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', color: '#fff', textDecoration: 'none',
-                fontWeight: 700, fontSize: '1.1rem', boxShadow: '0 8px 32px rgba(255,107,0,0.4)', transition: 'transform 0.2s'
+                fontWeight: 700, fontSize: '1.1rem', boxShadow: '0 8px 32px rgba(255,107,0,0.4)'
               }}>
                 <i className="fa-solid fa-wand-magic-sparkles" /> เริ่มต้นวิเคราะห์ศักยภาพ ฟรี!
               </Link>
@@ -188,7 +188,7 @@ export default function HomePage() {
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ฟีเจอร์เด่นของเรา</h3>
               
               {/* 1. วิเคราะห์ศักยภาพ */}
-              <div style={{...(activeToggles.f1 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
+              <div className="hover-lift" style={{...(activeToggles.f1 ? activeCard : glassCard)}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-brain" style={{ fontSize: '1.5rem', opacity: activeToggles.f1 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f1} onChange={() => setActiveToggles(p => ({...p, f1: !p.f1}))} />
@@ -219,7 +219,7 @@ export default function HomePage() {
               </div>
 
               {/* 2. AI Chatbot */}
-              <div style={{...(activeToggles.f2 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
+              <div className="hover-lift" style={{...(activeToggles.f2 ? activeCard : glassCard)}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-robot" style={{ fontSize: '1.5rem', opacity: activeToggles.f2 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f2} onChange={() => setActiveToggles(p => ({...p, f2: !p.f2}))} />
@@ -250,7 +250,7 @@ export default function HomePage() {
               </div>
 
               {/* 3. จำลองการสัมภาษณ์ */}
-              <div style={{...(activeToggles.f3 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
+              <div className="hover-lift" style={{...(activeToggles.f3 ? activeCard : glassCard)}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-microphone" style={{ fontSize: '1.5rem', opacity: activeToggles.f3 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f3} onChange={() => setActiveToggles(p => ({...p, f3: !p.f3}))} />
@@ -281,7 +281,7 @@ export default function HomePage() {
               </div>
 
               {/* 4. ทดลองงานในฝัน */}
-              <div style={{...(activeToggles.f4 ? activeCard : glassCard), transition: 'all 0.4s ease-out'}}>
+              <div className="hover-lift" style={{...(activeToggles.f4 ? activeCard : glassCard)}}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <i className="fa-solid fa-briefcase" style={{ fontSize: '1.5rem', opacity: activeToggles.f4 ? 1 : 0.6 }} />
                   <Toggle active={activeToggles.f4} onChange={() => setActiveToggles(p => ({...p, f4: !p.f4}))} />
@@ -318,18 +318,16 @@ export default function HomePage() {
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div 
+                  className="hover-lift"
                   style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
                 >
                   <i className="fa-solid fa-users" style={{ color: '#ffb347', fontSize: '1.5rem', marginBottom: '8px' }} />
                   <h3 style={{ fontSize: '1.8rem', fontWeight: 700, lineHeight: 1 }}>{stats.users}</h3>
                   <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>ผู้ใช้งานทั้งหมด</p>
                 </div>
                 <div 
+                  className="hover-lift"
                   style={{ ...glassCard, padding: '20px', alignItems: 'center', textAlign: 'center' }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
                 >
                   <i className="fa-solid fa-file-signature" style={{ color: '#ff4b00', fontSize: '1.5rem', marginBottom: '8px' }} />
                   <h3 style={{ fontSize: '1.8rem', fontWeight: 700, lineHeight: 1 }}>{stats.assess}</h3>
@@ -338,9 +336,8 @@ export default function HomePage() {
               </div>
 
               <div 
+                className="hover-lift"
                 style={{ ...glassCard, flex: 1, padding: '32px 24px' }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
               >
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '16px' }}>
                   <h3 style={{ fontSize: '1.1rem', fontWeight: 500 }}>ระดับความพึงพอใจ</h3>
@@ -409,9 +406,8 @@ export default function HomePage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>กราฟสถิติรายเดือน</h3>
               <div 
+                className="hover-lift"
                 style={glassCard}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255,255,255,0.1)'; }}
               >
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#ffb347', marginBottom: '20px' }}>การลงทะเบียน (ผู้ใช้ใหม่)</h4>
                 <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 40px)', minHeight: '220px' }}>
