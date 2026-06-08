@@ -175,6 +175,7 @@ export default function AssessmentPage() {
     const fallback = {
       Title: 'ผู้นำแห่งนวัตกรรมและการพัฒนา',
       Desc: 'ทักษะของคุณมีความโดดเด่นหลากหลาย สามารถประยุกต์ใช้ได้ทั้งสายงานการศึกษา การพัฒนาสังคม และธุรกิจเทคโนโลยี',
+      AnalysisDetail: 'จากคะแนนของคุณ แสดงให้เห็นถึงความสมดุลระหว่างการคิดวิเคราะห์เชิงตรรกะและความคิดสร้างสรรค์ คุณสามารถทำงานที่ต้องใช้ความละเอียดรอบคอบ ควบคู่ไปกับการทำงานร่วมกับผู้อื่นได้อย่างมีประสิทธิภาพ ทักษะเหล่านี้เป็นที่ต้องการสูงในตลาดยุคดิจิทัล',
       Edu: [
         {t:'อันดับ 1: คณะครุศาสตร์ สาขาวิทยาศาสตร์และเทคโนโลยี',d:'ใช้ตรรกะและเทคโนโลยีเพื่อยกระดับคุณภาพผู้เรียน'},
         {t:'อันดับ 2: คณะครุศาสตร์ สาขาการศึกษาปฐมวัย',d:'บูรณาการกิจกรรมพัฒนาการหลักทั้ง 6 ด้าน'},
@@ -190,12 +191,16 @@ export default function AssessmentPage() {
         {t:'อันดับ 5: นักวิเคราะห์ข้อมูลธุรกิจ',d:'ใช้สถิติช่วยองค์กรตัดสินใจ'},
       ],
       Dev: [{t:'Data Visualization & Analysis',d:'ฝึกแปลงข้อมูลซับซ้อนให้เป็นภาพ'}],
+      Refs: [
+        {t:'World Economic Forum',d:'รายงานทักษะแห่งอนาคต (Future of Jobs Report)'},
+        {t:'O*NET Online',d:'ฐานข้อมูลทักษะและอาชีพมาตรฐานสากล'}
+      ]
     };
 
     let aiResult = fallback;
     if (apiStatus === 'success' || apiStatus === 'hidden') {
       try {
-        const promptText = `วิเคราะห์คะแนนทักษะต่อไปนี้: ${JSON.stringify(newScores)}. ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โดยใช้โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ", "Edu": [{"t": "อันดับ 1: ชื่อคณะ/สาขา", "d": "เหตุผล"},{"t": "อันดับ 2: ชื่อคณะ/สาขา", "d": "เหตุผล"},{"t": "อันดับ 3: ชื่อคณะ/สาขา", "d": "เหตุผล"},{"t": "อันดับ 4: ชื่อคณะ/สาขา", "d": "เหตุผล"},{"t": "อันดับ 5: ชื่อคณะ/สาขา", "d": "เหตุผล"}], "Jobs": [{"t": "อันดับ 1: ชื่ออาชีพ", "d": "เหตุผล"},{"t": "อันดับ 2: ชื่ออาชีพ", "d": "เหตุผล"},{"t": "อันดับ 3: ชื่ออาชีพ", "d": "เหตุผล"},{"t": "อันดับ 4: ชื่ออาชีพ", "d": "เหตุผล"},{"t": "อันดับ 5: ชื่ออาชีพ", "d": "เหตุผล"}], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำ"}]}`;
+        const promptText = `วิเคราะห์คะแนนทักษะต่อไปนี้: ${JSON.stringify(newScores)}. ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก", "Edu": [{"t": "อันดับ 1: สาขา", "d": "เหตุผล"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "เหตุผล"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำ"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -221,14 +226,17 @@ export default function AssessmentPage() {
               aiResult = {
                 Title: extracted.Title || extracted.title || fallback.Title,
                 Desc: extracted.Desc || extracted.Description || extracted.desc || extracted.description || fallback.Desc,
+                AnalysisDetail: extracted.AnalysisDetail || extracted.analysisDetail || extracted.Analysis || fallback.AnalysisDetail,
                 Edu: formatArr(extracted.Edu || extracted.Education || extracted.edu || extracted.education) || fallback.Edu,
                 Jobs: formatArr(extracted.Jobs || extracted.jobs) || fallback.Jobs,
-                Dev: formatArr(extracted.Dev || extracted.Development || extracted.dev || extracted.development) || fallback.Dev
+                Dev: formatArr(extracted.Dev || extracted.Development || extracted.dev || extracted.development) || fallback.Dev,
+                Refs: formatArr(extracted.Refs || extracted.References || extracted.refs || extracted.references) || fallback.Refs
               };
               
               if (aiResult.Edu.length === 0) aiResult.Edu = fallback.Edu;
               if (aiResult.Jobs.length === 0) aiResult.Jobs = fallback.Jobs;
               if (aiResult.Dev.length === 0) aiResult.Dev = fallback.Dev;
+              if (aiResult.Refs.length === 0) aiResult.Refs = fallback.Refs;
             } else {
               aiResult = fallback;
             }
@@ -359,8 +367,29 @@ export default function AssessmentPage() {
           </div>
         </div>
 
+        {/* Analysis Detail */}
+        {resultData.AnalysisDetail && (
+          <div
+            className="hover-lift"
+            style={{
+              padding: '36px', borderRadius: 'var(--r-xl)',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))', 
+              border: '1px solid var(--glass-border)',
+              marginBottom: '24px',
+              textAlign: 'center'
+            }}
+          >
+            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--accent-color)', marginBottom: '16px' }}>
+              <i className="fa-solid fa-magnifying-glass-chart mr-2" /> บทวิเคราะห์เชิงลึก
+            </h3>
+            <p style={{ fontSize: '1rem', color: 'var(--text-main)', lineHeight: 1.8, maxWidth: '800px', margin: '0 auto' }}>
+              {resultData.AnalysisDetail}
+            </p>
+          </div>
+        )}
+
         {/* AI Suggestions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
           {[
             { title: '🎓 คณะ/สาขาที่แนะนำ', items: resultData.Edu, accent: 'var(--accent-color)' },
             { title: '💼 อาชีพที่เหมาะสม',   items: resultData.Jobs, accent: '#ff4b00'            },
@@ -373,7 +402,6 @@ export default function AssessmentPage() {
                 padding: '32px 28px', borderRadius: 'var(--r-xl)',
                 background: 'var(--card-bg)', border: '1px solid var(--card-border)',
                 boxShadow: '0 4px 12px var(--shadow-color)', 
-                marginTop: '24px',
               }}
             >
               <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: sec.accent, marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -412,6 +440,33 @@ export default function AssessmentPage() {
             </div>
           ))}
         </div>
+
+        {/* References */}
+        {resultData.Refs && resultData.Refs.length > 0 && (
+          <div
+            className="hover-lift"
+            style={{
+              padding: '32px 28px', borderRadius: 'var(--r-xl)',
+              background: 'var(--card-bg)', border: '1px dashed var(--glass-border)',
+              marginBottom: '32px'
+            }}
+          >
+            <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-sub)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <i className="fa-solid fa-book-bookmark" /> ข้อมูลอ้างอิงและบรรณานุกรม
+            </h3>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+              {resultData.Refs.map((ref, i) => (
+                <li key={i} style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                  <i className="fa-solid fa-link" style={{ color: 'var(--accent-color)', marginTop: '4px', fontSize: '0.85rem' }} />
+                  <div>
+                    <strong style={{ display: 'block', color: 'var(--text-main)', fontSize: '0.95rem', marginBottom: '6px' }}>{ref.t}</strong>
+                    <span style={{ color: 'var(--text-sub)', fontSize: '0.85rem', lineHeight: 1.6, display: 'block' }}>{ref.d}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', marginTop: '24px' }}>
           <a href="/home" className="btn-outline" style={{ textDecoration: 'none' }}>
