@@ -129,21 +129,22 @@ export default function HomePage() {
       </div>
 
       <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8">
+        <div className="flex w-[90%] md:w-[85%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
           
           {/* Desktop Attached Nav */}
-          <div className="hidden md:block shrink-0">
+          <div className="hidden md:flex shrink-0 items-center h-full">
             <GlassNav inline={true} />
           </div>
 
-          <div style={{ ...glassPanel, flex: 1, padding: '40px', display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          <div style={{ ...glassPanel, flex: 1, padding: '40px 48px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
           
           {/* Header Row (Hero Content) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '24px', alignItems: 'center' }}>
-            <div style={{ maxWidth: '700px' }}>
+            <div style={{ maxWidth: '60%' }}>
               <p style={{ color: '#ff9d4d', fontWeight: 600, letterSpacing: '2px', marginBottom: '8px', textTransform: 'uppercase', fontSize: '0.9rem' }}>
                 ยินดีต้อนรับคุณ {user.name?.split(' ')[0]} สู่
               </p>
-              <h1 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '16px' }}>
+              <h1 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, lineHeight: 1.2, marginBottom: '16px' }}>
                 ปลดล็อกศักยภาพที่ซ่อนอยู่ <br />
                 <span style={{ color: '#ffb347' }}>ค้นพบ &ldquo;อาชีพที่ใช่&rdquo;</span> ด้วย AI
               </h1>
@@ -163,7 +164,7 @@ export default function HomePage() {
           </div>
 
           {/* Bento Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             
             {/* Column 1: Feature Cards */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -308,6 +309,7 @@ export default function HomePage() {
             </div>
 
           </div>
+        </div>
         </div>
       </main>
     </div>
