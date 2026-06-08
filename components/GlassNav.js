@@ -91,28 +91,26 @@ export default function GlassNav() {
         onClick={() => setOpen(false)}
       />
 
-      {/* ── Side Drawer Menu ── */}
+      {/* ── Centered Menu ── */}
       <nav className={`glass-menu ${open ? 'active' : ''}`}>
-        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '0 28px' }}>
+        <div className="glass-menu-inner">
 
-          {/* Brand inside drawer */}
-          <div style={{ textAlign: 'center', marginBottom: '36px', paddingTop: '80px' }}>
+          {/* Brand */}
+          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
             <img
               src="/img/logo1.png"
               alt="Logo"
-              style={{ width: '56px', height: '56px', objectFit: 'contain', borderRadius: '12px', margin: '0 auto 12px' }}
+              style={{ width: '52px', height: '52px', objectFit: 'contain', borderRadius: '12px', margin: '0 auto 10px' }}
               onError={(e) => { e.target.style.display = 'none'; }}
             />
             <div style={{
               fontFamily: "'Kanit', sans-serif", fontWeight: 900,
-              fontSize: '1rem', letterSpacing: '0.18em', color: 'var(--accent-color)',
-              textShadow: '0 0 20px rgba(0,242,254,0.4)',
+              fontSize: '0.95rem', letterSpacing: '0.18em', color: 'var(--accent-color)',
+              textShadow: '0 0 20px rgba(0,242,254,0.45)',
             }}>
               FUTUREPATH AI
             </div>
-
-            {/* Divider */}
-            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,242,254,0.25), transparent)', marginTop: '20px' }} />
+            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,242,254,0.3), transparent)', marginTop: '18px' }} />
           </div>
 
           {/* Nav Links */}
@@ -128,17 +126,16 @@ export default function GlassNav() {
                   className="nav-link"
                   onClick={() => setOpen(false)}
                 >
-                  <i className={`fa-solid ${link.icon}`} style={{ color: 'var(--accent-color)', fontSize: '1rem', width: '20px', textAlign: 'center' }} />
+                  <i className={`fa-solid ${link.icon}`} style={{ color: 'var(--accent-color)', fontSize: '0.95rem', width: '20px', textAlign: 'center', flexShrink: 0 }} />
                   <span>{link.label}</span>
                 </Link>
               </li>
             ))}
           </ul>
 
-          {/* Footer inside drawer */}
-          <div style={{ marginTop: 'auto', paddingTop: '40px', paddingBottom: '32px', textAlign: 'center' }}>
-            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', marginBottom: '16px' }} />
-            <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>
+          {/* Footer */}
+          <div style={{ marginTop: '20px', paddingTop: '16px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>
               © 2025 FuturePath AI
             </span>
           </div>

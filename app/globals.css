@@ -103,9 +103,9 @@ input, textarea, button, select, label {
 .glass-menu-backdrop {
   position: fixed; inset: 0;
   z-index: 939;
-  background: rgba(4, 2, 14, 0.60);
-  backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  background: rgba(4, 2, 14, 0.75);
+  backdrop-filter: blur(40px) saturate(120%) brightness(0.45);
+  -webkit-backdrop-filter: blur(40px) saturate(120%) brightness(0.45);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.45s ease, visibility 0.45s ease;
@@ -117,81 +117,95 @@ input, textarea, button, select, label {
   pointer-events: auto;
 }
 
-/* Side drawer panel — slides in from the right */
+/* Centered fullscreen menu panel */
 .glass-menu {
   position: fixed;
-  top: 0; right: 0;
-  height: 100vh;
-  width: min(340px, 90vw);
+  inset: 0;
   z-index: 940;
-  background: linear-gradient(160deg,
-    rgba(10, 6, 30, 0.97) 0%,
-    rgba(8, 4, 24, 0.99) 100%);
-  border-left: 1px solid rgba(0, 242, 254, 0.12);
-  box-shadow: -16px 0 60px rgba(0, 0, 0, 0.7), -2px 0 0 rgba(0,242,254,0.05);
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(100%);
-  transition: transform 0.50s cubic-bezier(0.65, 0, 0.35, 1);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.96);
+  transition: opacity 0.40s ease, transform 0.40s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.40s ease;
   pointer-events: none;
 }
 .glass-menu.active {
-  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
   pointer-events: auto;
 }
 
-/* Decorative glow inside panel */
-.glass-menu::before {
+/* Inner card */
+.glass-menu-inner {
+  background: linear-gradient(160deg,
+    rgba(10, 6, 32, 0.92) 0%,
+    rgba(6, 3, 20, 0.96) 100%);
+  border: 1px solid rgba(0, 242, 254, 0.15);
+  border-radius: 28px;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0,242,254,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  padding: 48px 56px;
+  min-width: 360px;
+  max-width: 480px;
+  width: 90vw;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative glows inside card */
+.glass-menu-inner::before {
   content: '';
   position: absolute;
-  top: -100px; right: -80px;
-  width: 300px; height: 300px;
+  top: -80px; right: -80px;
+  width: 280px; height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0,242,254,0.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(0,242,254,0.09) 0%, transparent 70%);
   pointer-events: none;
 }
-.glass-menu::after {
+.glass-menu-inner::after {
   content: '';
   position: absolute;
   bottom: -80px; left: -60px;
-  width: 250px; height: 250px;
+  width: 240px; height: 240px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,0,128,0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,0,128,0.07) 0%, transparent 70%);
   pointer-events: none;
 }
 
 .nav-item {
-  margin: 10px 0;
+  margin: 6px 0;
   opacity: 0;
-  transform: translateX(30px);
-  transition: all 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+  transform: translateY(20px);
+  transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-.glass-menu.active .nav-item { opacity: 1; transform: translateX(0); }
+.glass-menu.active .nav-item { opacity: 1; transform: translateY(0); }
 
 .nav-link {
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   font-family: 'Kanit', sans-serif;
-  color: rgba(220, 230, 255, 0.75);
+  color: rgba(220, 230, 255, 0.72);
   text-decoration: none;
   text-transform: uppercase;
   letter-spacing: 4px;
-  transition: all 0.35s ease;
-  display: inline-flex;
+  transition: all 0.3s ease;
+  display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 12px 20px;
+  gap: 16px;
+  padding: 13px 20px;
   border-radius: 14px;
-  width: 260px;
-  position: relative;
+  width: 100%;
 }
 .nav-link:hover {
   color: #ffffff;
-  background: rgba(0,242,254,0.07);
-  border: none;
+  background: rgba(0,242,254,0.08);
   letter-spacing: 5px;
-  text-shadow: 0 0 20px rgba(0,242,254,0.6);
+  text-shadow: 0 0 18px rgba(0,242,254,0.55);
   padding-left: 26px;
 }
 .nav-link:hover i {
