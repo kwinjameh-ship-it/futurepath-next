@@ -68,6 +68,24 @@ export default function GlassNav({ inline = false }) {
           );
         })}
       </div>
+
+      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
+      
+      {/* Admin Button */}
+      <Link
+        href="/admin"
+        title="Admin Panel"
+        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
+        style={{
+          color: 'var(--text-sub)',
+          background: 'transparent',
+        }}
+      >
+        <i className={`fa-solid fa-user-shield text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff9d4d]`} />
+        <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
+          ผู้ดูแลระบบ
+        </span>
+      </Link>
     </nav>
   );
 }
