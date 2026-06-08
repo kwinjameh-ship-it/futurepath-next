@@ -80,25 +80,19 @@ export default function ChatPage() {
   );
 
   return (
-    <div
-      style={{
-        height: '100vh',
-        paddingTop: '64px',
-        boxSizing: 'border-box',
-        background: 'linear-gradient(135deg, #0c0a22 0%, #12102e 45%, #0e1438 100%)',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div className="blob blob-1" /><div className="blob blob-2" />
-
-      {/* Video BG */}
-      <div className="fixed inset-0" style={{ zIndex: -2 }}>
-        <video autoPlay muted loop playsInline
-          style={{ position: 'absolute', top: '50%', left: '50%', minWidth: '100%', minHeight: '100%', transform: 'translate(-50%,-50%)', objectFit: 'cover', opacity: 0.18, mixBlendMode: 'screen' }}
-        >
-          <source src="/vdo/vdobg2.mp4" type="video/mp4" />
-        </video>
+    <div style={{ height: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif", paddingTop: '64px', display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+      {/* Image Background & Corner Gradients */}
+      <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
+        <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%)', filter: 'blur(80px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
       </div>
 
       <GlassNav />

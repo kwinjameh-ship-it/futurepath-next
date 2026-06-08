@@ -80,11 +80,24 @@ export default function FeedbackPage() {
   );
 
   return (
-    <div style={{ minHeight: '100vh', paddingTop: '64px' }}>
-      <div className="blob blob-1" /><div className="blob blob-2" />
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif", paddingTop: '64px', display: 'flex', flexDirection: 'column' }}>
+      {/* Image Background & Corner Gradients */}
+      <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
+        <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%)', filter: 'blur(80px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
+      </div>
+
       <GlassNav />
 
-      <main style={{ maxWidth: '760px', margin: '0 auto', padding: '28px 20px 80px' }}>
+      <main className="relative z-10" style={{ maxWidth: '760px', width: '100%', margin: '0 auto', padding: '28px 20px 80px' }}>
         {/* Header */}
         <div
           style={{

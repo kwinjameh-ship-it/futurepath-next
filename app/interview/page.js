@@ -217,10 +217,20 @@ export default function InterviewPage() {
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #050314 0%, #0c0a22 50%, #0d0622 100%)', paddingTop: '64px' }}>
-      {/* Ambient blobs */}
-      <div style={{ position: 'fixed', top: '10%', left: '5%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,75,0,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'fixed', bottom: '10%', right: '5%', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,0,128,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif", paddingTop: '64px', display: 'flex', flexDirection: 'column' }}>
+      {/* Image Background & Corner Gradients */}
+      <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
+        <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%)', filter: 'blur(80px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
+      </div>
 
       <GlassNav />
 
