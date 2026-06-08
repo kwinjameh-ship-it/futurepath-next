@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const navLinks = [
   { href: '/home',       label: 'หน้าหลัก',                       icon: 'fa-house' },
@@ -12,6 +12,13 @@ const navLinks = [
 
 export default function GlassNav({ inline = false }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    localStorage.removeItem('futurepath_user_name');
+    localStorage.removeItem('futurepath_user_email');
+    router.push('/login');
+  };
 
   const navClasses = inline
     ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
@@ -71,21 +78,21 @@ export default function GlassNav({ inline = false }) {
 
       <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
       
-      {/* Admin Button */}
-      <Link
-        href="/admin"
-        title="Admin Panel"
+      {/* Logout Button */}
+      <button
+        onClick={handleLogout}
+        title="ออกจากระบบ"
         className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
         style={{
           color: 'var(--text-sub)',
           background: 'transparent',
         }}
       >
-        <i className={`fa-solid fa-user-shield text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff9d4d]`} />
-        <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
-          ผู้ดูแลระบบ
+        <i className={`fa-solid fa-arrow-right-from-bracket text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff4b00]`} />
+        <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[#ff4b00] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
+          ออกจากระบบ
         </span>
-      </Link>
+      </button>
     </nav>
   );
 }

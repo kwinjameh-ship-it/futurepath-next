@@ -1,6 +1,7 @@
 import './globals.css';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import ThemeProvider from '@/components/ThemeProvider';
+import AdminFloatButton from '@/components/AdminFloatButton';
 
 export const metadata = {
   title: 'FUTUREPATH AI | ระบบวิเคราะห์ศักยภาพและแนะแนวอาชีพ',
@@ -30,6 +31,7 @@ export default function RootLayout({ children }) {
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
           <AnalyticsTracker />
           {children}
+          <AdminFloatButton />
         </ThemeProvider>
       </body>
     </html>
