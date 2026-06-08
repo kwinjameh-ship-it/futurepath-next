@@ -195,11 +195,20 @@ export default function HomePage() {
                   opacity: activeToggles.f1 ? 1 : 0, marginTop: activeToggles.f1 ? '16px' : '0', paddingTop: activeToggles.f1 ? '16px' : '0',
                   borderTop: activeToggles.f1 ? '1px solid rgba(255,255,255,0.2)' : 'none'
                 }}>
-                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
-                    • เปรียบเทียบทักษะของคุณกับฐานข้อมูลอาชีพกว่า 10,000 รูปแบบ<br/>
-                    • วิเคราะห์แนวโน้มตลาดแรงงานแบบเรียลไทม์<br/>
-                    • ค้นหาจุดแข็งที่ซ่อนอยู่เพื่อสร้างข้อได้เปรียบ
-                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-chart-pie" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>เปรียบเทียบทักษะของคุณกับฐานข้อมูลอาชีพกว่า 10,000 รูปแบบ</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-chart-line" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>วิเคราะห์แนวโน้มตลาดแรงงานแบบเรียลไทม์</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-bullseye" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ค้นหาจุดแข็งที่ซ่อนอยู่เพื่อสร้างข้อได้เปรียบ</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -216,11 +225,20 @@ export default function HomePage() {
                   opacity: activeToggles.f2 ? 1 : 0, marginTop: activeToggles.f2 ? '16px' : '0', paddingTop: activeToggles.f2 ? '16px' : '0',
                   borderTop: activeToggles.f2 ? '1px solid rgba(255,255,255,0.2)' : 'none'
                 }}>
-                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
-                    • ค้นพบอาชีพที่มีความเสี่ยงต่ำต่อการถูก AI แทนที่<br/>
-                    • เจาะลึกสายงานมาแรง (Trending Jobs) ในทศวรรษหน้า<br/>
-                    • ทักษะที่ตลาดต้องการสูง (High-Demand Skills)
-                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-shield-halved" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ค้นพบอาชีพที่มีความเสี่ยงต่ำต่อการถูก AI แทนที่</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-fire" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>เจาะลึกสายงานมาแรง (Trending Jobs) ในทศวรรษหน้า</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-lightbulb" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ทักษะที่ตลาดต้องการสูง (High-Demand Skills)</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
 
@@ -233,15 +251,24 @@ export default function HomePage() {
                 <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วางแผนการเรียนรู้แบบเฉพาะตัว</p>
 
                 <div style={{
-                  maxHeight: activeToggles.f3 ? '150px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
+                  maxHeight: activeToggles.f3 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
                   opacity: activeToggles.f3 ? 1 : 0, marginTop: activeToggles.f3 ? '16px' : '0', paddingTop: activeToggles.f3 ? '16px' : '0',
                   borderTop: activeToggles.f3 ? '1px solid rgba(255,255,255,0.2)' : 'none'
                 }}>
-                  <p style={{ fontSize: '0.8rem', lineHeight: 1.6, opacity: 0.9 }}>
-                    • รับแผนการเรียนรู้ (Learning Path) แบบ Step-by-Step<br/>
-                    • แนะนำคอร์สเรียนเพื่ออัปสกิล (Upskill & Reskill) ให้ตรงจุด<br/>
-                    • ติดตามความก้าวหน้าสู่เป้าหมายอาชีพในฝัน
-                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-route" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>สร้างแผนการเรียนรู้ที่เหมาะกับคุณโดยเฉพาะ</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
+                      <i className="fa-solid fa-graduation-cap" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>แนะนำคอร์สเรียนเพื่ออัปสกิล (Up-Skill) อย่างตรงจุด</span>
+                    </li>
+                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <i className="fa-solid fa-list-check" style={{ color: '#ffb347', marginTop: '4px' }}></i>
+                      <span>ติดตามความก้าวหน้าทีละสเต็ปอย่างชัดเจน</span>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
