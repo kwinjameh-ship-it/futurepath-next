@@ -253,17 +253,24 @@ input, textarea, button, select, label {
   font-weight: 700;
   font-size: 1rem;
   letter-spacing: 0.04em;
-  color: var(--accent-color);
-  background: transparent;
-  border: 1.5px solid var(--accent-color);
+  color: #ffb347;
+  background: rgba(255, 122, 0, 0.05);
+  border: 2px solid var(--accent-color);
+  box-shadow: 0 0 15px rgba(255, 122, 0, 0.2), inset 0 0 10px rgba(255, 122, 0, 0.1);
   cursor: pointer;
-  transition: all 0.25s var(--ease-out);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .btn-outline:hover {
-  background: var(--accent-color);
-  color: #0c0a22;
-  box-shadow: 0 4px 20px var(--accent-glow);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, var(--accent-color), #ff4b00);
+  color: #fff;
+  border-color: transparent;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(255, 122, 0, 0.6);
+}
+.btn-outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* ── Hover Effects for Dashboard Cards & Buttons ── */
