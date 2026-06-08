@@ -8,12 +8,12 @@
   --glass-bg-hover:     rgba(255, 255, 255, 0.10);
   --glass-border:       rgba(255, 255, 255, 0.11);
   --glass-border-hover: rgba(255, 255, 255, 0.24);
-  --accent-color:       #00f2fe;
-  --accent-dim:         rgba(0, 242, 254, 0.18);
-  --accent-glow:        rgba(0, 242, 254, 0.32);
-  --secondary-color:    #ff0080;
-  --secondary-dim:      rgba(255, 0, 128, 0.18);
-  --secondary-glow:     rgba(255, 0, 128, 0.32);
+  --accent-color:       #ff7a00;
+  --accent-dim:         rgba(255, 122, 0, 0.18);
+  --accent-glow:        rgba(255, 122, 0, 0.32);
+  --secondary-color:    #ff4b00;
+  --secondary-dim:      rgba(255, 75, 0, 0.18);
+  --secondary-glow:     rgba(255, 75, 0, 0.32);
   --text-main:          #f0f4ff;
   --text-sub:           rgba(220, 230, 255, 0.65);
   --text-muted:         rgba(200, 210, 240, 0.38);

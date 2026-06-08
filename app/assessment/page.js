@@ -126,10 +126,10 @@ export default function AssessmentPage() {
           datasets: [{
             label: 'คะแนนทักษะ',
             data: skillsData.map(s => scores[s.id] || 0),
-            backgroundColor: 'rgba(0,242,254,0.15)',
-            borderColor: '#00f2fe',
+            backgroundColor: 'rgba(255,122,0,0.15)',
+            borderColor: '#ff7a00',
             borderWidth: 2,
-            pointBackgroundColor: '#ff0080',
+            pointBackgroundColor: '#ff4b00',
             pointRadius: 5,
           }],
         },
@@ -262,8 +262,20 @@ export default function AssessmentPage() {
 
   /* ─── RESULT VIEW ─── */
   if (showResult && resultData) return (
-    <div style={{ minHeight: '100vh' }}>
-      <div className="blob blob-1" /><div className="blob blob-2" />
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
+      {/* Image Background & Corner Gradients */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
+        <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%)', filter: 'blur(80px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
+      </div>
       <GlassNav />
       <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px' }}>
         <UserBar name={user.name} email={user.email} />
@@ -275,7 +287,7 @@ export default function AssessmentPage() {
             padding: '52px 40px',
             borderRadius: 'var(--r-xl)',
             marginBottom: '28px',
-            background: 'linear-gradient(135deg, rgba(0,242,254,0.08), rgba(255,0,128,0.08))',
+            background: 'linear-gradient(135deg, rgba(255,122,0,0.08), rgba(255,75,0,0.08))',
             border: '1.5px solid var(--accent-color)',
             backdropFilter: 'blur(20px)',
           }}
@@ -347,7 +359,7 @@ export default function AssessmentPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 mt-10">
           {[
             { title: '🎓 คณะ/สาขาที่แนะนำ', items: resultData.Edu, accent: 'var(--accent-color)' },
-            { title: '💼 อาชีพที่เหมาะสม',   items: resultData.Jobs, accent: '#ff0080'            },
+            { title: '💼 อาชีพที่เหมาะสม',   items: resultData.Jobs, accent: '#ff4b00'            },
             { title: '📈 ทักษะที่ควรพัฒนา',  items: resultData.Dev,  accent: '#fed330'            },
           ].map(sec => (
             <div
@@ -413,8 +425,20 @@ export default function AssessmentPage() {
 
   /* ─── ASSESSMENT VIEW ─── */
   return (
-    <div style={{ minHeight: '100vh' }}>
-      <div className="blob blob-1" /><div className="blob blob-2" />
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
+      {/* Image Background & Corner Gradients */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
+        <div style={{ position: 'absolute', top: '-20%', left: '-15%', width: '60vw', height: '60vw', background: 'radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%)', filter: 'blur(80px)', mixBlendMode: 'screen' }} />
+        <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
+      </div>
       <GlassNav />
 
       <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px' }}>
