@@ -295,7 +295,7 @@ export default function AssessmentPage() {
             textAlign: 'center',
             padding: '52px 40px',
             borderRadius: 'var(--r-xl)',
-            marginBottom: '28px',
+            marginBottom: '24px',
             background: 'linear-gradient(135deg, rgba(255,122,0,0.08), rgba(255,75,0,0.08))',
             border: '1.5px solid var(--accent-color)',
             backdropFilter: 'blur(20px)',
@@ -324,7 +324,7 @@ export default function AssessmentPage() {
         </div>
 
         {/* Charts + Score Bars */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginBottom: '24px' }}>
           <div
             className="hover-lift"
             style={{
@@ -389,7 +389,7 @@ export default function AssessmentPage() {
         )}
 
         {/* AI Suggestions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: '24px' }}>
           {[
             { title: '🎓 คณะ/สาขาที่แนะนำ', items: resultData.Edu, accent: 'var(--accent-color)' },
             { title: '💼 อาชีพที่เหมาะสม',   items: resultData.Jobs, accent: '#ff4b00'            },
