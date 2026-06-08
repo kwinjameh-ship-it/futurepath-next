@@ -18,18 +18,17 @@ Chart.register(
 const SHEET_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycby8Is6dQueTovRqsEbn90Yn-pYMBvXH3dNqDNwvodSMK7G0sRc-jTQm46y6c3vm6ij6/exec';
 
-// ── Purple palette ──────────────────────────────────────────
+// ── Purple palette (brighter) ─────────────────────────────────
 const P = {
-  darkest:  '#2D1B3D',  // กระดานเข้มสุด
-  dark:     '#4A1F6E',  // ม่วงเข้ม
-  mid:      '#7B3DB8',  // ม่วงกลาง
-  light:    '#9B6BC0',  // ม่วงอ่อน
-  pale:     '#C4A0D8',  // ม่วงซีด
-  // accent glow
-  glow:     'rgba(123,61,184,0.35)',
-  glowSoft: 'rgba(123,61,184,0.12)',
-  border:   'rgba(155,107,192,0.2)',
-  borderHv: 'rgba(155,107,192,0.45)',
+  darkest:  '#3D1F5C',
+  dark:     '#6B2FA0',
+  mid:      '#9B4DD4',
+  light:    '#BC80E8',
+  pale:     '#DDB8F0',
+  glow:     'rgba(155,77,212,0.45)',
+  glowSoft: 'rgba(155,77,212,0.18)',
+  border:   'rgba(188,128,232,0.28)',
+  borderHv: 'rgba(188,128,232,0.65)',
 };
 
 const features = [
@@ -106,17 +105,18 @@ export default function HomePage() {
   }
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Kanit,sans-serif', background: '#1A0D2E', color: P.pale }}>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Kanit,sans-serif', background: 'linear-gradient(135deg, #3D1F5C 0%, #2D1B3D 100%)', color: P.pale }}>
       <i className="fas fa-spinner fa-spin" style={{ marginRight: 10, color: P.light }} /> กำลังโหลด...
     </div>
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: `linear-gradient(160deg, #1A0D2E 0%, #0F0820 50%, #1A0D2E 100%)`, fontFamily: 'Kanit,sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: `linear-gradient(145deg, #3D1F5C 0%, #2A1A4A 35%, #351C5B 70%, #4A2575 100%)`, fontFamily: 'Kanit,sans-serif' }}>
 
       {/* ── Ambient circles ── */}
-      <div style={{ position: 'fixed', top: '-200px', left: '-200px',  width: '600px', height: '600px', borderRadius: '50%', background: `radial-gradient(circle, ${P.glowSoft} 0%, transparent 70%)`, pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'fixed', bottom: '-150px', right: '-150px', width: '500px', height: '500px', borderRadius: '50%', background: `radial-gradient(circle, rgba(74,31,110,0.15) 0%, transparent 70%)`, pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', top: '-150px', left: '-150px',  width: '550px', height: '550px', borderRadius: '50%', background: `radial-gradient(circle, rgba(155,77,212,0.25) 0%, transparent 65%)`, pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', bottom: '-100px', right: '-100px', width: '450px', height: '450px', borderRadius: '50%', background: `radial-gradient(circle, rgba(107,47,160,0.22) 0%, transparent 65%)`, pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', top: '40%', right: '15%', width: '300px', height: '300px', borderRadius: '50%', background: `radial-gradient(circle, rgba(188,128,232,0.10) 0%, transparent 60%)`, pointerEvents: 'none', zIndex: 0 }} />
 
       <GlassNav />
 
@@ -126,9 +126,9 @@ export default function HomePage() {
         <section style={{ textAlign: 'center', marginBottom: '80px' }}>
 
           {/* Eyebrow */}
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', borderRadius: '999px', border: `1px solid ${P.border}`, background: 'rgba(123,61,184,0.08)', marginBottom: '28px' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: P.light, display: 'inline-block', animation: 'pulse 2s infinite' }} />
-            <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', color: P.pale, fontWeight: 600, textTransform: 'uppercase' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 18px', borderRadius: '999px', border: `1px solid ${P.border}`, background: 'rgba(155,77,212,0.18)', marginBottom: '28px' }}>
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: P.light, display: 'inline-block', boxShadow: `0 0 8px ${P.light}`, animation: 'pulse 2s infinite' }} />
+            <span style={{ fontSize: '0.72rem', letterSpacing: '0.14em', color: P.pale, fontWeight: 700, textTransform: 'uppercase' }}>
               AI-Powered Career Platform
             </span>
           </div>
@@ -140,11 +140,12 @@ export default function HomePage() {
             background: `linear-gradient(135deg, #fff 0%, ${P.pale} 40%, ${P.light} 100%)`,
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             marginBottom: '20px',
+            filter: 'drop-shadow(0 0 30px rgba(188,128,232,0.5))',
           }}>
             FUTUREPATH AI
           </h1>
 
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', color: P.pale, maxWidth: '560px', margin: '0 auto 40px', lineHeight: 1.8, opacity: 0.85 }}>
+          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.15rem)', color: '#E8D0F8', maxWidth: '560px', margin: '0 auto 40px', lineHeight: 1.8 }}>
             ค้นพบอาชีพที่ใช่ ฝึกทักษะที่ต้องการ<br />และเดินหน้าสู่อนาคตที่คุณออกแบบเอง
           </p>
 
@@ -178,12 +179,12 @@ export default function HomePage() {
           </div>
 
           {/* Welcome pill */}
-          <div style={{ marginTop: '36px', display: 'inline-flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: `linear-gradient(135deg, ${P.dark}, ${P.mid})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, color: '#fff' }}>
+          <div style={{ marginTop: '36px', display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '10px 20px', borderRadius: '999px', background: 'rgba(255,255,255,0.07)', border: `1px solid ${P.border}` }}>
+            <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: `linear-gradient(135deg, ${P.dark}, ${P.mid})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem', fontWeight: 900, color: '#fff', boxShadow: `0 0 12px ${P.glow}` }}>
               {user.name?.charAt(0)}
             </div>
-            <span style={{ fontSize: '0.85rem', color: 'rgba(196,160,216,0.6)' }}>
-              ยินดีต้อนรับ, <strong style={{ color: P.pale }}>{user.name}</strong>
+            <span style={{ fontSize: '0.88rem', color: 'rgba(232,208,248,0.75)' }}>
+              ยินดีต้อนรับ, <strong style={{ color: '#E8D0F8' }}>{user.name}</strong>
             </span>
           </div>
         </section>
@@ -192,7 +193,7 @@ export default function HomePage() {
         <section style={{ marginBottom: '80px' }}>
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <p style={{ fontSize: '0.7rem', letterSpacing: '0.16em', textTransform: 'uppercase', color: P.light, fontWeight: 700, marginBottom: '8px' }}>ฟีเจอร์</p>
-            <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff', margin: 0 }}>สิ่งที่คุณทำได้กับเรา</h2>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 800, color: '#fff', margin: 0, textShadow: '0 2px 20px rgba(188,128,232,0.3)' }}>สิ่งที่คุณทำได้กับเรา</h2>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
@@ -205,19 +206,22 @@ export default function HomePage() {
                     padding: '32px 24px',
                     borderRadius: '20px',
                     border: `1px solid ${hovered === i ? P.borderHv : P.border}`,
-                    background: hovered === i ? `linear-gradient(135deg, rgba(74,31,110,0.25), rgba(123,61,184,0.15))` : 'rgba(255,255,255,0.02)',
+                    background: hovered === i
+                      ? `linear-gradient(135deg, rgba(107,47,160,0.50), rgba(155,77,212,0.30))`
+                      : 'rgba(255,255,255,0.12)',
+                    backdropFilter: 'blur(12px)',
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
                     transform: hovered === i ? 'translateY(-6px)' : 'translateY(0)',
-                    boxShadow: hovered === i ? `0 16px 48px ${P.glow}` : 'none',
+                    boxShadow: hovered === i ? `0 20px 56px ${P.glow}` : '0 2px 12px rgba(0,0,0,0.2)',
                   }}
                 >
                   <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: hovered === i ? `linear-gradient(135deg, ${P.dark}, ${P.mid})` : `rgba(123,61,184,0.15)`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', transition: 'all 0.3s ease' }}>
                     <i className={`fa-solid ${f.icon}`} style={{ fontSize: '1.3rem', color: hovered === i ? '#fff' : P.light }} />
                   </div>
                   <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#fff', marginBottom: '8px' }}>{f.label}</h3>
-                  <p style={{ fontSize: '0.85rem', color: 'rgba(196,160,216,0.65)', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
-                  <div style={{ marginTop: '16px', fontSize: '0.78rem', color: P.light, display: 'flex', alignItems: 'center', gap: '4px', opacity: hovered === i ? 1 : 0.4, transition: 'opacity 0.3s ease' }}>
+                  <p style={{ fontSize: '0.85rem', color: 'rgba(220,190,245,0.8)', lineHeight: 1.65, margin: 0 }}>{f.desc}</p>
+                  <div style={{ marginTop: '16px', fontSize: '0.78rem', color: P.light, display: 'flex', alignItems: 'center', gap: '4px', opacity: hovered === i ? 1 : 0.6, transition: 'opacity 0.3s ease' }}>
                     เริ่มต้น <i className="fa-solid fa-arrow-right" style={{ fontSize: '0.7rem' }} />
                   </div>
                 </div>
@@ -234,10 +238,10 @@ export default function HomePage() {
               { icon: 'fa-file-signature', label: 'ประเมินแล้ว',       value: stats.assess       },
               { icon: 'fa-star',           label: 'ความพึงพอใจ',       value: stats.satisfaction },
             ].map((s) => (
-              <div key={s.label} style={{ padding: '28px 24px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.02)', textAlign: 'center' }}>
-                <i className={`fa-solid ${s.icon}`} style={{ fontSize: '1.4rem', color: P.light, marginBottom: '12px', display: 'block' }} />
-                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#fff', lineHeight: 1, marginBottom: '6px' }}>{s.value}</div>
-                <p style={{ fontSize: '0.78rem', color: 'rgba(196,160,216,0.55)', margin: 0, letterSpacing: '0.04em' }}>{s.label}</p>
+              <div key={s.label} style={{ padding: '28px 24px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)', textAlign: 'center' }}>
+                <i className={`fa-solid ${s.icon}`} style={{ fontSize: '1.6rem', color: P.light, marginBottom: '12px', display: 'block', filter: `drop-shadow(0 0 8px ${P.light})` }} />
+                <div style={{ fontSize: '2rem', fontWeight: 900, color: '#fff', lineHeight: 1, marginBottom: '6px', textShadow: '0 2px 12px rgba(188,128,232,0.4)' }}>{s.value}</div>
+                <p style={{ fontSize: '0.78rem', color: 'rgba(220,190,245,0.65)', margin: 0, letterSpacing: '0.04em' }}>{s.label}</p>
               </div>
             ))}
           </div>
@@ -250,7 +254,7 @@ export default function HomePage() {
               { title: 'สถิติการลงทะเบียน (รายเดือน)', ref: usageRef },
               { title: 'ระดับความพึงพอใจ',              ref: satRef   },
             ].map((c) => (
-              <div key={c.title} style={{ padding: '28px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.02)', height: '320px', display: 'flex', flexDirection: 'column' }}>
+              <div key={c.title} style={{ padding: '28px', borderRadius: '20px', border: `1px solid ${P.border}`, background: 'rgba(255,255,255,0.07)', backdropFilter: 'blur(12px)', height: '320px', display: 'flex', flexDirection: 'column' }}>
                 <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'rgba(196,160,216,0.7)', marginBottom: '16px', textAlign: 'center', letterSpacing: '0.06em' }}>
                   {c.title}
                 </h3>
