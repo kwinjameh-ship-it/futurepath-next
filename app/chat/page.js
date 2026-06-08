@@ -222,7 +222,7 @@ export default function ChatPage() {
                   padding: '14px 18px',
                   borderRadius: '18px 18px 4px 18px',
                   background: 'var(--accent-dim)',
-                  border: '1px solid rgba(0,242,254,0.35)',
+                  border: '1px solid rgba(255,122,0,0.35)',
                   fontSize: '0.95rem',
                   lineHeight: 1.7,
                   color: 'var(--text-main)',
@@ -278,7 +278,7 @@ export default function ChatPage() {
             disabled={sending}
             style={{
               width: '50px', height: '50px', borderRadius: '50%',
-              background: sending ? 'rgba(0,242,254,0.3)' : 'linear-gradient(135deg, var(--accent-color), #00a8ff)',
+              background: sending ? 'rgba(255,122,0,0.3)' : 'linear-gradient(135deg, var(--accent-color), #ff4b00)',
               border: 'none', cursor: sending ? 'not-allowed' : 'pointer',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: '#0c0a22', fontSize: '1.1rem',

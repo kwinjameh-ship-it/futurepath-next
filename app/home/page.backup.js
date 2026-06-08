@@ -96,8 +96,8 @@ export default function HomePage() {
         datasets: [{
           label: 'ผู้ลงทะเบียน',
           data: monthlyUsage,
-          borderColor: '#00f2fe',
-          backgroundColor: 'rgba(0,242,254,0.12)',
+          borderColor: '#ff7a00',
+          backgroundColor: 'rgba(255,122,0,0.12)',
           borderWidth: 2.5,
           tension: 0.45,
           fill: true,
@@ -125,7 +125,7 @@ export default function HomePage() {
         labels: ['มากที่สุด (5)','มาก (4)','ปานกลาง (3)','น้อย (2)','น้อยที่สุด (1)'],
         datasets: [{
           data: satDistribution,
-          backgroundColor: ['#00f2fe','#00c3ff','#ff0080','#ff5e00','#ff0040'],
+          backgroundColor: ['#ff7a00','#00c3ff','#ff0080','#ff5e00','#ff0040'],
           borderWidth: 0,
           hoverOffset: 8,
         }],
@@ -249,7 +249,7 @@ export default function HomePage() {
               borderRadius: 'var(--r-lg)',
               overflow: 'hidden',
               border: '1px solid var(--glass-border)',
-              boxShadow: '0 8px 40px rgba(0,242,254,0.12)',
+              boxShadow: '0 8px 40px rgba(255,122,0,0.12)',
             }}
           >
             <img
@@ -449,7 +449,7 @@ export default function HomePage() {
         }}
         onMouseEnter={e => {
           e.currentTarget.style.color = 'var(--accent-color)';
-          e.currentTarget.style.background = 'rgba(0, 242, 254, 0.1)';
+          e.currentTarget.style.background = 'rgba(255,122,0, 0.1)';
           e.currentTarget.style.borderColor = 'var(--accent-color)';
           e.currentTarget.style.transform = 'translateY(-2px)';
         }}

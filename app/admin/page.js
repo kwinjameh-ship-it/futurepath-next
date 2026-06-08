@@ -76,7 +76,7 @@ export default function AdminDashboard() {
       label: 'จำนวนครั้งที่เปิดดู',
       data: viewsByPath.map(v => v.count),
       backgroundColor: [
-        '#ff0080', '#00f2fe', '#fed330', '#26de81', '#a55eea', '#fd9644', '#fc5c65', '#2bcbba', '#45aaf2', '#4b7bec'
+        '#ff0080', '#ff7a00', '#fed330', '#26de81', '#a55eea', '#fd9644', '#fc5c65', '#2bcbba', '#45aaf2', '#4b7bec'
       ],
       borderWidth: 0,
     }]

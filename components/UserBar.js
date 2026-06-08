@@ -5,7 +5,7 @@ export default function UserBar({ name, email }) {
   const router = useRouter();
 
   const avatarUrl = name
-    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=00f2fe&color=0c0a22&size=100&bold=true`
+    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff7a00&color=0c0a22&size=100&bold=true`
     : '';
 
   function triggerLogout() {

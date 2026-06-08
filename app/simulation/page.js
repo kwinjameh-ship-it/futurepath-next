@@ -109,7 +109,7 @@ export default function SimulationPage() {
             <div
               style={{
                 width: '40px', height: '40px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, var(--accent-color), #00a8ff)',
+                background: 'linear-gradient(135deg, var(--accent-color), #ff4b00)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontWeight: 900, fontSize: '1rem', color: 'var(--body-bg-start)',
                 boxShadow: '0 0 12px var(--accent-glow)', flexShrink: 0,
@@ -306,14 +306,14 @@ export default function SimulationPage() {
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                <div style={{ padding: '18px', borderRadius: 'var(--r-md)', borderTop: '2px solid #4facfe', background: 'rgba(79,172,254,0.06)' }}>
-                  <h4 style={{ fontWeight: 700, marginBottom: '12px', color: '#4facfe', fontSize: '0.9rem' }}>
+                <div style={{ padding: '18px', borderRadius: 'var(--r-md)', borderTop: '2px solid #ff7a00', background: 'rgba(79,172,254,0.06)' }}>
+                  <h4 style={{ fontWeight: 700, marginBottom: '12px', color: '#ff7a00', fontSize: '0.9rem' }}>
                     <i className="fa-solid fa-circle-check mr-2" />จุดเด่นที่ทำได้ดี
                   </h4>
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '7px' }}>
                     {evaluation.strengths?.map((s, i) => (
                       <li key={i} style={{ fontSize: '0.87rem', color: 'var(--text-sub)', paddingLeft: '16px', position: 'relative', lineHeight: 1.5 }}>
-                        <span style={{ position: 'absolute', left: 0, color: '#4facfe' }}>✓</span>{s}
+                        <span style={{ position: 'absolute', left: 0, color: '#ff7a00' }}>✓</span>{s}
                       </li>
                     ))}
                   </ul>

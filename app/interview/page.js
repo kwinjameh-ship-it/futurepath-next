@@ -219,7 +219,7 @@ export default function InterviewPage() {
   return (
     <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #050314 0%, #0c0a22 50%, #0d0622 100%)', paddingTop: '64px' }}>
       {/* Ambient blobs */}
-      <div style={{ position: 'fixed', top: '10%', left: '5%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,100,255,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'fixed', top: '10%', left: '5%', width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,75,0,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'fixed', bottom: '10%', right: '5%', width: '350px', height: '350px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,0,128,0.06) 0%, transparent 70%)', pointerEvents: 'none', zIndex: 0 }} />
 
       <GlassNav />
@@ -245,7 +245,7 @@ export default function InterviewPage() {
 
           {/* Stats + Reset */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{ padding: '8px 16px', borderRadius: 'var(--r-pill)', background: 'rgba(0,242,254,0.08)', border: '1px solid rgba(0,242,254,0.2)', textAlign: 'center' }}>
+            <div style={{ padding: '8px 16px', borderRadius: 'var(--r-pill)', background: 'rgba(255,122,0,0.08)', border: '1px solid rgba(255,122,0,0.2)', textAlign: 'center' }}>
               <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--accent-color)' }}>{qCount}</div>
               <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>คำถาม</div>
             </div>
@@ -386,7 +386,7 @@ export default function InterviewPage() {
                     width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
                     background: msg.sender === 'ai'
                       ? 'var(--card-bg)'
-                      : 'linear-gradient(135deg, var(--accent-color), #00a8ff)',
+                      : 'linear-gradient(135deg, var(--accent-color), #ff4b00)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontSize: msg.sender === 'ai' ? '0.9rem' : '0.85rem',
                     fontWeight: 900, color: msg.sender === 'ai' ? 'var(--text-main)' : 'var(--body-bg-start)',
@@ -537,7 +537,7 @@ export default function InterviewPage() {
           to   { transform: scaleY(1.5); }
         }
         textarea::placeholder { color: rgba(255,255,255,0.25); }
-        textarea:focus { border-color: rgba(0,242,254,0.4) !important; box-shadow: 0 0 0 2px rgba(0,242,254,0.08); }
+        textarea:focus { border-color: rgba(255,122,0,0.4) !important; box-shadow: 0 0 0 2px rgba(255,122,0,0.08); }
       `}</style>
     </div>
   );

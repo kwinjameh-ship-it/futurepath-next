@@ -29,8 +29,8 @@
   --avatar-bg:          linear-gradient(135deg, #1c2a4a, #0d1f3c);
   --status-warn:        #fed330;
   --status-ok:          #26de81;
-  --bubble-ai:          linear-gradient(135deg, rgba(0,100,255,0.08), rgba(0,242,254,0.06));
-  --bubble-user:        linear-gradient(135deg, rgba(255,0,128,0.10), rgba(0,242,254,0.06));
+  --bubble-ai:          linear-gradient(135deg, rgba(255,75,0,0.08), rgba(255,122,0,0.06));
+  --bubble-user:        linear-gradient(135deg, rgba(255,0,128,0.10), rgba(255,122,0,0.06));
 
   --nav-h:              64px;
   --ease-smooth:        cubic-bezier(0.65, 0, 0.35, 1);
@@ -47,7 +47,7 @@
   --glass-bg-hover:     rgba(255, 255, 255, 0.85);
   --glass-border:       rgba(0, 0, 0, 0.08);
   --glass-border-hover: rgba(0, 0, 0, 0.15);
-  --accent-color:       #0084ff;
+  --accent-color:       #ff7a00;
   --accent-dim:         rgba(0, 132, 255, 0.12);
   --accent-glow:        rgba(0, 132, 255, 0.25);
   --secondary-color:    #d10068;
@@ -146,7 +146,7 @@ input, textarea, button, select, label {
 /* ── Glass Menu Overlay ── */
 .glass-menu {
   position: fixed; inset: 0;
-  background: linear-gradient(135deg, rgba(0, 229, 255, 0.85) 0%, rgba(107, 140, 206, 0.85) 33%, rgba(168, 85, 247, 0.85) 66%, rgba(255, 0, 128, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(255,122,0, 0.85) 0%, rgba(107, 140, 206, 0.85) 33%, rgba(168, 85, 247, 0.85) 66%, rgba(255, 0, 128, 0.85) 100%);
   backdrop-filter: blur(60px) saturate(160%) brightness(0.6);
   -webkit-backdrop-filter: blur(60px) saturate(160%) brightness(0.6);
   display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -233,7 +233,7 @@ input, textarea, button, select, label {
   font-size: 1rem;
   letter-spacing: 0.05em;
   color: #0c0a22;
-  background: linear-gradient(135deg, var(--accent-color), #00a8ff);
+  background: linear-gradient(135deg, var(--accent-color), #ff4b00);
   border: none;
   cursor: pointer;
   transition: transform 0.25s var(--ease-out), box-shadow 0.25s ease, opacity 0.25s ease;

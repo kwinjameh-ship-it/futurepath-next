@@ -451,7 +451,7 @@ export default function AssessmentPage() {
           </div>
         )}
         {apiStatus === 'success' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 18px', borderRadius: 'var(--r-md)', marginBottom: '20px', fontSize: '0.87rem', fontWeight: 600, background: 'var(--accent-dim)', color: 'var(--accent-color)', border: '1px solid rgba(0,242,254,0.3)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 18px', borderRadius: 'var(--r-md)', marginBottom: '20px', fontSize: '0.87rem', fontWeight: 600, background: 'var(--accent-dim)', color: 'var(--accent-color)', border: '1px solid rgba(255,122,0,0.3)' }}>
             <i className="fas fa-check-circle" /> เชื่อมต่อระบบ AI สำเร็จ
           </div>
         )}

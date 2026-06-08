@@ -100,7 +100,7 @@ export default function FeedbackPage() {
           <div
             style={{
               width: '56px', height: '56px', borderRadius: '16px',
-              background: 'var(--accent-dim)', border: '1px solid rgba(0,242,254,0.3)',
+              background: 'var(--accent-dim)', border: '1px solid rgba(255,122,0,0.3)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               margin: '0 auto 16px',
             }}
@@ -120,12 +120,12 @@ export default function FeedbackPage() {
             style={{
               display: 'flex', alignItems: 'center', gap: '12px',
               padding: '12px 18px', borderRadius: 'var(--r-md)', marginTop: '20px',
-              background: 'var(--accent-dim)', border: '1px solid rgba(0,242,254,0.25)',
+              background: 'var(--accent-dim)', border: '1px solid rgba(255,122,0,0.25)',
               justifyContent: 'center',
             }}
           >
             <img
-              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=00f2fe&color=0c0a22&size=100&bold=true`}
+              src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=ff7a00&color=0c0a22&size=100&bold=true`}
               alt="Avatar"
               style={{ width: '36px', height: '36px', borderRadius: '50%', border: '2px solid var(--accent-color)' }}
             />
@@ -153,14 +153,14 @@ export default function FeedbackPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   padding: '18px 24px',
-                  background: 'rgba(0,242,254,0.04)',
+                  background: 'rgba(255,122,0,0.04)',
                   borderBottom: '1px solid var(--glass-border)',
                 }}
               >
                 <div
                   style={{
                     width: '34px', height: '34px', borderRadius: '10px',
-                    background: 'var(--accent-dim)', border: '1px solid rgba(0,242,254,0.3)',
+                    background: 'var(--accent-dim)', border: '1px solid rgba(255,122,0,0.3)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}
                 >
