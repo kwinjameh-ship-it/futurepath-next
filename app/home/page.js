@@ -126,7 +126,7 @@ export default function HomePage() {
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
-          backgroundImage: "url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1920&q=80')", 
+          backgroundImage: "url('/img/bg-room.jpg')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center',
           opacity: 0.8
