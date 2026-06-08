@@ -97,6 +97,19 @@ export default function ChatPage() {
 
       <GlassNav />
 
+      {/* Page Header */}
+      <div style={{ maxWidth: '900px', width: '100%', margin: '0 auto', padding: '16px 20px 0', position: 'relative', zIndex: 10 }}>
+        <p style={{ fontSize: '0.75rem', color: 'var(--accent-color)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '4px' }}>
+          Personal AI Advisor
+        </p>
+        <h1 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 900, background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', margin: 0 }}>
+          ปรึกษา AI ค้นหาตัวเอง
+        </h1>
+        <p style={{ fontSize: '0.9rem', color: 'var(--text-sub)', marginTop: '8px', fontWeight: 400 }}>
+          พูดคุยสอบถามแนวทางการศึกษาและอาชีพในอนาคตกับผู้เชี่ยวชาญ AI ของเรา
+        </p>
+      </div>
+
       {/* Chat Container */}
       <div
         style={{
