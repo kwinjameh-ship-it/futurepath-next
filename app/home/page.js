@@ -329,6 +329,40 @@ export default function HomePage() {
                     <span style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>/ 5.0</span>
                   </div>
                 </div>
+
+                {/* Sub-metrics */}
+                <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>ความแม่นยำของการวิเคราะห์ (AI)</span>
+                      <span style={{ color: '#ffb347', fontWeight: 600 }}>92%</span>
+                    </div>
+                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: '92%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>ประสบการณ์ใช้งานแพลตฟอร์ม</span>
+                      <span style={{ color: '#ffb347', fontWeight: 600 }}>95%</span>
+                    </div>
+                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: '95%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>แนะนำให้เพื่อนใช้งานต่อ</span>
+                      <span style={{ color: '#ffb347', fontWeight: 600 }}>98%</span>
+                    </div>
+                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                      <div style={{ width: '98%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
 
