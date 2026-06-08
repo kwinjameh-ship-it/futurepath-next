@@ -122,10 +122,17 @@ export default function HomePage() {
   return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
 
-      {/* Warm Glowing Background */}
+      {/* Image Background */}
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '800px', height: '800px', background: 'radial-gradient(circle, rgba(255,107,0,0.4) 0%, transparent 60%)', filter: 'blur(80px)' }} />
-        <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '1000px', height: '1000px', background: 'radial-gradient(circle, rgba(255,60,0,0.3) 0%, transparent 60%)', filter: 'blur(100px)' }} />
+        <div style={{ 
+          position: 'absolute', inset: 0, 
+          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundSize: 'cover', 
+          backgroundPosition: 'center',
+          opacity: 0.8
+        }} />
+        {/* Dark overlay to ensure text readability */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18, 12, 10, 0.65)' }} />
       </div>
 
       <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8">
