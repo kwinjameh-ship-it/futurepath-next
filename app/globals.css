@@ -189,10 +189,10 @@ input, textarea, button, select, label {
 }
 .nav-link:hover {
   color: var(--text-main);
-  background: var(--accent-dim);
-  letter-spacing: 5px;
-  text-shadow: 0 0 18px var(--accent-glow);
-  padding-left: 26px;
+  background: transparent;
+  transform: scale(1.1);
+  letter-spacing: 6px;
+  text-shadow: 0 0 15px var(--accent-color), 0 0 30px var(--accent-glow);
 }
 .nav-link:hover i {
   color: var(--accent-color);
