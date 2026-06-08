@@ -282,6 +282,7 @@ export default function AssessmentPage() {
 
         {/* Match Score */}
         <div
+          className="hover-lift"
           style={{
             textAlign: 'center',
             padding: '52px 40px',
@@ -294,6 +295,7 @@ export default function AssessmentPage() {
         >
           <p className="section-eyebrow" style={{ marginBottom: '16px' }}>ผลการวิเคราะห์ DNA ของคุณ</p>
           <div
+            className="hover-lift"
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
               width: '110px', height: '110px', borderRadius: '50%',
@@ -316,6 +318,7 @@ export default function AssessmentPage() {
         {/* Charts + Score Bars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div
+            className="hover-lift"
             style={{
               padding: '36px', borderRadius: 'var(--r-lg)',
               background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
@@ -328,6 +331,7 @@ export default function AssessmentPage() {
             <div style={{ height: '280px', position: 'relative' }}><canvas ref={radarRef} /></div>
           </div>
           <div
+            className="hover-lift"
             style={{
               padding: '36px', borderRadius: 'var(--r-lg)',
               background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
@@ -364,6 +368,7 @@ export default function AssessmentPage() {
           ].map(sec => (
             <div
               key={sec.title}
+              className="hover-lift"
               style={{
                 padding: '32px 28px', borderRadius: 'var(--r-xl)',
                 background: 'var(--card-bg)', border: '1px solid var(--card-border)',
