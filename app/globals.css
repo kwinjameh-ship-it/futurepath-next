@@ -98,54 +98,107 @@ input, textarea, button, select, label {
 }
 
 /* ── Glass Menu Overlay ─────────────────────────────────── */
-.glass-menu {
+
+/* Overlay backdrop — blurs the page content behind it */
+.glass-menu-backdrop {
   position: fixed; inset: 0;
-  /* ── Dark opaque background so page content is hidden under blur ── */
-  background: rgba(5, 3, 16, 0.82);
-  backdrop-filter: blur(60px) saturate(200%) brightness(0.55);
-  -webkit-backdrop-filter: blur(60px) saturate(200%) brightness(0.55);
-  display: flex; justify-content: center; align-items: center;
-  z-index: 940;
-  clip-path: circle(0% at calc(100% - 22px) 32px);
-  transition: clip-path 0.85s var(--ease-smooth), visibility 0.85s var(--ease-smooth);
+  z-index: 939;
+  background: rgba(4, 2, 14, 0.60);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  opacity: 0;
   visibility: hidden;
+  transition: opacity 0.45s ease, visibility 0.45s ease;
   pointer-events: none;
 }
-.glass-menu.active {
-  clip-path: circle(150% at calc(100% - 22px) 32px);
+.glass-menu-backdrop.active {
+  opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.nav-item {
-  margin: 16px 0;
-  opacity: 0;
-  transform: translateY(28px);
-  transition: all 0.7s var(--ease-smooth);
+/* Side drawer panel — slides in from the right */
+.glass-menu {
+  position: fixed;
+  top: 0; right: 0;
+  height: 100vh;
+  width: min(340px, 90vw);
+  z-index: 940;
+  background: linear-gradient(160deg,
+    rgba(10, 6, 30, 0.97) 0%,
+    rgba(8, 4, 24, 0.99) 100%);
+  border-left: 1px solid rgba(0, 242, 254, 0.12);
+  box-shadow: -16px 0 60px rgba(0, 0, 0, 0.7), -2px 0 0 rgba(0,242,254,0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(100%);
+  transition: transform 0.50s cubic-bezier(0.65, 0, 0.35, 1);
+  pointer-events: none;
 }
-.glass-menu.active .nav-item { opacity: 1; transform: translateY(0); }
+.glass-menu.active {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+/* Decorative glow inside panel */
+.glass-menu::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -80px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,242,254,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.glass-menu::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -60px;
+  width: 250px; height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,0,128,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.nav-item {
+  margin: 10px 0;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.glass-menu.active .nav-item { opacity: 1; transform: translateX(0); }
 
 .nav-link {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
   font-family: 'Kanit', sans-serif;
-  /* ── Bright enough to read against dark overlay ── */
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(220, 230, 255, 0.75);
   text-decoration: none;
   text-transform: uppercase;
-  letter-spacing: 5px;
-  transition: all 0.45s var(--ease-smooth);
+  letter-spacing: 4px;
+  transition: all 0.35s ease;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 8px 0;
+  gap: 14px;
+  padding: 12px 20px;
+  border-radius: 14px;
+  width: 260px;
+  position: relative;
 }
 .nav-link:hover {
   color: #ffffff;
-  letter-spacing: 9px;
-  text-shadow: 0 0 28px var(--accent-color), 0 0 60px var(--accent-color);
+  background: rgba(0,242,254,0.07);
+  border: none;
+  letter-spacing: 5px;
+  text-shadow: 0 0 20px rgba(0,242,254,0.6);
+  padding-left: 26px;
 }
+.nav-link:hover i {
+  color: var(--accent-color);
+  filter: drop-shadow(0 0 8px var(--accent-color));
+}
+
 
 /* ── Utility: Input field ────────────────────────────────── */
 .fp-input {

@@ -1,37 +1,48 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const navLinks = [
-  { href: '/home',       label: 'หน้าหลัก',                         icon: 'fa-house' },
-  { href: '/assessment', label: 'วิเคราะห์ศักยภาพ',                  icon: 'fa-brain' },
-  { href: '/chat',       label: 'AI ChatBot',                        icon: 'fa-comments' },
-  { href: '/interview',  label: 'จำลองการสัมภาษณ์ด้วยเสียง',         icon: 'fa-microphone' },
-  { href: '/simulation', label: 'ทดลองทำงานในสายงานที่คุณใฝ่ฝัน',   icon: 'fa-briefcase' },
-  { href: '/feedback',   label: 'ประเมินความพึงพอใจ',                 icon: 'fa-star' },
+  { href: '/home',       label: 'หน้าหลัก',                       icon: 'fa-house' },
+  { href: '/assessment', label: 'วิเคราะห์ศักยภาพ',                icon: 'fa-brain' },
+  { href: '/chat',       label: 'AI ChatBot',                      icon: 'fa-comments' },
+  { href: '/interview',  label: 'จำลองสัมภาษณ์เสียง',              icon: 'fa-microphone' },
+  { href: '/simulation', label: 'ทดลองงานในฝัน',                   icon: 'fa-briefcase' },
+  { href: '/feedback',   label: 'ประเมินความพึงพอใจ',               icon: 'fa-star' },
 ];
 
 export default function GlassNav() {
   const [open, setOpen] = useState(false);
 
-  const barStyle = () => ({});
+  // ล็อก scroll ตอนเมนูเปิด
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [open]);
+
+  // ปิดเมื่อกด Escape
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') setOpen(false); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   return (
     <>
-      {/* ── Fixed Top Navbar ───────────────────────────── */}
+      {/* ── Fixed Top Navbar ── */}
       <header
         className="fixed top-0 left-0 right-0 z-[950] flex items-center justify-between"
         style={{
           height: '64px',
           padding: '0 24px',
-          background: 'rgba(10, 8, 30, 0.82)',
+          background: 'rgba(10, 8, 30, 0.85)',
           backdropFilter: 'blur(24px) saturate(160%)',
           WebkitBackdropFilter: 'blur(24px) saturate(160%)',
           borderBottom: '1px solid var(--glass-border)',
           boxShadow: '0 2px 24px rgba(0,0,0,0.45)',
         }}
       >
-        {/* Logo + Brand */}
+        {/* Logo */}
         <Link href="/home" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
           <img
             src="/img/logo1.png"
@@ -41,32 +52,26 @@ export default function GlassNav() {
           />
           <span style={{
             fontFamily: "'Kanit', sans-serif",
-            fontWeight: 900,
-            fontSize: '1.1rem',
-            letterSpacing: '0.15em',
-            color: 'var(--accent-color)',
-            textShadow: '0 0 14px rgba(0,242,254,0.45)',
+            fontWeight: 900, fontSize: '1.1rem', letterSpacing: '0.15em',
+            color: 'var(--accent-color)', textShadow: '0 0 14px rgba(0,242,254,0.45)',
           }}>
             FUTUREPATH AI
           </span>
         </Link>
 
-        {/* Hamburger Button */}
+        {/* Hamburger */}
         <button
           onClick={() => setOpen(!open)}
           aria-label="Toggle Menu"
           style={{
-            width: '44px',
-            height: '44px',
-            borderRadius: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: '44px', height: '44px', borderRadius: '50%',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer',
             border: `1px solid ${open ? 'var(--accent-color)' : 'var(--glass-border)'}`,
             background: open ? 'rgba(0,242,254,0.10)' : 'var(--glass-bg)',
-            transition: 'all 0.3s ease',
-            flexShrink: 0,
+            transition: 'all 0.3s ease', flexShrink: 0,
+            zIndex: 960,
+            position: 'relative',
           }}
         >
           <i
@@ -75,57 +80,68 @@ export default function GlassNav() {
               fontSize: '1.25rem',
               color: open ? 'var(--accent-color)' : '#ffffff',
               transition: 'color 0.2s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
             }}
           />
         </button>
       </header>
 
-      {/* ── Full-Screen Overlay Menu ───────────────────── */}
+      {/* ── Blurred backdrop (คลิกปิดเมนูได้) ── */}
+      <div
+        className={`glass-menu-backdrop ${open ? 'active' : ''}`}
+        onClick={() => setOpen(false)}
+      />
+
+      {/* ── Side Drawer Menu ── */}
       <nav className={`glass-menu ${open ? 'active' : ''}`}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%', padding: '0 28px' }}>
+
+          {/* Brand inside drawer */}
+          <div style={{ textAlign: 'center', marginBottom: '36px', paddingTop: '80px' }}>
             <img
               src="/img/logo1.png"
               alt="Logo"
-              style={{ width: '72px', height: '72px', objectFit: 'contain', borderRadius: '16px', margin: '0 auto 14px' }}
+              style={{ width: '56px', height: '56px', objectFit: 'contain', borderRadius: '12px', margin: '0 auto 12px' }}
               onError={(e) => { e.target.style.display = 'none'; }}
             />
             <div style={{
-              fontFamily: "'Kanit', sans-serif",
-              fontWeight: 900,
-              fontSize: '1.8rem',
-              letterSpacing: '0.2em',
-              color: 'var(--accent-color)',
+              fontFamily: "'Kanit', sans-serif", fontWeight: 900,
+              fontSize: '1rem', letterSpacing: '0.18em', color: 'var(--accent-color)',
+              textShadow: '0 0 20px rgba(0,242,254,0.4)',
             }}>
               FUTUREPATH AI
             </div>
+
+            {/* Divider */}
+            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(0,242,254,0.25), transparent)', marginTop: '20px' }} />
           </div>
-          
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+
+          {/* Nav Links */}
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' }}>
             {navLinks.map((link, i) => (
               <li
                 key={link.href}
                 className="nav-item"
-                style={{ transitionDelay: `${(i + 1) * 0.07}s`, margin: '12px 0' }}
+                style={{ transitionDelay: open ? `${(i + 1) * 0.06}s` : '0s' }}
               >
-                <Link 
-                  href={link.href} 
-                  className="nav-link" 
+                <Link
+                  href={link.href}
+                  className="nav-link"
                   onClick={() => setOpen(false)}
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '16px', padding: '8px 0' }}
                 >
-                  <i
-                    className={`fa-solid ${link.icon}`}
-                    style={{ color: 'var(--accent-color)', fontSize: '1.1rem' }}
-                  />
+                  <i className={`fa-solid ${link.icon}`} style={{ color: 'var(--accent-color)', fontSize: '1rem', width: '20px', textAlign: 'center' }} />
                   <span>{link.label}</span>
                 </Link>
               </li>
             ))}
           </ul>
+
+          {/* Footer inside drawer */}
+          <div style={{ marginTop: 'auto', paddingTop: '40px', paddingBottom: '32px', textAlign: 'center' }}>
+            <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', marginBottom: '16px' }} />
+            <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>
+              © 2025 FuturePath AI
+            </span>
+          </div>
         </div>
       </nav>
     </>
