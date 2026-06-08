@@ -632,8 +632,20 @@ export default function AssessmentPage() {
               className="hover-glow-btn"
               style={{ 
                 flex: 1, padding: '15px', fontSize: '1.05rem', borderRadius: '30px',
-                background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', color: '#fff', border: 'none',
-                fontWeight: 700, boxShadow: '0 8px 32px rgba(255,107,0,0.4)', cursor: 'pointer'
+                background: 'rgba(255, 122, 0, 0.05)',
+                border: '2px solid #ff7a00',
+                color: '#ffb347',
+                boxShadow: '0 0 15px rgba(255, 122, 0, 0.2), inset 0 0 10px rgba(255, 122, 0, 0.1)',
+                fontWeight: 700, cursor: 'pointer',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'linear-gradient(135deg, #ff7a00, #ff4b00)';
+                e.currentTarget.style.color = '#fff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'rgba(255, 122, 0, 0.05)';
+                e.currentTarget.style.color = '#ffb347';
               }}
             >
               ถัดไป <i className="fa-solid fa-arrow-right ml-2" />
@@ -642,8 +654,29 @@ export default function AssessmentPage() {
             <button
               onClick={calculateDNA}
               disabled={submitting}
-              className="btn-primary"
-              style={{ flex: 1, padding: '13px', fontSize: '1rem' }}
+              className="hover-glow-btn"
+              style={{ 
+                flex: 1, padding: '15px', fontSize: '1.05rem', borderRadius: '30px',
+                background: 'rgba(255, 122, 0, 0.05)',
+                border: '2px solid #ff7a00',
+                color: '#ffb347',
+                boxShadow: '0 0 15px rgba(255, 122, 0, 0.2), inset 0 0 10px rgba(255, 122, 0, 0.1)',
+                fontWeight: 700, cursor: submitting ? 'not-allowed' : 'pointer',
+                opacity: submitting ? 0.7 : 1,
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                if (!submitting) {
+                  e.currentTarget.style.background = 'linear-gradient(135deg, #ff7a00, #ff4b00)';
+                  e.currentTarget.style.color = '#fff';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!submitting) {
+                  e.currentTarget.style.background = 'rgba(255, 122, 0, 0.05)';
+                  e.currentTarget.style.color = '#ffb347';
+                }
+              }}
             >
               {submitting
                 ? <><i className="fas fa-spinner fa-spin mr-2" />กำลังวิเคราะห์ DNA ของคุณ...</>
