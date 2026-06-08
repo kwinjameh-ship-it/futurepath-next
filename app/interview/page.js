@@ -31,10 +31,34 @@ export default function InterviewPage() {
   const [status, setStatus]       = useState('idle'); // idle | recording | processing
   const [qCount, setQCount]       = useState(0);
   const [speaking, setSpeaking]   = useState(false);
+  const [mouthOpen, setMouthOpen] = useState(false);
+  const [voiceReady, setVoiceReady] = useState(false);
+  const selectedVoiceRef = useRef(null);
+  const mouthTimerRef    = useRef(null);
 
   const chatRef        = useRef(null);
   const recognitionRef = useRef(null);
   const inputRef       = useRef(null);
+
+  /* ── Load & pick best Thai voice ── */
+  useEffect(() => {
+    if (!('speechSynthesis' in window)) return;
+
+    function pickVoice() {
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices.length) return;
+
+      // Priority: Thai male > Thai any > network Thai > first Thai-sounding
+      const thaiVoices = voices.filter(v => v.lang.startsWith('th'));
+      const maleThai   = thaiVoices.find(v => /male|man|กัน|วีร|สม/i.test(v.name));
+      const netThai    = thaiVoices.find(v => !v.localService);
+      selectedVoiceRef.current = maleThai || thaiVoices[0] || netThai || null;
+      setVoiceReady(true);
+    }
+
+    pickVoice();
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+  }, []);
 
   /* ── Init history & speech recognition ── */
   useEffect(() => {
@@ -66,16 +90,40 @@ export default function InterviewPage() {
     if (chatRef.current) chatRef.current.scrollTop = chatRef.current.scrollHeight;
   }, [messages]);
 
+  /* ── Mouth animation loop ── */
+  function startMouthAnim() {
+    if (mouthTimerRef.current) clearInterval(mouthTimerRef.current);
+    mouthTimerRef.current = setInterval(() => {
+      setMouthOpen(p => !p);
+    }, 220);
+  }
+  function stopMouthAnim() {
+    if (mouthTimerRef.current) clearInterval(mouthTimerRef.current);
+    setMouthOpen(false);
+  }
+
   /* ── TTS ── */
   function speakText(text) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
-    const clean = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*/g, '');
+    const clean = text.replace(/\*\*(.*?)\*\*/g, '$1').replace(/\*/g, '').replace(/<br>/g, ' ');
     const u = new SpeechSynthesisUtterance(clean);
-    u.lang = 'th-TH';
-    u.rate = 1.05;
-    u.onstart = () => setSpeaking(true);
-    u.onend   = () => setSpeaking(false);
+
+    // ใช้เสียงที่เลือกไว้ หรือ fallback ไป th-TH
+    if (selectedVoiceRef.current) {
+      u.voice = selectedVoiceRef.current;
+      u.lang  = selectedVoiceRef.current.lang;
+    } else {
+      u.lang = 'th-TH';
+    }
+    u.rate  = 0.95;   // พูดช้านิดให้ฟังชัด
+    u.pitch = 0.85;   // เสียงต่ำลง ดูเป็นผู้ชาย
+    u.volume = 1.0;
+
+    u.onstart = () => { setSpeaking(true);  startMouthAnim(); };
+    u.onend   = () => { setSpeaking(false); stopMouthAnim();  };
+    u.onerror = () => { setSpeaking(false); stopMouthAnim();  };
+
     window.speechSynthesis.speak(u);
   }
 
@@ -185,52 +233,109 @@ export default function InterviewPage() {
           {/* ── HR Avatar Panel ── */}
           <div style={{ position: 'sticky', top: '88px' }}>
             <div style={{ borderRadius: '20px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', padding: '24px 16px', textAlign: 'center', backdropFilter: 'blur(12px)' }}>
-              {/* Avatar */}
-              <div style={{ position: 'relative', marginBottom: '16px', display: 'inline-block' }}>
+              {/* ── Animated Avatar ── */}
+              <div style={{ position: 'relative', marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
+
+                {/* Outer glow ring when speaking */}
+                {speaking && (
+                  <div style={{
+                    position: 'absolute', top: '50%', left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '110px', height: '110px', borderRadius: '50%',
+                    border: '2px solid rgba(0,242,254,0.5)',
+                    animation: 'ping 1s cubic-bezier(0,0,0.2,1) infinite',
+                    pointerEvents: 'none',
+                  }} />
+                )}
+
+                {/* Face circle */}
                 <div style={{
-                  width: '90px', height: '90px', borderRadius: '50%', margin: '0 auto',
-                  background: 'linear-gradient(135deg, #1a1a3a, #0d2040)',
-                  border: `3px solid ${speaking ? '#00f2fe' : 'rgba(0,242,254,0.3)'}`,
+                  width: '90px', height: '90px', borderRadius: '50%',
+                  background: 'linear-gradient(135deg, #1c2a4a, #0d1f3c)',
+                  border: `3px solid ${speaking ? '#00f2fe' : 'rgba(0,242,254,0.25)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: speaking ? '0 0 24px rgba(0,242,254,0.5)' : '0 0 12px rgba(0,242,254,0.15)',
-                  transition: 'all 0.3s ease', fontSize: '2.8rem',
+                  boxShadow: speaking
+                    ? '0 0 28px rgba(0,242,254,0.55), inset 0 1px 0 rgba(255,255,255,0.08)'
+                    : '0 0 10px rgba(0,242,254,0.12), inset 0 1px 0 rgba(255,255,255,0.05)',
+                  transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
+                  position: 'relative', flexDirection: 'column', gap: '0',
                 }}>
-                  👔
+                  {/* SVG Face */}
+                  <svg width="54" height="54" viewBox="0 0 54 54" fill="none">
+                    {/* Hair */}
+                    <ellipse cx="27" cy="10" rx="17" ry="10" fill="#1a2840"/>
+                    {/* Face */}
+                    <ellipse cx="27" cy="28" rx="15" ry="18" fill="#f5c89a"/>
+                    {/* Forehead hair line */}
+                    <path d="M13 18 Q27 8 41 18" stroke="#2d3a52" strokeWidth="6" strokeLinecap="round" fill="none"/>
+                    {/* Eyebrows */}
+                    <path d="M18 19 Q21 17 24 19" stroke="#4a3520" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                    <path d="M30 19 Q33 17 36 19" stroke="#4a3520" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                    {/* Eyes */}
+                    <ellipse cx="21" cy="23" rx="2.5" ry={speaking && mouthOpen ? "2.2" : "2.5"} fill="#2d1f14"/>
+                    <ellipse cx="33" cy="23" rx="2.5" ry={speaking && mouthOpen ? "2.2" : "2.5"} fill="#2d1f14"/>
+                    {/* Eye shine */}
+                    <circle cx="22.2" cy="22" r="0.8" fill="white"/>
+                    <circle cx="34.2" cy="22" r="0.8" fill="white"/>
+                    {/* Nose */}
+                    <path d="M25.5 27 Q27 30 28.5 27" stroke="#c99a7a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                    {/* Mouth - animated */}
+                    {speaking && mouthOpen ? (
+                      <ellipse cx="27" cy="35" rx="5" ry="3.5" fill="#8B3A3A"/>
+                    ) : (
+                      <path d="M22 34 Q27 37.5 32 34" stroke="#c27a5a" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+                    )}
+                    {/* Shirt collar */}
+                    <path d="M12 50 L20 40 L27 44 L34 40 L42 50" fill="#1a3a6a" stroke="#1a3a6a" strokeWidth="1"/>
+                    {/* Tie */}
+                    <path d="M25 42 L27 50 L29 42 L27 39Z" fill="#c0392b"/>
+                  </svg>
                 </div>
+
                 {/* Status dot */}
                 <div style={{
-                  position: 'absolute', bottom: '4px', right: '4px',
-                  width: '16px', height: '16px', borderRadius: '50%',
+                  position: 'absolute', bottom: '2px', right: 'calc(50% - 48px)',
+                  width: '14px', height: '14px', borderRadius: '50%',
                   background: status === 'processing' ? '#fed330' : speaking ? '#00f2fe' : '#26de81',
-                  border: '2px solid #0c0a22',
-                  boxShadow: `0 0 8px ${status === 'processing' ? '#fed330' : speaking ? '#00f2fe' : '#26de81'}`,
+                  border: '2px solid #080618',
+                  boxShadow: `0 0 6px ${status === 'processing' ? '#fed330' : speaking ? '#00f2fe' : '#26de81'}`,
                   transition: 'all 0.3s ease',
                 }} />
               </div>
 
               <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-main)', marginBottom: '2px' }}>คุณวีรพล</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.04em', marginBottom: '12px' }}>ฝ่ายบุคคล (HR)</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.04em', marginBottom: '14px' }}>ฝ่ายบุคคล (HR)</div>
 
-              {/* Speaking status */}
-              <div style={{ fontSize: '0.72rem', color: status === 'processing' ? '#fed330' : speaking ? 'var(--accent-color)' : 'var(--text-muted)', transition: 'all 0.3s ease' }}>
+              {/* Sound wave bars when speaking */}
+              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '3px', height: '24px', marginBottom: '10px' }}>
+                {[0.6, 1, 0.7, 1.3, 0.5, 1.1, 0.8].map((h, i) => (
+                  <div key={i} style={{
+                    width: '4px', borderRadius: '2px',
+                    background: speaking ? 'var(--accent-color)' : 'rgba(255,255,255,0.1)',
+                    height: speaking ? `${h * 18}px` : '4px',
+                    transition: 'height 0.15s ease, background 0.3s ease',
+                    animation: speaking ? `soundBar 0.5s ease ${i * 0.07}s infinite alternate` : 'none',
+                  }} />
+                ))}
+              </div>
+
+              {/* Status text */}
+              <div style={{ fontSize: '0.72rem', color: status === 'processing' ? '#fed330' : speaking ? 'var(--accent-color)' : 'var(--text-muted)', transition: 'all 0.3s ease', marginBottom: '16px' }}>
                 {status === 'processing' ? '⏳ กำลังคิดคำถาม...' : speaking ? '🔊 กำลังพูด...' : status === 'recording' ? '🎙️ กำลังฟัง...' : '🟢 พร้อมรับฟัง'}
               </div>
 
               {/* Tips */}
-              <div style={{ marginTop: '20px', padding: '12px', borderRadius: '12px', background: 'rgba(0,242,254,0.05)', border: '1px solid rgba(0,242,254,0.1)', textAlign: 'left' }}>
-                <div style={{ fontSize: '0.68rem', color: 'var(--accent-color)', fontWeight: 700, marginBottom: '8px', letterSpacing: '0.06em' }}>💡 เคล็ดลับ</div>
+              <div style={{ padding: '12px', borderRadius: '12px', background: 'rgba(0,242,254,0.04)', border: '1px solid rgba(0,242,254,0.1)', textAlign: 'left' }}>
+                <div style={{ fontSize: '0.67rem', color: 'var(--accent-color)', fontWeight: 700, marginBottom: '8px', letterSpacing: '0.06em' }}>💡 เคล็ดลับ</div>
                 <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  {[
-                    'ตอบให้ชัดเจนและตรงประเด็น',
-                    'ยกตัวอย่างจากประสบการณ์จริง',
-                    'แสดงความคิดเชิงบวก',
-                  ].map((tip, i) => (
-                    <li key={i} style={{ fontSize: '0.68rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>• {tip}</li>
+                  {['ตอบให้ชัดเจนตรงประเด็น', 'ยกตัวอย่างจากประสบการณ์', 'แสดงความคิดเชิงบวก'].map((tip, i) => (
+                    <li key={i} style={{ fontSize: '0.67rem', color: 'var(--text-muted)', lineHeight: 1.5 }}>• {tip}</li>
                   ))}
                 </ul>
               </div>
             </div>
           </div>
+
 
           {/* ── Chat Area ── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -398,6 +503,14 @@ export default function InterviewPage() {
         @keyframes wave {
           from { transform: scaleY(0.6); }
           to   { transform: scaleY(1.4); }
+        }
+        @keyframes ping {
+          0%   { transform: translate(-50%,-50%) scale(1);   opacity: 0.6; }
+          100% { transform: translate(-50%,-50%) scale(1.5); opacity: 0; }
+        }
+        @keyframes soundBar {
+          from { transform: scaleY(0.5); }
+          to   { transform: scaleY(1.5); }
         }
         textarea::placeholder { color: rgba(255,255,255,0.25); }
         textarea:focus { border-color: rgba(0,242,254,0.4) !important; box-shadow: 0 0 0 2px rgba(0,242,254,0.08); }
