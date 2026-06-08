@@ -1,7 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
 import { usePathname } from 'next/navigation';
 
 const navLinks = [
@@ -13,13 +11,7 @@ const navLinks = [
 ];
 
 export default function GlassNav({ inline = false }) {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const navClasses = inline
     ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
@@ -76,26 +68,6 @@ export default function GlassNav({ inline = false }) {
           );
         })}
       </div>
-
-      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
-      
-      {/* Settings / Theme Toggle */}
-      {mounted && (
-        <button
-          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          title="สลับโหมดสว่าง/มืด"
-          className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
-          style={{
-            color: 'var(--text-sub)',
-            background: 'transparent',
-          }}
-        >
-          <i className={`${theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff9d4d]`} />
-          <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
-            สลับโหมดสี
-          </span>
-        </button>
-      )}
     </nav>
   );
 }
