@@ -22,7 +22,7 @@ export default function GlassNav({ inline = false }) {
   }, []);
 
   const navClasses = inline
-    ? "flex flex-col items-center justify-between py-6 px-3 h-full shrink-0"
+    ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
     : "fixed z-[950] flex items-center justify-between md:justify-center p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-6";
 
   return (
@@ -66,10 +66,10 @@ export default function GlassNav({ inline = false }) {
                 textDecoration: 'none'
               }}
             >
-              <i className={`fa-solid ${link.icon} text-lg md:text-xl transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 group-hover:text-[var(--accent-color)]'}`} />
+              <i className={`fa-solid ${link.icon} text-lg md:text-xl transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 group-hover:text-[#ff9d4d]'}`} />
               
               {/* Tooltip on Desktop */}
-              <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg">
+              <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
                 {link.label}
               </span>
             </Link>
@@ -90,8 +90,8 @@ export default function GlassNav({ inline = false }) {
             background: 'transparent',
           }}
         >
-          <i className={`${theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[var(--accent-color)]`} />
-          <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg">
+          <i className={`${theme === 'light' ? 'fa-solid fa-moon' : 'fa-solid fa-sun'} text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff9d4d]`} />
+          <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
             สลับโหมดสี
           </span>
         </button>
