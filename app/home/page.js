@@ -144,7 +144,7 @@ export default function HomePage() {
         <div className="flex w-[90%] md:w-[85%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
           
           {/* Desktop Attached Nav */}
-          <div className="hidden md:flex shrink-0 items-center h-full">
+          <div className="hidden md:block shrink-0 self-center">
             <GlassNav inline={true} />
           </div>
 
