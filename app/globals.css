@@ -283,7 +283,7 @@ input, textarea, button, select, label {
 }
 
 .print-only {
-  display: none;
+  display: none !important;
 }
 
 .hover-glow-btn {
