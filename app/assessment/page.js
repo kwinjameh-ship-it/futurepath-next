@@ -210,6 +210,13 @@ export default function AssessmentPage() {
       Refs: [
         {t:'World Economic Forum',d:'รายงานทักษะแห่งอนาคต (Future of Jobs Report)'},
         {t:'O*NET Online',d:'ฐานข้อมูลทักษะและอาชีพมาตรฐานสากล'}
+      ],
+      Roadmap: [
+        {step: 1, title: 'ประเมินศักยภาพ', desc: 'คุณมีทักษะพื้นฐานที่ระบบวิเคราะห์แล้ว พร้อมเดินหน้าสู่เป้าหมาย'},
+        {step: 2, title: 'พัฒนาทักษะ', desc: 'เริ่มฝึกฝนทักษะที่จำเป็นเพิ่มเติม เพื่อต่อยอดศักยภาพ'},
+        {step: 3, title: 'เส้นทางการศึกษา', desc: 'เข้าศึกษาต่อในคณะและสาขาที่สอดคล้องกับจุดแข็ง'},
+        {step: 4, title: 'อาชีพเป้าหมาย', desc: 'มุ่งหน้าสู่อาชีพที่ใช่และเตรียมความพร้อมในการทำงาน'},
+        {step: 5, title: 'ความสำเร็จ', desc: 'บรรลุเป้าหมายในสายอาชีพที่ตรงกับศักยภาพที่แท้จริงของคุณ'}
       ]
     };
 
@@ -223,7 +230,7 @@ export default function AssessmentPage() {
 - ห้ามใช้คำที่ไม่แน่นอน เช่น อาจจะ, น่าจะ, คงจะ, อาจ, บางที, หรืออาจ, ถ้าหาก ทุกประโยคต้องฟันธงเท่านั้น
 - บังคับ: ต้องให้คำแนะนำคณะ/สาขา (Edu) และ อาชีพ (Jobs) ให้ครบอย่างละ 5 อันดับเสมอ ห้ามให้น้อยกว่านี้เด็ดขาด
 
-ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก ทุกประโยคต้องฟันธง", "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "เหตุผลเชิงลึกอย่างละเอียด อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) พร้อมแนะนำมหาวิทยาลัยชั้นนำในไทยที่โดดเด่นในสาขานี้ 1-2 แห่ง"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "เหตุผลเชิงลึกอย่างละเอียด อธิบายว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
+ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "เหตุผลเชิงลึกอย่างละเอียด อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) พร้อมแนะนำมหาวิทยาลัยชั้นนำในไทยที่โดดเด่นในสาขานี้ 1-2 แห่ง"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "เหตุผลเชิงลึกอย่างละเอียด อธิบายว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -253,7 +260,8 @@ export default function AssessmentPage() {
                 Edu: formatArr(extracted.Edu || extracted.Education || extracted.edu || extracted.education) || fallback.Edu,
                 Jobs: formatArr(extracted.Jobs || extracted.jobs) || fallback.Jobs,
                 Dev: formatArr(extracted.Dev || extracted.Development || extracted.dev || extracted.development) || fallback.Dev,
-                Refs: formatArr(extracted.Refs || extracted.References || extracted.refs || extracted.references) || fallback.Refs
+                Refs: formatArr(extracted.Refs || extracted.References || extracted.refs || extracted.references) || fallback.Refs,
+                Roadmap: extracted.Roadmap || fallback.Roadmap
               };
               
               if (aiResult.Edu.length === 0) aiResult.Edu = fallback.Edu;
@@ -535,29 +543,28 @@ export default function AssessmentPage() {
             <i className="fa-solid fa-road" /> เส้นทางสู่เป้าหมาย (Career Roadmap)
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-            {[
-              { step: 1, icon: 'fa-circle-check', label: 'จุดเริ่มต้น', desc: 'คุณมีทักษะพื้นฐานที่ระบบวิเคราะห์แล้ว พร้อมเดินหน้าสู่เป้าหมาย', color: '#26de81', done: true },
-              { step: 2, icon: 'fa-book-open',    label: 'พัฒนาทักษะ', desc: resultData.Dev?.[0] ? `เริ่มจาก: ${resultData.Dev[0].t}` : 'ฝึกทักษะที่แนะนำในส่วนด้านล่าง', color: 'var(--accent-color)', done: false },
-              { step: 3, icon: 'fa-graduation-cap', label: 'เส้นทางการศึกษา', desc: resultData.Edu?.[0] ? resultData.Edu[0].t.replace(/^อันดับ\s*\d+\s*:\s*/, '') : 'เลือกสาขาที่เหมาะสมกับทักษะของคุณ', color: '#2bcbba', done: false },
-              { step: 4, icon: 'fa-briefcase',    label: 'อาชีพเป้าหมาย', desc: resultData.Jobs?.[0] ? resultData.Jobs[0].t.replace(/^อันดับ\s*\d+\s*:\s*/, '') : 'อาชีพที่เหมาะสมกับโปรไฟล์ของคุณ', color: '#fed330', done: false },
-              { step: 5, icon: 'fa-trophy',       label: 'ความสำเร็จ', desc: 'บรรลุเป้าหมายในสายอาชีพที่ตรงกับศักยภาพที่แท้จริงของคุณ', color: '#ffa502', done: false },
-            ].map((item, idx, arr) => (
-              <div key={item.step} style={{ display: 'flex', gap: '20px', position: 'relative' }}>
+            {(resultData.Roadmap || fallback.Roadmap).map((item, idx, arr) => {
+              const icons = ['fa-circle-check', 'fa-book-open', 'fa-graduation-cap', 'fa-briefcase', 'fa-trophy'];
+              const colors = ['#26de81', 'var(--accent-color)', '#2bcbba', '#fed330', '#ffa502'];
+              const icon = icons[idx] || 'fa-circle';
+              const color = colors[idx] || 'var(--accent-color)';
+              return (
+              <div key={item.step || idx} style={{ display: 'flex', gap: '20px', position: 'relative' }}>
                 {/* Vertical line */}
                 {idx < arr.length - 1 && (
                   <div style={{ position: 'absolute', left: '19px', top: '44px', width: '2px', height: 'calc(100% - 4px)', background: 'rgba(255,255,255,0.08)' }} />
                 )}
                 {/* Circle */}
-                <div style={{ flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%', background: `${item.color}20`, border: `2px solid ${item.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
-                  <i className={`fa-solid ${item.icon}`} style={{ color: item.color, fontSize: '0.9rem' }} />
+                <div style={{ flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%', background: `${color}20`, border: `2px solid ${color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+                  <i className={`fa-solid ${icon}`} style={{ color: color, fontSize: '0.9rem' }} />
                 </div>
                 <div style={{ paddingBottom: idx < arr.length - 1 ? '28px' : '0' }}>
-                  <p style={{ fontSize: '0.75rem', color: item.color, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '3px' }}>STEP {item.step}</p>
-                  <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>{item.label}</p>
+                  <p style={{ fontSize: '0.75rem', color: color, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '3px' }}>STEP {item.step || idx + 1}</p>
+                  <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>{item.title || item.label || 'Step'}</p>
                   <p style={{ fontSize: '0.87rem', color: 'var(--text-sub)', lineHeight: 1.6 }}>{item.desc}</p>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
         </div>
 
