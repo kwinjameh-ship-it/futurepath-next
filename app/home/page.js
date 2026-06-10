@@ -225,11 +225,18 @@ export default function HomePage() {
                   href: '/interview', color: '#a55eea',
                 },
                 {
-                  icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ใหม่',
+                  icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ยอดฮิต',
                   en: 'Dream Job Simulation', th: 'ทดลองงานในฝัน',
                   desc: 'สัมผัสประสบการณ์การทำงานจริงในสายอาชีพต่างๆ ก่อนตัดสินใจ',
                   bullets: ['ภารกิจจำลองสถานการณ์จริง','ทดลองหลายสายอาชีพ','ประเมินความเหมาะสมก่อนเลือก'],
-                  href: '/assessment', color: '#fed330',
+                  href: '/simulation', color: '#fed330',
+                },
+                {
+                  icon: 'fa-file-pdf', iconBg: 'linear-gradient(135deg,#ff0080,#ff8c00)', tag: 'ใหม่🔥',
+                  en: 'TCAS Auto-Portfolio', th: 'สร้างพอร์ตโฟลิโออัตโนมัติ',
+                  desc: 'ระบบสร้างพอร์ต 1 หน้าแบบมือโปร พร้อมยื่นมหาวิทยาลัยทันที',
+                  bullets: ['ดาวน์โหลดเป็น PDF','ดึงจุดแข็งมาจัดหน้าสวยงาม','ออกแบบตามมาตรฐาน TCAS'],
+                  href: '/assessment', color: '#ff0080',
                 },
               ].map((f) => (
                 <Link key={f.en} href={f.href} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
