@@ -200,43 +200,32 @@ export default function HomePage() {
             
             {/* Column 1: Feature Cards */}
             <div className="stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>ฟีเจอร์เด่นของเรา</h3>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>การนำไปประยุกต์ใช้งาน (Use Cases)</h3>
 
               {[
                 {
-                  icon: 'fa-brain', iconBg: 'linear-gradient(135deg,#ff7a00,#ff4b00)', tag: 'แนะนำ',
-                  en: 'Potential Assessment', th: 'วิเคราะห์ศักยภาพ',
-                  desc: 'ประเมินทักษะและค้นพบจุดแข็งที่ซ่อนอยู่ด้วย AI ที่แม่นยำ',
-                  bullets: ['จับคู่กับสายงานที่เหมาะสม','วิเคราะห์ทักษะทั้ง 6 ด้าน','ผลลัพธ์เชิงลึกจาก AI'],
-                  href: '/assessment', color: '#ff7a00',
+                  icon: 'fa-file-pdf', iconBg: 'linear-gradient(135deg,#ff0080,#ff8c00)', tag: 'ยอดฮิต',
+                  en: 'TCAS Portfolio Prep', th: 'ยื่นเข้ามหาวิทยาลัย',
+                  desc: 'ใช้ระบบสร้าง Portfolio 1 หน้าอัตโนมัติจากผลประเมิน พร้อมนำไปยื่นรอบพอร์ตได้ทันที',
+                  href: '/assessment', color: '#ff0080',
                 },
                 {
-                  icon: 'fa-robot', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'AI Powered',
-                  en: 'AI Chatbot', th: 'แชทบอทที่ปรึกษาอาชีพ',
-                  desc: 'สอบถามและวางแผนอนาคตกับ AI ที่เข้าใจคุณได้ตลอด 24 ชั่วโมง',
-                  bullets: ['คำแนะนำเฉพาะบุคคล','ตอบได้ทุกคำถามด้านอาชีพ','ปรึกษาได้ทุกเวลา'],
-                  href: '/chat', color: '#2bcbba',
+                  icon: 'fa-compass', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'ค้นหาตัวเอง',
+                  en: 'Self Discovery', th: 'ค้นหาคณะและสายการเรียน',
+                  desc: 'วิเคราะห์ศักยภาพเชิงลึกด้วย AI เพื่อเลือกคณะหรือสายการเรียน ม.ปลาย หมดปัญหาเรียนผิดสาย',
+                  href: '/assessment', color: '#2bcbba',
                 },
                 {
-                  icon: 'fa-microphone', iconBg: 'linear-gradient(135deg,#a55eea,#7c3aed)', tag: 'ฝึกฝน',
-                  en: 'Mock Interview', th: 'จำลองการสัมภาษณ์งาน',
-                  desc: 'ฝึกซ้อมสัมภาษณ์กับ AI HR จำลอง รับ Feedback แบบเรียลไทม์',
-                  bullets: ['AI HR สัมภาษณ์จริง','ประเมินคำตอบและให้คะแนน','เพิ่มความมั่นใจก่อนสมัครงาน'],
-                  href: '/interview', color: '#a55eea',
-                },
-                {
-                  icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ยอดฮิต',
-                  en: 'Dream Job Simulation', th: 'ทดลองงานในฝัน',
-                  desc: 'สัมผัสประสบการณ์การทำงานจริงในสายอาชีพต่างๆ ก่อนตัดสินใจ',
-                  bullets: ['ภารกิจจำลองสถานการณ์จริง','ทดลองหลายสายอาชีพ','ประเมินความเหมาะสมก่อนเลือก'],
+                  icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ประสบการณ์',
+                  en: 'Career Readiness', th: 'เตรียมพร้อมลงสนามทำงาน',
+                  desc: 'สร้างความได้เปรียบด้วยการทดลองงานเสมือนจริง ซ้อมสัมภาษณ์กับ AI HR และเช็คฐานเงินเดือน',
                   href: '/simulation', color: '#fed330',
                 },
                 {
-                  icon: 'fa-file-pdf', iconBg: 'linear-gradient(135deg,#ff0080,#ff8c00)', tag: 'ใหม่🔥',
-                  en: 'TCAS Auto-Portfolio', th: 'สร้างพอร์ตโฟลิโออัตโนมัติ',
-                  desc: 'ระบบสร้างพอร์ต 1 หน้าแบบมือโปร พร้อมยื่นมหาวิทยาลัยทันที',
-                  bullets: ['ดาวน์โหลดเป็น PDF','ดึงจุดแข็งมาจัดหน้าสวยงาม','ออกแบบตามมาตรฐาน TCAS'],
-                  href: '/assessment', color: '#ff0080',
+                  icon: 'fa-user-tie', iconBg: 'linear-gradient(135deg,#a55eea,#7c3aed)', tag: 'ส่วนตัว',
+                  en: 'AI Career Mentor', th: 'ที่ปรึกษาอาชีพ 24 ชม.',
+                  desc: 'มี AI ผู้เชี่ยวชาญด้านอาชีพคอยตอบทุกข้อสงสัย แนะนำเส้นทางความก้าวหน้า และช่วยวางแผนอนาคต',
+                  href: '/chat', color: '#a55eea',
                 },
               ].map((f) => (
                 <Link key={f.en} href={f.href} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
