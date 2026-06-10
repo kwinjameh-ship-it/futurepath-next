@@ -443,12 +443,14 @@ export default function AssessmentPage() {
             className="hover-lift"
             style={{
               padding: '36px', borderRadius: 'var(--r-lg)',
-              background: 'var(--glass-bg)', border: '1px solid var(--glass-border)',
+              background: 'linear-gradient(135deg, rgba(255, 122, 0, 0.1), rgba(255, 75, 0, 0.05))', 
+              border: '1px solid rgba(255, 122, 0, 0.4)',
+              boxShadow: '0 12px 32px rgba(255, 75, 0, 0.15)',
               backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
               textAlign: 'center',
             }}
           >
-            <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-sub)', marginBottom: '20px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+            <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent-color)', marginBottom: '20px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               แผนภูมิเรดาร์ทักษะ
             </h3>
             <div style={{ height: '280px', position: 'relative' }}><canvas ref={radarRef} /></div>
