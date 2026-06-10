@@ -22,7 +22,7 @@ export default function GlassNav({ inline = false }) {
 
   const navClasses = inline
     ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
-    : "fixed z-[950] flex items-center justify-between md:justify-center p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col md:gap-6";
+    : "fixed z-[950] flex items-center justify-between md:justify-center gap-2 md:gap-6 p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col";
 
   return (
     <nav 
@@ -49,7 +49,7 @@ export default function GlassNav({ inline = false }) {
       <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
 
       {/* Nav Links */}
-      <div className="flex md:flex-col items-center justify-around w-full md:w-auto gap-2 md:gap-6">
+      <div className="flex md:flex-col items-center justify-around flex-1 md:flex-none md:w-auto gap-2 md:gap-6">
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
