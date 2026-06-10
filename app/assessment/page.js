@@ -362,28 +362,16 @@ export default function AssessmentPage() {
                     ทักษะที่โดดเด่น
                   </p>
 
-                  {/* Large text boxes */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center', marginBottom: '16px' }}>
+                  {/* Icon + name only */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', marginBottom: '16px' }}>
                     {highlights.map(s => {
                       const c = tierColor(s.pct);
                       const icon = skillsData.find(sk => sk.id === s.id)?.icon;
                       return (
-                        <div key={s.id} style={{
-                          padding: '20px 32px',
-                          borderRadius: 'var(--r-lg)',
-                          background: `${c}12`,
-                          border: `2px solid ${c}`,
-                          boxShadow: `0 0 24px ${c}30`,
-                          backdropFilter: 'blur(12px)',
-                          minWidth: '200px',
-                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
-                        }}>
-                          <i className={`fa-solid ${icon}`} style={{ fontSize: '1.6rem', color: c, marginBottom: '4px' }} />
-                          <span style={{ fontSize: '1.5rem', fontWeight: 900, color: c, lineHeight: 1.1 }}>
+                        <div key={s.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                          <i className={`fa-solid ${icon}`} style={{ fontSize: '2rem', color: c }} />
+                          <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--text-main)' }}>
                             {skillNameMap[s.id]}
-                          </span>
-                          <span style={{ fontSize: '2rem', fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1 }}>
-                            {s.pct}%
                           </span>
                         </div>
                       );
