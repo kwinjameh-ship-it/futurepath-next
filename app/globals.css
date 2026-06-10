@@ -376,6 +376,9 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     -webkit-filter: grayscale(100%) !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
   }
 
   .no-print, .blob, header, nav, video, button, a.btn-outline, .glass-menu { 
@@ -409,9 +412,16 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
   .grid { display: block !important; }
   .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; border: 1px solid #ddd !important; }
 
+  .print-wrapper {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+  }
+
   .print-content {
     height: auto !important;
-    overflow-y: visible !important;
+    overflow: visible !important;
     padding: 0 !important;
     display: block !important;
   }

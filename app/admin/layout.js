@@ -59,7 +59,7 @@ export default function AdminLayout({ children }) {
   ];
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#334155', fontFamily: "'Kanit', sans-serif" }}>
+    <div className="print-wrapper" style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#334155', fontFamily: "'Kanit', sans-serif" }}>
       {/* Sidebar */}
       <aside className="no-print" style={{
         width: '260px',
