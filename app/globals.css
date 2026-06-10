@@ -373,6 +373,7 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     height: auto !important;
     min-height: auto !important;
     overflow: visible !important;
+    zoom: 0.82; /* Shrink the entire page to fit on 1 A4 */
   }
 
   /* Hide navigation, buttons, and decorative elements */
@@ -398,8 +399,9 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     text-shadow: none !important;
   }
 
-  /* Prevent page breaks inside important containers */
-  .hover-lift, .glass-panel, [style*="border-radius"] {
+  /* Reduce padding to save space */
+  .hover-lift, .glass-panel {
+    padding: 16px !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
@@ -407,7 +409,7 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
   /* Keep grid layouts for side-by-side content instead of stacking everything */
   .grid {
     display: grid !important;
-    gap: 16px !important;
+    gap: 12px !important; /* Reduce gap to save space */
   }
 
   /* Assessment Layout Specifics */
@@ -424,5 +426,11 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     padding: 0 !important;
     display: block !important;
   }
+  
+  /* Shrink header titles specifically */
+  h1 { font-size: 1.8rem !important; margin-bottom: 8px !important; }
+  h2 { font-size: 1.4rem !important; margin-bottom: 8px !important; }
+  h3 { font-size: 1.1rem !important; margin-bottom: 6px !important; }
+  p { margin-bottom: 8px !important; line-height: 1.4 !important; }
 }
 
