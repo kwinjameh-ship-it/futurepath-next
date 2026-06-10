@@ -363,14 +363,14 @@ export default function AssessmentPage() {
                   </p>
 
                   {/* Icon + name only */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', justifyContent: 'center', marginBottom: '16px' }}>
                     {highlights.map(s => {
                       const c = tierColor(s.pct);
                       const icon = skillsData.find(sk => sk.id === s.id)?.icon;
                       return (
-                        <div key={s.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
-                          <i className={`fa-solid ${icon}`} style={{ fontSize: '2rem', color: c }} />
-                          <span style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--text-main)' }}>
+                        <div key={s.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+                          <i className={`fa-solid ${icon}`} style={{ fontSize: '2.4rem', color: '#ffffff' }} />
+                          <span style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>
                             {skillNameMap[s.id]}
                           </span>
                         </div>
