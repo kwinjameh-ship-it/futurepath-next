@@ -14,7 +14,7 @@ export default function AdminFloatButton() {
     <Link
       href="/admin"
       title="เข้าสู่ระบบผู้ดูแลระบบ"
-      className="fixed bottom-6 right-6 z-[9999] flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 hover:scale-110 shadow-lg group"
+      className="fixed top-6 right-6 z-[9999] flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 hover:scale-110 shadow-lg group"
       style={{
         background: 'rgba(18, 12, 10, 0.8)',
         backdropFilter: 'blur(10px)',
