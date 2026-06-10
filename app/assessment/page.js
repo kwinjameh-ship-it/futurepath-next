@@ -113,6 +113,8 @@ export default function AssessmentPage() {
   const [displayPct, setDisplayPct]   = useState(0);
   const radarRef   = useRef(null);
   const radarChart = useRef(null);
+  const printRadarRef   = useRef(null);
+  const printRadarChart = useRef(null);
 
   useEffect(() => { checkAPI(); }, []);
 
@@ -131,11 +133,11 @@ export default function AssessmentPage() {
   }, [showResult, resultData]);
 
   useEffect(() => {
-    if (showResult && resultData && radarRef.current) {
-      if (radarChart.current) radarChart.current.destroy();
+    if (showResult && resultData) {
       Chart.defaults.color       = '#ffb347'; // Use light orange globally
       Chart.defaults.font.family = "'Kanit', sans-serif";
-      radarChart.current = new Chart(radarRef.current, {
+      
+      const config = {
         type: 'radar',
         data: {
           labels: skillsData.map(s => s.th),
@@ -162,7 +164,16 @@ export default function AssessmentPage() {
           },
           plugins: { legend: { display: false } },
         },
-      });
+      };
+
+      if (radarRef.current) {
+        if (radarChart.current) radarChart.current.destroy();
+        radarChart.current = new Chart(radarRef.current, config);
+      }
+      if (printRadarRef.current) {
+        if (printRadarChart.current) printRadarChart.current.destroy();
+        printRadarChart.current = new Chart(printRadarRef.current, config);
+      }
     }
   }, [showResult, resultData]);
 
@@ -330,11 +341,11 @@ export default function AssessmentPage() {
         <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
       </div>
       <GlassNav />
-      <main style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
+      <main className="no-print" style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
         <UserBar name={user.name} email={user.email} />
 
         {/* Action Bar (Export) */}
-        <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
           <button 
             onClick={() => window.print()}
             className="btn-primary hover-glow-btn"
@@ -733,6 +744,144 @@ export default function AssessmentPage() {
           </button>
         </div>
       </main>
+
+      {/* ─── PRINT ONLY LAYOUT ─── */}
+      <div className="print-only" style={{ padding: '20px 40px', fontFamily: "'Kanit', sans-serif", color: '#111827', background: '#fff' }}>
+        {/* Header */}
+        <div style={{ borderBottom: '2px solid #ff7a00', paddingBottom: '16px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <h1 style={{ fontSize: '24px', fontWeight: 900, color: '#111827', margin: 0 }}>FUTUREPATH AI</h1>
+            <p style={{ fontSize: '14px', color: '#ff7a00', margin: 0, fontWeight: 700 }}>รายงานผลการประเมินศักยภาพและแนวทางอาชีพ</p>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, margin: 0 }}>ผู้รับการประเมิน: {user.name}</p>
+            <p style={{ fontSize: '12px', color: '#4b5563', margin: 0 }}>{user.email} | วันที่ประเมิน: {new Date().toLocaleDateString('th-TH')}</p>
+          </div>
+        </div>
+
+        {/* Section 1: Top Summary */}
+        <div style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
+          {/* Match Score */}
+          <div style={{ flexShrink: 0, width: '180px', textAlign: 'center', background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px' }}>
+            <p style={{ fontSize: '12px', fontWeight: 700, color: '#6b7280', margin: '0 0 8px 0' }}>ความเข้ากันได้ของ DNA</p>
+            <div style={{ fontSize: '36px', fontWeight: 900, color: '#ff7a00', lineHeight: 1 }}>{resultData.matchPct}%</div>
+            <p style={{ fontSize: '14px', fontWeight: 800, margin: '8px 0 0 0', color: '#111827' }}>{resultData.Title}</p>
+          </div>
+          {/* Top 2 Skills */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <p style={{ fontSize: '14px', fontWeight: 700, color: '#111827', marginBottom: '8px' }}>จุดเด่นหลักของคุณ (Top Skills)</p>
+            <div style={{ display: 'flex', gap: '16px' }}>
+              {sortedSkills.slice(0, 2).map(s => {
+                const icon = skillsData.find(sk => sk.id === s.id)?.icon;
+                return (
+                  <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#fff4eb', border: '1px solid #ffcc99', padding: '8px 12px', borderRadius: '8px' }}>
+                    <i className={`fa-solid ${icon}`} style={{ color: '#ff7a00', fontSize: '16px' }} />
+                    <span style={{ fontSize: '14px', fontWeight: 700, color: '#b35500' }}>{skillNameMap[s.id]}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <p style={{ fontSize: '13px', color: '#374151', marginTop: '12px', lineHeight: 1.5 }}>
+              {resultData.Desc}
+            </p>
+          </div>
+        </div>
+
+        {/* Section 2: Chart & Competencies */}
+        <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', alignItems: 'flex-start' }}>
+          <div style={{ width: '40%' }}>
+             <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>แผนภูมิเรดาร์ทักษะ</h3>
+             <div style={{ position: 'relative', height: '240px' }}><canvas ref={printRadarRef} /></div>
+          </div>
+          <div style={{ width: '60%' }}>
+             <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>ผลสรุปสมรรถนะรายด้าน</h3>
+             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+               {sortedSkills.map(s => {
+                  const icon = skillsData.find(sk => sk.id === s.id)?.icon;
+                  return (
+                    <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px' }}>
+                      <div style={{ width: '28px', height: '28px', background: '#f3f4f6', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                         <i className={`fa-solid ${icon}`} style={{ color: '#6b7280', fontSize: '12px' }} />
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2px' }}>
+                           <span style={{ fontWeight: 700 }}>{skillNameMap[s.id]}</span>
+                           <span style={{ fontWeight: 700, color: '#ff7a00' }}>{s.score}</span>
+                        </div>
+                        <div style={{ width: '100%', background: '#e5e7eb', height: '4px', borderRadius: '2px' }}>
+                           <div style={{ width: `${s.score}%`, background: '#ff7a00', height: '100%', borderRadius: '2px' }} />
+                        </div>
+                      </div>
+                    </div>
+                  )
+               })}
+             </div>
+             
+             {/* Deep Analysis appended here to save space */}
+             <div style={{ marginTop: '20px' }}>
+               <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '12px' }}>บทวิเคราะห์เจาะลึก</h3>
+               <p style={{ fontSize: '12px', lineHeight: 1.6, color: '#374151', margin: 0 }}>{resultData.AnalysisDetail}</p>
+             </div>
+          </div>
+        </div>
+
+        {/* Section 3: Recommendations (2 cols) */}
+        <div className="avoid-break" style={{ display: 'flex', gap: '24px', marginBottom: '24px' }}>
+           <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #ff7a00', color: '#ff7a00', paddingBottom: '8px', marginBottom: '12px' }}>💼 อาชีพที่เหมาะสม</h3>
+              <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '12px', color: '#374151' }}>
+                {resultData.Jobs?.map((item, i) => (
+                  <li key={i} style={{ marginBottom: '8px', lineHeight: 1.5 }}>
+                    <strong style={{ color: '#111827' }}>{item.t.replace(/^อันดับ\s*\d+\s*:\s*/, '')}</strong>: {item.d}
+                  </li>
+                ))}
+              </ul>
+              {resultData.MarketData && (
+                <div style={{ marginTop: '12px', background: '#f9fafb', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb' }}>
+                  <p style={{ fontSize: '12px', margin: '0 0 4px 0' }}><strong>ฐานเงินเดือน:</strong> {resultData.MarketData.salary}</p>
+                  <p style={{ fontSize: '12px', margin: 0 }}><strong>แนวโน้มตลาด:</strong> {resultData.MarketData.demand}</p>
+                </div>
+              )}
+           </div>
+           <div style={{ flex: 1 }}>
+              <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #ff7a00', color: '#ff7a00', paddingBottom: '8px', marginBottom: '12px' }}>🎓 คณะ/สาขาที่แนะนำ</h3>
+              <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '12px', color: '#374151' }}>
+                {resultData.Edu?.map((item, i) => (
+                  <li key={i} style={{ marginBottom: '8px', lineHeight: 1.5 }}>
+                    <strong style={{ color: '#111827' }}>{item.t.replace(/^อันดับ\s*\d+\s*:\s*/, '')}</strong>: {item.d}
+                  </li>
+                ))}
+              </ul>
+              {resultData.Dev && (
+                <div style={{ marginTop: '16px' }}>
+                  <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '12px' }}>📈 ทักษะที่ควรพัฒนา</h3>
+                  <ul style={{ paddingLeft: '16px', margin: 0, fontSize: '12px', color: '#374151' }}>
+                    {resultData.Dev.map((item, i) => (
+                      <li key={i} style={{ marginBottom: '8px', lineHeight: 1.5 }}>
+                        <strong style={{ color: '#111827' }}>{item.t.replace(/^อันดับ\s*\d+\s*:\s*/, '')}</strong>: {item.d}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+           </div>
+        </div>
+
+        {/* Section 4: Roadmap */}
+        <div className="avoid-break" style={{ marginBottom: '24px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>เส้นทางสู่เป้าหมาย (Roadmap)</h3>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '12px' }}>
+            {((resultData.Roadmap && resultData.Roadmap.length > 0) ? resultData.Roadmap : fallback.Roadmap).map((item, idx) => (
+              <div key={idx} style={{ background: '#f9fafb', border: '1px solid #e5e7eb', padding: '12px', borderRadius: '8px' }}>
+                <div style={{ fontSize: '10px', fontWeight: 700, color: '#ff7a00', marginBottom: '4px' }}>STEP {item.step || idx + 1}</div>
+                <div style={{ fontSize: '12px', fontWeight: 700, color: '#111827', marginBottom: '4px' }}>{item.title || item.label}</div>
+                <div style={{ fontSize: '11px', color: '#4b5563', lineHeight: 1.4 }}>{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+      </div>
     </div>
   );
 

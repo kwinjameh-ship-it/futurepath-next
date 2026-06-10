@@ -282,6 +282,10 @@ input, textarea, button, select, label {
   box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px rgba(255,107,0,0.15) !important;
 }
 
+.print-only {
+  display: none;
+}
+
 .hover-glow-btn {
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, filter 0.3s ease;
 }
@@ -350,19 +354,13 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
 
 /* ── Print ───────────────────────────────────────────────── */
 @media print {
-  @page { size: A4 portrait; margin: 10mm; }
+  @page { size: A4 portrait; margin: 15mm; }
   
   :root {
-    --body-bg-start: #ffffff;
-    --body-bg-mid: #ffffff;
-    --body-bg-end: #ffffff;
     --text-main: #111827 !important;
     --text-sub: #374151 !important;
     --text-muted: #6b7280 !important;
-    --glass-bg: rgba(255, 255, 255, 0.95) !important;
-    --glass-border: rgba(0, 0, 0, 0.1) !important;
-    --card-bg: #ffffff !important;
-    --card-border: rgba(0, 0, 0, 0.1) !important;
+    --accent-color: #ff7a00 !important;
   }
 
   body { 
@@ -370,19 +368,19 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     color: #111827 !important; 
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
-    zoom: 0.82; /* Shrink the entire page to fit on 1 A4 */
   }
 
-  /* Hide navigation, buttons, and decorative elements */
-  .no-print, .blob, header, nav, video, button, a.btn-outline, .glass-menu { 
+  /* Hide entire web layout */
+  .no-print, header, nav, video, button, .blob { 
     display: none !important; 
   }
 
+  /* Show print layout */
+  .print-only {
+    display: block !important;
+  }
+
   main { 
-    max-width: 100% !important; 
     padding: 0 !important; 
     margin: 0 !important;
     background: #ffffff !important;
@@ -392,56 +390,18 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
     box-shadow: none !important;
-  }
-
-  /* Ensure text within cards is readable */
-  *, div, p, span, h1, h2, h3, h4, h5, h6, strong, i {
     text-shadow: none !important;
-    color: #111827 !important; /* Force all text and icons to be dark */
   }
 
-  /* Reduce padding to save space */
-  .hover-lift, .glass-panel {
-    padding: 16px !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
+  .page-break {
+    page-break-before: always;
+    break-before: page;
   }
 
-  /* Keep grid layouts for side-by-side content instead of stacking everything */
-  .grid {
-    display: grid !important;
-    gap: 12px !important; /* Reduce gap to save space */
+  .avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
-  
-  .md\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  /* Assessment Layout Specifics */
-  .print-wrapper {
-    display: block !important;
-    height: auto !important;
-    min-height: auto !important;
-    overflow: visible !important;
-  }
-
-  .print-content {
-    height: auto !important;
-    overflow: visible !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-  
-  /* Expand accordions completely during print */
-  .print-expand {
-    max-height: none !important;
-    overflow: visible !important;
-  }
-  
-  /* Shrink header titles specifically */
-  h1 { font-size: 1.8rem !important; margin-bottom: 8px !important; }
-  h2 { font-size: 1.4rem !important; margin-bottom: 8px !important; }
-  h3 { font-size: 1.1rem !important; margin-bottom: 6px !important; }
-  p { margin-bottom: 8px !important; line-height: 1.4 !important; }
 }
+
 
