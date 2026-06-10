@@ -37,7 +37,7 @@ export default function GlassNav({ inline = false }) {
       }}
     >
       {/* Logo (Hidden on very small mobile, visible on desktop) */}
-      <Link href="/home" className="hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden shrink-0" title="FuturePath AI">
+      <Link href="/home" className="mx-auto hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden shrink-0" title="FuturePath AI">
         <img
           src="/img/logo1.png"
           alt="FuturePath AI"
@@ -46,10 +46,10 @@ export default function GlassNav({ inline = false }) {
         />
       </Link>
 
-      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
+      <div className="mx-auto hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
 
       {/* Nav Links */}
-      <div className="flex md:flex-col items-center justify-around flex-1 md:flex-none md:w-auto gap-2 md:gap-6">
+      <div className="mx-auto flex md:flex-col items-center justify-around flex-1 md:flex-none md:w-auto gap-2 md:gap-6">
         {navLinks.map((link) => {
           const isActive = pathname === link.href;
           return (
@@ -57,7 +57,7 @@ export default function GlassNav({ inline = false }) {
               key={link.href}
               href={link.href}
               title={link.label}
-              className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 relative group"
+              className="mx-auto flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 relative group"
               style={{
                 color: isActive ? '#fff' : 'var(--text-sub)',
                 background: isActive ? 'linear-gradient(135deg, #ff7a00, #ff4b00)' : 'transparent',
@@ -76,13 +76,13 @@ export default function GlassNav({ inline = false }) {
         })}
       </div>
 
-      <div className="hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
+      <div className="mx-auto hidden md:block w-8 h-[1px] bg-[var(--glass-border)] opacity-50 shrink-0" />
       
       {/* Logout Button */}
       <button
         onClick={handleLogout}
         title="ออกจากระบบ"
-        className="flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
+        className="mx-auto flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
         style={{
           color: 'var(--text-sub)',
           background: 'transparent',
