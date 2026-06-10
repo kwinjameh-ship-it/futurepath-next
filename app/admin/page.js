@@ -270,7 +270,6 @@ export default function AdminDashboard() {
         <div style={{ padding: '24px', background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
           <h3 style={{ marginBottom: '24px', color: '#334155', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
             <span>School DNA (ศักยภาพรวม)</span>
-            {!avgSkills && <span className="no-print" style={{ fontSize: '0.75rem', background: '#fef08a', color: '#854d0e', padding: '4px 8px', borderRadius: '12px', fontWeight: 600 }}>ข้อมูลจำลองรอ API</span>}
           </h3>
           <div style={{ height: '320px' }}>
             <Radar data={radarChartData} options={radarOptions} />
