@@ -172,7 +172,9 @@ export default function AssessmentPage() {
       }
       if (printRadarRef.current) {
         if (printRadarChart.current) printRadarChart.current.destroy();
-        printRadarChart.current = new Chart(printRadarRef.current, config);
+        const printConfig = JSON.parse(JSON.stringify(config));
+        printConfig.options.scales.r.pointLabels.font.size = 10;
+        printRadarChart.current = new Chart(printRadarRef.current, printConfig);
       }
     }
   }, [showResult, resultData]);
@@ -790,11 +792,11 @@ export default function AssessmentPage() {
 
         {/* Section 2: Chart & Competencies */}
         <div style={{ display: 'flex', gap: '24px', marginBottom: '24px', alignItems: 'flex-start' }}>
-          <div style={{ width: '40%' }}>
+          <div style={{ width: '45%' }}>
              <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>แผนภูมิเรดาร์ทักษะ</h3>
-             <div style={{ position: 'relative', height: '240px' }}><canvas ref={printRadarRef} /></div>
+             <div style={{ position: 'relative', width: '100%', maxWidth: '240px', height: '240px', margin: '0' }}><canvas ref={printRadarRef} /></div>
           </div>
-          <div style={{ width: '60%' }}>
+          <div style={{ width: '55%' }}>
              <h3 style={{ fontSize: '14px', fontWeight: 700, borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>ผลสรุปสมรรถนะรายด้าน</h3>
              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                {sortedSkills.map(s => {
