@@ -141,6 +141,9 @@ export default function AdminDashboard() {
   };
 
   const getSentiment = (comment) => {
+    if (!comment || typeof comment !== 'string') {
+      return <span style={{ background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600, marginLeft: '8px' }}>🟡 ทั่วไป</span>;
+    }
     const positiveWords = ['ดี', 'ชอบ', 'เยี่ยม', 'เจ๋ง', 'เข้าใจง่าย', 'มีประโยชน์', 'สวย', 'สุดยอด', 'แม่น', 'สุด'];
     const isPositive = positiveWords.some(w => comment.includes(w));
     if (isPositive) return <span style={{ background: '#dcfce7', color: '#166534', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600, marginLeft: '8px' }}>🟢 เชิงบวก</span>;
