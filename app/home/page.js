@@ -18,6 +18,7 @@ export default function HomePage() {
     f3: false,
     f4: false
   });
+  const [toastMsg, setToastMsg] = useState(null);
   const usageRef = useRef(null);
   const chartInstance = useRef(null);
 
@@ -41,6 +42,11 @@ export default function HomePage() {
       setStats({ users: 'Err', assess: 'Err', satisfaction: '0' });
     }
   }
+
+  const showToast = (msg) => {
+    setToastMsg(msg);
+    setTimeout(() => setToastMsg(null), 5000);
+  };
 
   function renderLineChart(monthlyUsage) {
     if (!usageRef.current) return;
@@ -149,6 +155,8 @@ export default function HomePage() {
 
       <style>{`
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
         .stagger-1 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.1s; }
         .stagger-2 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
         .stagger-3 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.3s; }
@@ -207,7 +215,8 @@ export default function HomePage() {
                   icon: 'fa-file-pdf', iconBg: 'linear-gradient(135deg,#ff0080,#ff8c00)', tag: 'ยอดฮิต',
                   en: 'TCAS Portfolio Prep', th: 'ยื่นเข้ามหาวิทยาลัย',
                   desc: 'ใช้ระบบสร้าง Portfolio 1 หน้าอัตโนมัติจากผลประเมิน พร้อมนำไปยื่นรอบพอร์ตได้ทันที',
-                  href: '/assessment', color: '#ff0080',
+                  onClick: () => showToast(true),
+                  color: '#ff0080',
                 },
                 {
                   icon: 'fa-compass', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'ค้นหาตัวเอง',
@@ -227,8 +236,8 @@ export default function HomePage() {
                   desc: 'มี AI ผู้เชี่ยวชาญด้านอาชีพคอยตอบทุกข้อสงสัย แนะนำเส้นทางความก้าวหน้า และช่วยวางแผนอนาคต',
                   href: '/chat', color: '#a55eea',
                 },
-              ].map((f) => (
-                <Link key={f.en} href={f.href} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
+              ].map((f) => {
+                const innerCard = (
                   <div
                     className="hover-lift"
                     style={{
@@ -239,6 +248,7 @@ export default function HomePage() {
                       flex: 1,
                       justifyContent: 'center',
                     }}
+                    onClick={f.onClick}
                     onMouseEnter={e => { e.currentTarget.style.background = `${f.color}18`; e.currentTarget.style.borderColor = `${f.color}60`; }}
                     onMouseLeave={e => { e.currentTarget.style.background = glassCard.background; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
                   >
@@ -258,9 +268,24 @@ export default function HomePage() {
                       <i className="fa-solid fa-chevron-right" style={{ color: f.color, fontSize: '0.8rem', opacity: 0.7 }} />
                     </div>
                   </div>
-                </Link>
-              ))}
+                );
+
+                if (f.href) {
+                  return (
+                    <Link key={f.en} href={f.href} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
+                      {innerCard}
+                    </Link>
+                  );
+                }
+
+                return (
+                  <div key={f.en} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
+                    {innerCard}
+                  </div>
+                );
+              })}
             </div>
+
 
             {/* Column 2: Satisfaction Dial & Quick Stats */}
             <div className="stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
@@ -371,6 +396,70 @@ export default function HomePage() {
         </div>
         </div>
       </main>
+
+      {/* Modal Notification */}
+      {toastMsg && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+          animation: 'fadeIn 0.3s ease-out'
+        }} onClick={() => setToastMsg(null)}>
+          <div 
+            onClick={e => e.stopPropagation()}
+            style={{
+              background: 'linear-gradient(135deg, rgba(30, 20, 15, 0.95), rgba(18, 12, 10, 0.98))',
+              border: '1px solid rgba(255, 122, 0, 0.3)',
+              borderRadius: '24px', padding: '40px 32px',
+              maxWidth: '450px', width: '90%', textAlign: 'center',
+              boxShadow: '0 24px 64px rgba(255, 75, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.1)',
+              position: 'relative',
+              animation: 'zoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          >
+            {/* Close button */}
+            <button 
+              onClick={() => setToastMsg(null)} 
+              style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: '8px', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+            >
+              <i className="fa-solid fa-xmark" style={{ fontSize: '1.2rem' }} />
+            </button>
+
+            {/* Icon */}
+            <div style={{ 
+              width: '80px', height: '80px', borderRadius: '50%', margin: '0 auto 24px',
+              background: 'linear-gradient(135deg, #ff0080, #ff8c00)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 8px 32px rgba(255, 0, 128, 0.4)'
+            }}>
+              <i className="fa-solid fa-file-pdf" style={{ fontSize: '2.5rem', color: '#fff' }} />
+            </div>
+
+            <h3 style={{ fontSize: '1.3rem', fontWeight: 800, color: '#fff', marginBottom: '12px' }}>
+              เคล็ดลับการสร้าง Portfolio
+            </h3>
+            
+            <p style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', lineHeight: 1.7, marginBottom: '24px' }}>
+              เพียงแค่ทำ <strong style={{ color: '#ffb347' }}>แบบประเมินศักยภาพ</strong> หรือ <strong style={{ color: '#ffb347' }}>ทดลองงานในฝัน</strong> จนจบ <br/>ระบบจะดึงจุดแข็งมาจัดหน้า Portfolio สวยๆ ให้คุณใช้ยื่น TCAS รอบ 1 ได้ทันที!
+            </p>
+
+            <button 
+              onClick={() => setToastMsg(null)}
+              className="hover-glow-btn"
+              style={{
+                width: '100%', padding: '14px', borderRadius: '16px',
+                background: 'rgba(255, 122, 0, 0.15)', border: '1px solid #ff7a00',
+                color: '#ffb347', fontWeight: 700, fontSize: '1rem', cursor: 'pointer'
+              }}
+            >
+              รับทราบ
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
