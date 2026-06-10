@@ -36,6 +36,9 @@ export default function GlassNav({ inline = false }) {
         boxShadow: inline ? 'none' : '0 8px 32px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.2)'
       }}
     >
+      {/* Spacer for top curve on desktop */}
+      <div className="hidden md:block w-full h-4 shrink-0" />
+
       {/* Logo (Hidden on very small mobile, visible on desktop) */}
       <Link href="/home" className="mx-auto hidden md:flex items-center justify-center w-10 h-10 rounded-full overflow-hidden shrink-0" title="FuturePath AI">
         <img
@@ -93,6 +96,9 @@ export default function GlassNav({ inline = false }) {
           ออกจากระบบ
         </span>
       </button>
+
+      {/* Spacer for bottom curve on desktop */}
+      <div className="hidden md:block w-full h-2 shrink-0" />
     </nav>
   );
 }
