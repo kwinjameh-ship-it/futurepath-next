@@ -357,31 +357,41 @@ export default function AssessmentPage() {
 
               return (
                 <>
-                  {/* Top skill name */}
-                  <p style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '10px' }}>
+                  {/* Top skill label */}
+                  <p style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '16px' }}>
                     ทักษะที่โดดเด่น
                   </p>
 
-                  {/* Highlight badges - top 1-2 only */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', marginBottom: '14px' }}>
-                    {highlights.map(s => (
-                      <span key={s.id} style={{
-                        padding: '8px 20px', borderRadius: '999px',
-                        background: `${tierColor(s.pct)}22`,
-                        border: `2px solid ${tierColor(s.pct)}`,
-                        color: tierColor(s.pct),
-                        fontSize: '1rem', fontWeight: 800,
-                        display: 'inline-flex', alignItems: 'center', gap: '8px',
-                      }}>
-                        <i className={`fa-solid ${skillsData.find(sk => sk.id === s.id)?.icon}`} />
-                        {skillNameMap[s.id]}
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600, opacity: 0.85 }}>{s.pct}%</span>
-                      </span>
-                    ))}
+                  {/* Large text boxes */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', justifyContent: 'center', marginBottom: '16px' }}>
+                    {highlights.map(s => {
+                      const c = tierColor(s.pct);
+                      const icon = skillsData.find(sk => sk.id === s.id)?.icon;
+                      return (
+                        <div key={s.id} style={{
+                          padding: '20px 32px',
+                          borderRadius: 'var(--r-lg)',
+                          background: `${c}12`,
+                          border: `2px solid ${c}`,
+                          boxShadow: `0 0 24px ${c}30`,
+                          backdropFilter: 'blur(12px)',
+                          minWidth: '200px',
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px',
+                        }}>
+                          <i className={`fa-solid ${icon}`} style={{ fontSize: '1.6rem', color: c, marginBottom: '4px' }} />
+                          <span style={{ fontSize: '1.5rem', fontWeight: 900, color: c, lineHeight: 1.1 }}>
+                            {skillNameMap[s.id]}
+                          </span>
+                          <span style={{ fontSize: '2rem', fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1 }}>
+                            {s.pct}%
+                          </span>
+                        </div>
+                      );
+                    })}
                   </div>
 
-                  {/* Assertive single-line description */}
-                  <p style={{ fontSize: '0.95rem', color: 'var(--text-sub)', maxWidth: '560px', margin: '0 auto', lineHeight: 1.75 }}>
+                  {/* Assertive description */}
+                  <p style={{ fontSize: '0.97rem', color: 'var(--text-sub)', maxWidth: '580px', margin: '0 auto', lineHeight: 1.8 }}>
                     {skillDescMap[best.id]}{second ? ` และ${skillDescMap[second.id].replace(/^คุณ/, '').trim()}` : ''}
                   </p>
                 </>
