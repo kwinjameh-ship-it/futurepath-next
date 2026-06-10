@@ -400,11 +400,6 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     color: #111827 !important; /* Force all text and icons to be dark */
   }
 
-  /* Fix Chart.js Canvas (which draws white text in dark mode) */
-  canvas {
-    filter: invert(1) hue-rotate(180deg) !important;
-  }
-
   /* Reduce padding to save space */
   .hover-lift, .glass-panel {
     padding: 16px !important;
@@ -431,6 +426,12 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
     overflow: visible !important;
     padding: 0 !important;
     display: block !important;
+  }
+  
+  /* Expand accordions completely during print */
+  .print-expand {
+    max-height: none !important;
+    overflow: visible !important;
   }
   
   /* Shrink header titles specifically */

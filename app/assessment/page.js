@@ -133,7 +133,7 @@ export default function AssessmentPage() {
   useEffect(() => {
     if (showResult && resultData && radarRef.current) {
       if (radarChart.current) radarChart.current.destroy();
-      Chart.defaults.color       = 'rgba(220,230,255,0.7)';
+      Chart.defaults.color       = '#ffb347'; // Use light orange globally
       Chart.defaults.font.family = "'Kanit', sans-serif";
       radarChart.current = new Chart(radarRef.current, {
         type: 'radar',
@@ -151,7 +151,15 @@ export default function AssessmentPage() {
         },
         options: {
           responsive: true, maintainAspectRatio: false,
-          scales: { r: { min: 0, max: 100, ticks: { stepSize: 20, font: { family: 'Kanit' } }, grid: { color: 'rgba(255,255,255,0.10)' }, angleLines: { color: 'rgba(255,255,255,0.10)' } } },
+          scales: { 
+            r: { 
+              min: 0, max: 100, 
+              ticks: { stepSize: 20, font: { family: 'Kanit' }, color: 'rgba(255,179,71,0.6)' }, 
+              pointLabels: { color: '#ffb347', font: { family: 'Kanit', size: 12, weight: '700' } },
+              grid: { color: 'rgba(255,122,0,0.15)' }, 
+              angleLines: { color: 'rgba(255,122,0,0.15)' } 
+            } 
+          },
           plugins: { legend: { display: false } },
         },
       });
@@ -235,7 +243,7 @@ export default function AssessmentPage() {
 - บังคับ: ต้องให้คำแนะนำคณะ/สาขา (Edu) และ อาชีพ (Jobs) ให้ครบอย่างละ 5 อันดับเสมอ ห้ามให้น้อยกว่านี้เด็ดขาด
 - บังคับ: ในส่วนของคณะ/สาขา (Edu) ต้องระบุ "มหาวิทยาลัยชั้นนำ: (ชื่อมหาวิทยาลัย)" ต่อท้ายเหตุผลเสมอ ห้ามลืมเด็ดขาด
 
-ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "MarketData": {"salary": "ช่วงเงินเดือนเริ่มต้น (บาท)", "demand": "ความต้องการตลาดในปัจจุบัน (เชิงอธิบายและระบุเปอร์เซ็นต์การเติบโตถ้าเป็นไปได้)"}, "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และบังคับต่อท้ายด้วย 'มหาวิทยาลัยชั้นนำ: ...' เสมอ"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
+ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "MarketData": {"salary": "ช่วงเงินเดือนเริ่มต้นสำหรับเด็กจบใหม่ในไทย (อ้างอิงฐานจริง ไม่เวอร์เกินไป เช่น 18,000 - 25,000 บาท หรือตามสายงานจริง)", "demand": "ความต้องการตลาดในปัจจุบัน (เชิงอธิบายและระบุเปอร์เซ็นต์การเติบโตถ้าเป็นไปได้)"}, "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และบังคับต่อท้ายด้วย 'มหาวิทยาลัยชั้นนำ: ...' เสมอ"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -448,12 +456,13 @@ export default function AssessmentPage() {
               boxShadow: '0 12px 32px rgba(255, 75, 0, 0.15)',
               backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
               textAlign: 'center',
+              display: 'flex', flexDirection: 'column', height: '100%'
             }}
           >
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--accent-color)', marginBottom: '20px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
               แผนภูมิเรดาร์ทักษะ
             </h3>
-            <div style={{ height: '280px', position: 'relative' }}><canvas ref={radarRef} /></div>
+            <div style={{ flex: 1, position: 'relative', minHeight: '280px' }}><canvas ref={radarRef} /></div>
           </div>
           <div
             className="hover-lift"
@@ -675,7 +684,7 @@ export default function AssessmentPage() {
                     <span style={{ flex: 1, fontSize: '0.97rem', fontWeight: 700, color: 'var(--text-main)' }}>{cleanTitle}</span>
                     <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`} style={{ color: '#ff4b00', fontSize: '0.8rem', transition: 'transform 0.25s' }} />
                   </button>
-                  <div style={{ maxHeight: isOpen ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.35s ease' }}>
+                  <div className="print-expand" style={{ maxHeight: isOpen ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.35s ease' }}>
                     <p style={{ padding: '0 20px 18px 64px', fontSize: '0.88rem', color: 'var(--text-sub)', lineHeight: 1.75 }}>{item.d}</p>
                   </div>
                 </div>
