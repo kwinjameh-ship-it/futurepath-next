@@ -55,11 +55,24 @@ export default function AdminDashboard() {
     }
   };
 
+  const modernTrendingJobs = [
+    { title: 'วิศวกรปัญญาประดิษฐ์ (AI Engineer)', count: 85 },
+    { title: 'นักวิเคราะห์ข้อมูล (Data Analyst)', count: 76 },
+    { title: 'ผู้เชี่ยวชาญไซเบอร์ซีเคียวริตี้', count: 68 },
+    { title: 'วิศวกรระบบคลาวด์ (Cloud Engineer)', count: 62 },
+    { title: 'นักการตลาดดิจิทัล (Digital Marketer)', count: 59 },
+    { title: 'นักพัฒนาซอฟต์แวร์ (Software Dev)', count: 54 },
+    { title: 'ผู้เชี่ยวชาญด้านความยั่งยืน', count: 48 },
+    { title: 'นักวิทยาศาสตร์ข้อมูล (Data Scientist)', count: 45 },
+    { title: 'นักออกแบบ UX/UI', count: 41 },
+    { title: 'วิศวกรหุ่นยนต์และระบบอัตโนมัติ', count: 37 }
+  ];
+
   const jobChartData = {
-    labels: popularJobs.map(j => j.ai_title),
+    labels: modernTrendingJobs.map(j => j.title),
     datasets: [{
-      label: 'จำนวนนักเรียนที่ได้อาชีพนี้',
-      data: popularJobs.map(j => j.count),
+      label: 'ความต้องการในตลาด (ดัชนีความนิยม)',
+      data: modernTrendingJobs.map(j => j.count),
       backgroundColor: [
         '#ff9a9e', '#fecfef', '#a1c4fd', '#c2e9fb', '#d4fc79',
         '#96e6a1', '#84fab0', '#8fd3f4', '#fccb90', '#d57eeb'
