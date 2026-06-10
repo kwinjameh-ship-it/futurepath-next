@@ -61,7 +61,7 @@ export default function AdminLayout({ children }) {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc', color: '#334155', fontFamily: "'Kanit', sans-serif" }}>
       {/* Sidebar */}
-      <aside style={{
+      <aside className="no-print" style={{
         width: '260px',
         background: '#ffffff',
         borderRight: '1px solid #e2e8f0',
@@ -105,7 +105,7 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main style={{ flex: 1, padding: '32px 48px', overflowY: 'auto', height: '100vh' }}>
+      <main className="print-content" style={{ flex: 1, padding: '32px 48px', overflowY: 'auto', height: '100vh' }}>
         {children}
       </main>
     </div>

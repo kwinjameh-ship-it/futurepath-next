@@ -408,5 +408,12 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
   /* Specific Assessment Layout Overrides for Print */
   .grid { display: block !important; }
   .grid > div { margin-bottom: 20px !important; page-break-inside: avoid; border: 1px solid #ddd !important; }
+
+  .print-content {
+    height: auto !important;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    display: block !important;
+  }
 }
 
