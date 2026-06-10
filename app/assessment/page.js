@@ -200,7 +200,13 @@ export default function AssessmentPage() {
     let aiResult = fallback;
     if (apiStatus === 'success' || apiStatus === 'hidden') {
       try {
-        const promptText = `วิเคราะห์คะแนนทักษะต่อไปนี้: ${JSON.stringify(newScores)}. ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก", "Edu": [{"t": "อันดับ 1: สาขา", "d": "เหตุผล"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "เหตุผล"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำ"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
+        const promptText = `วิเคราะห์คะแนนทักษะต่อไปนี้: ${JSON.stringify(newScores)}
+
+กฎสำคัญในการเขียน:
+- ใช้ภาษาที่ฟันธง ชัดเจน และน่าเชื่อถือ เช่น "คุณมีความสามารถ...", "ผลการวิเคราะห์ชี้ว่า...", "จุดแข็งของคุณคือ..."
+- ห้ามใช้คำที่ไม่แน่นอน เช่น อาจจะ, น่าจะ, คงจะ, อาจ, บางที, หรืออาจ, ถ้าหาก ทุกประโยคต้องฟันธงเท่านั้น
+
+ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก ทุกประโยคต้องฟันธง", "Edu": [{"t": "อันดับ 1: สาขา", "d": "เหตุผลที่ฟันธง"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "เหตุผลที่ฟันธง"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำที่ฟันธง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -329,6 +335,14 @@ export default function AssessmentPage() {
                 Comm: 'การสื่อสาร',
                 Biz: 'ธุรกิจและการจัดการ',
               };
+              const skillDescMap = {
+                Tech:     'คุณมีความสามารถด้านเทคโนโลยีสูง เหมาะกับสายงานดิจิทัลและนวัตกรรม',
+                Logic:    'คุณคิดวิเคราะห์ได้แม่นยำ เหมาะกับงานที่ต้องใช้ข้อมูลประกอบการตัดสินใจ',
+                Creative: 'คุณมีความคิดสร้างสรรค์ที่โดดเด่น เหมาะกับสายงานออกแบบและสร้างสรรค์เนื้อหา',
+                Lead:     'คุณมีภาวะผู้นำที่ชัดเจน เหมาะกับบทบาทที่ต้องบริหารทีมและชี้นำทิศทาง',
+                Comm:     'คุณสื่อสารได้อย่างมีประสิทธิภาพ เหมาะกับงานประสานงาน เจรจา และนำเสนอ',
+                Biz:      'คุณมีความเข้าใจธุรกิจและการจัดการที่ดี เหมาะกับสายงานบริหารและกลยุทธ์',
+              };
               const tierColor = (pct) =>
                 pct >= 85 ? '#26de81' : pct >= 70 ? '#2bcbba' : pct >= 55 ? '#fed330' : pct >= 40 ? '#ffa502' : '#ff4d4d';
 
@@ -336,43 +350,40 @@ export default function AssessmentPage() {
                 .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0 }))
                 .sort((a, b) => b.pct - a.pct);
 
-              const topSkills  = sorted.filter(s => s.pct >= 55);
-              const weakSkills = sorted.filter(s => s.pct <  55);
+              // Show only the top 1-2 clearly dominant skills
+              const best = sorted[0];
+              const second = sorted[1] && sorted[1].pct >= sorted[0].pct - 5 ? sorted[1] : null;
+              const highlights = second ? [best, second] : [best];
 
               return (
                 <>
-                  {/* Section label */}
-                  <p style={{ fontSize: '0.78rem', color: 'var(--accent-color)', letterSpacing: '0.1em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px' }}>
-                    ทักษะที่คุณโดดเด่น
+                  {/* Top skill name */}
+                  <p style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '10px' }}>
+                    ทักษะที่โดดเด่น
                   </p>
 
-                  {/* Skill badges */}
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '16px' }}>
-                    {topSkills.length > 0 ? topSkills.map(s => (
+                  {/* Highlight badges - top 1-2 only */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center', marginBottom: '14px' }}>
+                    {highlights.map(s => (
                       <span key={s.id} style={{
-                        padding: '7px 18px', borderRadius: '999px',
-                        background: `${tierColor(s.pct)}18`,
-                        border: `1.5px solid ${tierColor(s.pct)}60`,
+                        padding: '8px 20px', borderRadius: '999px',
+                        background: `${tierColor(s.pct)}22`,
+                        border: `2px solid ${tierColor(s.pct)}`,
                         color: tierColor(s.pct),
-                        fontSize: '0.88rem', fontWeight: 700,
-                        display: 'inline-flex', alignItems: 'center', gap: '7px',
+                        fontSize: '1rem', fontWeight: 800,
+                        display: 'inline-flex', alignItems: 'center', gap: '8px',
                       }}>
-                        <i className={`fa-solid ${skillsData.find(sk => sk.id === s.id)?.icon}`} style={{ fontSize: '0.78rem' }} />
+                        <i className={`fa-solid ${skillsData.find(sk => sk.id === s.id)?.icon}`} />
                         {skillNameMap[s.id]}
-                        <span style={{ fontSize: '0.75rem', opacity: 0.75 }}>· {s.pct}%</span>
+                        <span style={{ fontSize: '0.8rem', fontWeight: 600, opacity: 0.85 }}>{s.pct}%</span>
                       </span>
-                    )) : (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>ยังไม่พบทักษะที่โดดเด่น</span>
-                    )}
+                    ))}
                   </div>
 
-                  {/* Needs-work row */}
-                  {weakSkills.length > 0 && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center', fontSize: '0.82rem', color: '#ffa502' }}>
-                      <i className="fa-solid fa-circle-arrow-up" />
-                      <span>ทักษะที่ควรพัฒนาเพิ่มเติม: <strong>{weakSkills.map(s => skillNameMap[s.id]).join(', ')}</strong></span>
-                    </div>
-                  )}
+                  {/* Assertive single-line description */}
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-sub)', maxWidth: '560px', margin: '0 auto', lineHeight: 1.75 }}>
+                    {skillDescMap[best.id]}{second ? ` และ${skillDescMap[second.id].replace(/^คุณ/, '').trim()}` : ''}
+                  </p>
                 </>
               );
             })()}
