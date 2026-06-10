@@ -325,8 +325,21 @@ export default function AssessmentPage() {
   const progress = ((currentTab + 1) / skillsData.length) * 100;
 
   /* ─── RESULT VIEW ─── */
-  if (showResult && resultData) return (
-    <div style={{ minHeight: '100vh', background: '#120c0a', color: 'var(--text-main)', fontFamily: "'Kanit', sans-serif" }}>
+  if (showResult && resultData) {
+    const skillNameMap = {
+      Tech: 'เทคโนโลยีดิจิทัล',
+      Logic: 'การคิดวิเคราะห์',
+      Creative: 'ความคิดสร้างสรรค์',
+      Lead: 'ภาวะผู้นำ',
+      Comm: 'การสื่อสาร',
+      Biz: 'ธุรกิจและการจัดการ',
+    };
+    const sortedSkills = skillsData
+      .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0, score: scores[sk.id] || 0 }))
+      .sort((a, b) => b.pct - a.pct);
+
+    return (
+      <div style={{ minHeight: '100vh', background: '#120c0a', color: 'var(--text-main)', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
       <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
@@ -395,14 +408,6 @@ export default function AssessmentPage() {
           </div>
           <div style={{ marginBottom: '20px' }}>
             {(() => {
-              const skillNameMap = {
-                Tech: 'เทคโนโลยีดิจิทัล',
-                Logic: 'การคิดวิเคราะห์',
-                Creative: 'ความคิดสร้างสรรค์',
-                Lead: 'ภาวะผู้นำ',
-                Comm: 'การสื่อสาร',
-                Biz: 'ธุรกิจและการจัดการ',
-              };
               const skillDescMap = {
                 Tech:     'คุณมีความสามารถด้านเทคโนโลยีสูง เหมาะกับสายงานดิจิทัลและนวัตกรรม',
                 Logic:    'คุณคิดวิเคราะห์ได้แม่นยำ เหมาะกับงานที่ต้องใช้ข้อมูลประกอบการตัดสินใจ',
@@ -414,13 +419,9 @@ export default function AssessmentPage() {
               const tierColor = (pct) =>
                 pct >= 85 ? '#26de81' : pct >= 70 ? '#2bcbba' : pct >= 55 ? '#fed330' : pct >= 40 ? '#ffa502' : '#ff4d4d';
 
-              const sorted = skillsData
-                .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0 }))
-                .sort((a, b) => b.pct - a.pct);
-
               // Show only the top 1-2 clearly dominant skills
-              const best = sorted[0];
-              const second = sorted[1] && sorted[1].pct >= sorted[0].pct - 5 ? sorted[1] : null;
+              const best = sortedSkills[0];
+              const second = sortedSkills[1] && sortedSkills[1].pct >= sortedSkills[0].pct - 5 ? sortedSkills[1] : null;
               const highlights = second ? [best, second] : [best];
 
               return (
@@ -884,6 +885,7 @@ export default function AssessmentPage() {
       </div>
     </div>
   );
+  }
 
   /* ─── ASSESSMENT VIEW ─── */
   return (
