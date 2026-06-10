@@ -82,13 +82,13 @@ export default function GlassNav({ inline = false }) {
       <button
         onClick={handleLogout}
         title="ออกจากระบบ"
-        className="mx-auto flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
+        className="relative mx-auto flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300 group shrink-0"
         style={{
           color: 'var(--text-sub)',
           background: 'transparent',
         }}
       >
-        <i className={`fa-solid fa-arrow-right-from-bracket text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff4b00]`} />
+        <i className={`fa-solid fa-fw fa-arrow-right-from-bracket text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff4b00]`} />
         <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[#ff4b00] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
           ออกจากระบบ
         </span>
