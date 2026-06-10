@@ -186,7 +186,7 @@ export default function AdminDashboard() {
           </h3>
           
           {aiInsight ? (
-            <p style={{ fontSize: '1.05rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight}</p>
+            <div style={{ fontSize: '1.05rem', lineHeight: 1.6, opacity: 0.9, whiteSpace: 'pre-wrap' }}>{aiInsight}</div>
           ) : (
             <div>
               <p style={{ color: '#94a3b8', marginBottom: '16px' }}>วิเคราะห์ข้อมูลภาพรวมในระบบด้วย AI เพื่อทำบทสรุปผู้บริหารเชิงนโยบาย (คลิกเพื่อประมวลผล)</p>
