@@ -154,14 +154,14 @@ export default function HomePage() {
         .stagger-3 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.3s; }
       `}</style>
 
-      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8" style={{ paddingLeft: '80px' }}>
-        <div className="flex w-[100%] md:w-[95%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
+      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 pb-[120px] md:p-8 md:pl-[100px]">
+        <div className="flex w-full md:w-[95%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
           
-          <div style={{ ...glassPanel, flex: 1, padding: '40px 48px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+          <div className="flex-1 flex flex-col gap-8 md:gap-10 p-5 md:p-12" style={{ ...glassPanel }}>
           
           {/* Header Row (Hero Content) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '24px', alignItems: 'center' }}>
-            <div style={{ maxWidth: '60%' }}>
+            <div className="w-full md:max-w-[60%]">
               <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '12px' }}>
                 <div style={{
                   width: '56px', height: '56px', borderRadius: '50%',
@@ -196,7 +196,7 @@ export default function HomePage() {
           </div>
 
           {/* Bento Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
             
             {/* Column 1: Feature Cards */}
             <div className="stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
