@@ -307,7 +307,7 @@ export default function AssessmentPage() {
 
   /* ─── RESULT VIEW ─── */
   if (showResult && resultData) return (
-    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: 'var(--text-main)', fontFamily: "'Kanit', sans-serif" }}>
       {/* Image Background & Corner Gradients */}
       <div className="no-print" style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
@@ -418,8 +418,8 @@ export default function AssessmentPage() {
                       const icon = skillsData.find(sk => sk.id === s.id)?.icon;
                       return (
                         <div key={s.id} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-                          <i className={`fa-solid ${icon}`} style={{ fontSize: '2.4rem', color: '#ffffff' }} />
-                          <span style={{ fontSize: '1.8rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>
+                          <i className={`fa-solid ${icon}`} style={{ fontSize: '2.4rem', color: 'var(--text-main)' }} />
+                          <span style={{ fontSize: '1.8rem', fontWeight: 900, color: 'var(--text-main)', letterSpacing: '-0.01em' }}>
                             {skillNameMap[s.id]}
                           </span>
                         </div>
