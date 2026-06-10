@@ -43,9 +43,14 @@ export default function AdminDashboard() {
         body: JSON.stringify({ popularJobs, avgSatisfaction, totalAssessments })
       });
       const d = await res.json();
-      setAiInsight(d.insight);
+      try {
+        const parsed = typeof d.insight === 'string' ? JSON.parse(d.insight) : d.insight;
+        setAiInsight(parsed);
+      } catch (e) {
+        setAiInsight({ overall: d.insight, strengths: 'ไม่สามารถแยกข้อมูลได้', recommendation: 'ไม่สามารถแยกข้อมูลได้' });
+      }
     } catch {
-      setAiInsight('ไม่สามารถดึงข้อมูลวิเคราะห์จาก AI ได้ในขณะนี้');
+      setAiInsight({ overall: 'เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้ง', strengths: '', recommendation: '' });
     }
     setLoadingInsight(false);
   };
@@ -186,7 +191,20 @@ export default function AdminDashboard() {
           </h3>
           
           {aiInsight ? (
-            <div style={{ fontSize: '1.05rem', lineHeight: 1.6, opacity: 0.9, whiteSpace: 'pre-wrap' }}>{aiInsight}</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginTop: '16px' }}>
+              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #38ef7d' }}>
+                <h4 style={{ color: '#38ef7d', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-bullseye mr-2"></i>ภาพรวมศักยภาพ</h4>
+                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.overall}</p>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #0ea5e9' }}>
+                <h4 style={{ color: '#0ea5e9', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-star mr-2"></i>จุดเด่นที่ค้นพบ</h4>
+                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.strengths}</p>
+              </div>
+              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #fcd34d' }}>
+                <h4 style={{ color: '#fcd34d', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-lightbulb mr-2"></i>ข้อเสนอแนะเชิงนโยบาย</h4>
+                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.recommendation}</p>
+              </div>
+            </div>
           ) : (
             <div>
               <p style={{ color: '#94a3b8', marginBottom: '16px' }}>วิเคราะห์ข้อมูลภาพรวมในระบบด้วย AI เพื่อทำบทสรุปผู้บริหารเชิงนโยบาย (คลิกเพื่อประมวลผล)</p>
