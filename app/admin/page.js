@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Bar, Doughnut } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import {
   Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement
 } from 'chart.js';
@@ -46,32 +46,13 @@ export default function AdminDashboard() {
     }
   };
 
-  const doughnutOptions = {
+  const pieOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '70%',
     color: '#475569',
     plugins: {
-      legend: { 
-        position: 'right', 
-        labels: { usePointStyle: true, padding: 20, color: '#475569', font: { family: "'Kanit', sans-serif", size: 13 } } 
-      },
-      tooltip: {
-        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-        titleFont: { family: "'Kanit', sans-serif", size: 14 },
-        bodyFont: { family: "'Kanit', sans-serif", size: 13 },
-        padding: 12,
-        cornerRadius: 8,
-      }
+      legend: { position: 'bottom', labels: { color: '#475569', font: { family: "'Kanit', sans-serif" } } }
     }
-  };
-
-  const getPageName = (path) => {
-    if (path === '/' || path === '/home') return 'หน้าหลัก (Home)';
-    if (path.includes('assessment')) return 'ทำแบบประเมิน (Assessment)';
-    if (path.includes('simulation')) return 'ทดลองงาน (Simulation)';
-    if (path.includes('admin')) return 'หน้าแอดมิน (Admin)';
-    return path;
   };
 
   const jobChartData = {
@@ -90,17 +71,14 @@ export default function AdminDashboard() {
   };
 
   const viewChartData = {
-    labels: viewsByPath.map(v => getPageName(v.path)),
+    labels: viewsByPath.map(v => v.path === '/' ? '/home (หน้าหลัก)' : v.path),
     datasets: [{
-      label: 'จำนวนการเข้าชม',
+      label: 'จำนวนครั้งที่เปิดดู',
       data: viewsByPath.map(v => v.count),
       backgroundColor: [
-        '#3b82f6', '#10b981', '#f59e0b', '#ec4899', 
-        '#8b5cf6', '#14b8a6', '#f43f5e', '#0ea5e9'
+        '#ff0080', '#ff7a00', '#fed330', '#26de81', '#a55eea', '#fd9644', '#fc5c65', '#2bcbba', '#45aaf2', '#4b7bec'
       ],
-      borderWidth: 3,
-      borderColor: '#ffffff',
-      hoverOffset: 8
+      borderWidth: 0,
     }]
   };
 
@@ -155,10 +133,10 @@ export default function AdminDashboard() {
 
         <div style={{ padding: '24px', background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
           <h3 style={{ marginBottom: '24px', color: '#334155', fontWeight: 600 }}>สถิติการเข้าชมรายหน้า</h3>
-          <div style={{ height: '350px', display: 'flex', justifyContent: 'center' }}>
-            <Doughnut 
+          <div style={{ height: '350px' }}>
+            <Pie 
               data={viewChartData} 
-              options={doughnutOptions} 
+              options={pieOptions} 
             />
           </div>
         </div>
