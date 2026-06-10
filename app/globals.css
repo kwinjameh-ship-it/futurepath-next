@@ -395,8 +395,14 @@ input[type="range"] { accent-color: var(--accent-color); cursor: pointer; }
   }
 
   /* Ensure text within cards is readable */
-  div, p, span, h1, h2, h3, h4, h5, h6, strong {
+  *, div, p, span, h1, h2, h3, h4, h5, h6, strong, i {
     text-shadow: none !important;
+    color: #111827 !important; /* Force all text and icons to be dark */
+  }
+
+  /* Fix Chart.js Canvas (which draws white text in dark mode) */
+  canvas {
+    filter: invert(1) hue-rotate(180deg) !important;
   }
 
   /* Reduce padding to save space */
