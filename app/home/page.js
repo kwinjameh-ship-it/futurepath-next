@@ -199,7 +199,7 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             
             {/* Column 1: Feature Cards */}
-            <div className="stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
               <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>ฟีเจอร์เด่นของเรา</h3>
 
               {[
@@ -232,7 +232,7 @@ export default function HomePage() {
                   href: '/assessment', color: '#fed330',
                 },
               ].map((f) => (
-                <Link key={f.en} href={f.href} style={{ textDecoration: 'none' }}>
+                <Link key={f.en} href={f.href} style={{ textDecoration: 'none', display: 'flex', flex: 1 }}>
                   <div
                     className="hover-lift"
                     style={{
@@ -240,6 +240,8 @@ export default function HomePage() {
                       cursor: 'pointer',
                       padding: '20px 22px',
                       transition: 'all 0.25s ease',
+                      flex: 1,
+                      justifyContent: 'center',
                     }}
                     onMouseEnter={e => { e.currentTarget.style.background = `${f.color}18`; e.currentTarget.style.borderColor = `${f.color}60`; }}
                     onMouseLeave={e => { e.currentTarget.style.background = glassCard.background; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
@@ -265,7 +267,7 @@ export default function HomePage() {
             </div>
 
             {/* Column 2: Satisfaction Dial & Quick Stats */}
-            <div className="stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
               <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>ภาพรวมสถิติระบบ</h3>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -356,11 +358,11 @@ export default function HomePage() {
             </div>
 
             {/* Column 3: Monthly Usage Chart */}
-            <div className="stagger-3" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="stagger-3" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
               <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>กราฟสถิติรายเดือน</h3>
               <div 
                 className="hover-lift"
-                style={glassCard}
+                style={{ ...glassCard, flex: 1 }}
               >
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#ffb347', marginBottom: '20px' }}>การลงทะเบียน (ผู้ใช้ใหม่)</h4>
                 <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 40px)', minHeight: '220px' }}>
