@@ -348,24 +348,64 @@ export default function AssessmentPage() {
             }}
           >
             <h3 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-sub)', marginBottom: '24px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-              คะแนนสรุปรายหมวด
+              ผลสรุปสมรรถนะรายด้าน (Competency Summary)
             </h3>
-            {skillsData.map(sk => (
-              <div key={sk.id} style={{ marginBottom: '18px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', marginBottom: '7px', fontWeight: 500 }}>
-                  <span style={{ color: 'var(--text-sub)' }}>{sk.th}</span>
-                  <span style={{ color: 'var(--accent-color)', fontWeight: 700 }}>{scores[sk.id]}%</span>
+            {skillsData.map(sk => {
+              const pct = scores[sk.id] || 0;
+              // Formal tier labels with colors
+              const tier = pct >= 85
+                ? { label: 'ดีเยี่ยม', en: 'Excellent', color: '#26de81', bg: 'rgba(38,222,129,0.12)', border: 'rgba(38,222,129,0.3)' }
+                : pct >= 70
+                ? { label: 'ดี', en: 'Good', color: '#2bcbba', bg: 'rgba(43,203,186,0.12)', border: 'rgba(43,203,186,0.3)' }
+                : pct >= 55
+                ? { label: 'พอใช้', en: 'Fair', color: '#fed330', bg: 'rgba(254,211,48,0.12)', border: 'rgba(254,211,48,0.3)' }
+                : pct >= 40
+                ? { label: 'ต้องพัฒนา', en: 'Developing', color: '#ffa502', bg: 'rgba(255,165,2,0.12)', border: 'rgba(255,165,2,0.3)' }
+                : { label: 'ต้องเสริม', en: 'Needs Attention', color: '#ff4d4d', bg: 'rgba(255,77,77,0.12)', border: 'rgba(255,77,77,0.3)' };
+
+              // Formal descriptions per skill dimension
+              const descMap = {
+                Tech:     'สมรรถนะด้านเทคโนโลยีและระบบดิจิทัล รวมถึงการประยุกต์ใช้เครื่องมือในยุคอุตสาหกรรม 4.0',
+                Logic:    'สมรรถนะด้านการคิดวิเคราะห์และการใช้เหตุผลเชิงตรรกะในการแก้ปัญหาและตัดสินใจ',
+                Creative: 'สมรรถนะด้านความคิดสร้างสรรค์ การออกแบบ และการนำเสนอแนวคิดใหม่เชิงนวัตกรรม',
+                Lead:     'สมรรถนะด้านภาวะผู้นำ การบริหารจัดการทีม และการสร้างแรงบันดาลใจให้ผู้อื่น',
+                Comm:     'สมรรถนะด้านการสื่อสารและการประสานงาน ทั้งในระดับบุคคลและองค์กร',
+                Biz:      'สมรรถนะด้านการคิดเชิงธุรกิจ การวางกลยุทธ์ และการบริหารทรัพยากรอย่างมีประสิทธิภาพ',
+              };
+
+              return (
+                <div key={sk.id} style={{ marginBottom: '20px', padding: '16px', borderRadius: 'var(--r-md)', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {/* Skill Name Row */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '3px' }}>
+                        <i className={`fa-solid ${sk.icon}`} style={{ color: 'var(--accent-color)', fontSize: '0.8rem' }} />
+                        <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)' }}>{sk.th}</span>
+                        <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 400 }}>({sk.title})</span>
+                      </div>
+                      <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
+                        {descMap[sk.id]}
+                      </p>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px', flexShrink: 0, marginLeft: '12px' }}>
+                      <span style={{ fontSize: '1.15rem', fontWeight: 900, color: tier.color }}>{pct}%</span>
+                      <span style={{ fontSize: '0.72rem', fontWeight: 700, color: tier.color, background: tier.bg, border: `1px solid ${tier.border}`, borderRadius: '999px', padding: '2px 10px', letterSpacing: '0.04em' }}>
+                        {tier.label} · {tier.en}
+                      </span>
+                    </div>
+                  </div>
+                  {/* Progress Bar */}
+                  <div style={{ height: '7px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%', borderRadius: '8px',
+                      width: `${pct}%`,
+                      background: `linear-gradient(90deg, ${tier.color}, var(--accent-color))`,
+                      transition: 'width 0.8s var(--ease-out)',
+                    }} />
+                  </div>
                 </div>
-                <div style={{ height: '7px', borderRadius: '8px', background: 'rgba(255,255,255,0.08)', overflow: 'hidden' }}>
-                  <div style={{
-                    height: '100%', borderRadius: '8px',
-                    width: `${scores[sk.id]}%`,
-                    background: 'linear-gradient(90deg, var(--accent-color), var(--secondary-color))',
-                    transition: 'width 0.8s var(--ease-out)',
-                  }} />
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
