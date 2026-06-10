@@ -109,10 +109,26 @@ export default function AssessmentPage() {
   const [resultData, setResultData]   = useState(null);
   const [scores, setScores]           = useState({});
   const [submitting, setSubmitting]   = useState(false);
+  const [expandedJob, setExpandedJob] = useState(null);
+  const [displayPct, setDisplayPct]   = useState(0);
   const radarRef   = useRef(null);
   const radarChart = useRef(null);
 
   useEffect(() => { checkAPI(); }, []);
+
+  // Animated counter for match %
+  useEffect(() => {
+    if (!showResult || !resultData) return;
+    let start = 0;
+    const target = resultData.matchPct || 0;
+    const step = Math.max(1, Math.floor(target / 40));
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      setDisplayPct(start);
+      if (start >= target) clearInterval(timer);
+    }, 30);
+    return () => clearInterval(timer);
+  }, [showResult, resultData]);
 
   useEffect(() => {
     if (showResult && resultData && radarRef.current) {
@@ -308,22 +324,29 @@ export default function AssessmentPage() {
           }}
         >
           <p className="section-eyebrow" style={{ marginBottom: '16px' }}>ผลการวิเคราะห์ DNA ของคุณ</p>
-          <div
-            className="hover-lift"
-            style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              width: '110px', height: '110px', borderRadius: '50%',
-              border: '4px solid var(--accent-color)',
-              background: 'var(--card-bg)',
-              boxShadow: '0 0 28px var(--accent-glow)',
-              marginBottom: '20px',
-              flexDirection: 'column',
-            }}
-          >
-            <div style={{ fontSize: '2.6rem', fontWeight: 900, color: 'var(--accent-color)', lineHeight: 1 }}>
-              {resultData.matchPct}%
+          {/* Animated SVG Ring */}
+          <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+            <svg width="130" height="130" style={{ transform: 'rotate(-90deg)' }}>
+              <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(255,122,0,0.12)" strokeWidth="8" />
+              <circle
+                cx="65" cy="65" r="56" fill="none"
+                stroke="url(#ringGrad)" strokeWidth="8"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 56}`}
+                strokeDashoffset={`${2 * Math.PI * 56 * (1 - displayPct / 100)}`}
+                style={{ transition: 'stroke-dashoffset 0.05s linear' }}
+              />
+              <defs>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#ff4b00" />
+                  <stop offset="100%" stopColor="#ff7a00" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div style={{ position: 'absolute', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--accent-color)', lineHeight: 1 }}>{displayPct}%</span>
+              <span style={{ fontSize: '0.6rem', color: 'var(--text-muted)', letterSpacing: '0.1em', marginTop: '2px' }}>MATCH</span>
             </div>
-            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>MATCH</span>
           </div>
           <div style={{ marginBottom: '20px' }}>
             {(() => {
@@ -496,50 +519,65 @@ export default function AssessmentPage() {
           </div>
         )}
 
-        {/* AI Suggestions */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: '24px' }}>
+        {/* Career Roadmap */}
+        <div
+          className="hover-lift"
+          style={{
+            padding: '36px', borderRadius: 'var(--r-xl)',
+            background: 'linear-gradient(135deg, rgba(255,122,0,0.06), rgba(255,75,0,0.03))',
+            border: '1px solid rgba(255,122,0,0.25)',
+            backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+            marginBottom: '24px',
+          }}
+        >
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--accent-color)', marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <i className="fa-solid fa-road" /> เส้นทางสู่เป้าหมาย (Career Roadmap)
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+            {[
+              { step: 1, icon: 'fa-circle-check', label: 'จุดเริ่มต้น', desc: 'คุณมีทักษะพื้นฐานที่ระบบวิเคราะห์แล้ว พร้อมเดินหน้าสู่เป้าหมาย', color: '#26de81', done: true },
+              { step: 2, icon: 'fa-book-open',    label: 'พัฒนาทักษะ', desc: resultData.Dev?.[0] ? `เริ่มจาก: ${resultData.Dev[0].t}` : 'ฝึกทักษะที่แนะนำในส่วนด้านล่าง', color: 'var(--accent-color)', done: false },
+              { step: 3, icon: 'fa-graduation-cap', label: 'เส้นทางการศึกษา', desc: resultData.Edu?.[0] ? resultData.Edu[0].t.replace(/^อันดับ\s*\d+\s*:\s*/, '') : 'เลือกสาขาที่เหมาะสมกับทักษะของคุณ', color: '#2bcbba', done: false },
+              { step: 4, icon: 'fa-briefcase',    label: 'อาชีพเป้าหมาย', desc: resultData.Jobs?.[0] ? resultData.Jobs[0].t.replace(/^อันดับ\s*\d+\s*:\s*/, '') : 'อาชีพที่เหมาะสมกับโปรไฟล์ของคุณ', color: '#fed330', done: false },
+              { step: 5, icon: 'fa-trophy',       label: 'ความสำเร็จ', desc: 'บรรลุเป้าหมายในสายอาชีพที่ตรงกับศักยภาพที่แท้จริงของคุณ', color: '#ffa502', done: false },
+            ].map((item, idx, arr) => (
+              <div key={item.step} style={{ display: 'flex', gap: '20px', position: 'relative' }}>
+                {/* Vertical line */}
+                {idx < arr.length - 1 && (
+                  <div style={{ position: 'absolute', left: '19px', top: '44px', width: '2px', height: 'calc(100% - 4px)', background: 'rgba(255,255,255,0.08)' }} />
+                )}
+                {/* Circle */}
+                <div style={{ flexShrink: 0, width: '40px', height: '40px', borderRadius: '50%', background: `${item.color}20`, border: `2px solid ${item.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1 }}>
+                  <i className={`fa-solid ${item.icon}`} style={{ color: item.color, fontSize: '0.9rem' }} />
+                </div>
+                <div style={{ paddingBottom: idx < arr.length - 1 ? '28px' : '0' }}>
+                  <p style={{ fontSize: '0.75rem', color: item.color, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '3px' }}>STEP {item.step}</p>
+                  <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '4px' }}>{item.label}</p>
+                  <p style={{ fontSize: '0.87rem', color: 'var(--text-sub)', lineHeight: 1.6 }}>{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* AI Suggestions — Education & Skills (non-expandable) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginBottom: '24px' }}>
           {[
             { title: '🎓 คณะ/สาขาที่แนะนำ', items: resultData.Edu, accent: 'var(--accent-color)' },
-            { title: '💼 อาชีพที่เหมาะสม',   items: resultData.Jobs, accent: '#ff4b00'            },
             { title: '📈 ทักษะที่ควรพัฒนา',  items: resultData.Dev,  accent: '#fed330'            },
           ].map(sec => (
-            <div
-              key={sec.title}
-              className="hover-lift"
-              style={{
-                padding: '32px 28px', borderRadius: 'var(--r-xl)',
-                background: 'var(--card-bg)', border: '1px solid var(--card-border)',
-                backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-                boxShadow: '0 4px 12px var(--shadow-color)', 
-              }}
-            >
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: sec.accent, marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {sec.title}
-              </h3>
+            <div key={sec.title} className="hover-lift" style={{ padding: '32px 28px', borderRadius: 'var(--r-xl)', background: 'var(--card-bg)', border: '1px solid var(--card-border)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: sec.accent, marginBottom: '24px' }}>{sec.title}</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
                 {sec.items?.map((item, i) => {
                   const cleanTitle = item.t.replace(/^อันดับ\s*\d+\s*:\s*/, '');
                   return (
-                    <div key={i} style={{ paddingBottom: i !== sec.items.length - 1 ? '20px' : '0', marginBottom: i !== sec.items.length - 1 ? '20px' : '0', borderBottom: i !== sec.items.length - 1 ? '1px dashed rgba(255,255,255,0.07)' : 'none' }}>
-                      <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                        <div
-                          style={{
-                            width: '28px', height: '28px', borderRadius: '50%', flexShrink: 0,
-                            background: `${sec.accent}15`, color: sec.accent,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontWeight: 800, fontSize: '0.85rem', border: `1px solid ${sec.accent}40`,
-                            marginTop: '2px'
-                          }}
-                        >
-                          {i + 1}
-                        </div>
+                    <div key={i} style={{ paddingBottom: i !== sec.items.length - 1 ? '18px' : '0', marginBottom: i !== sec.items.length - 1 ? '18px' : '0', borderBottom: i !== sec.items.length - 1 ? '1px dashed rgba(255,255,255,0.07)' : 'none' }}>
+                      <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                        <div style={{ width: '26px', height: '26px', borderRadius: '50%', flexShrink: 0, background: `${sec.accent}15`, color: sec.accent, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.82rem', border: `1px solid ${sec.accent}40`, marginTop: '2px' }}>{i + 1}</div>
                         <div>
-                          <p style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '8px', lineHeight: 1.45 }}>
-                            {cleanTitle}
-                          </p>
-                          <p style={{ fontSize: '0.85rem', color: 'var(--text-sub)', lineHeight: 1.7 }}>
-                            {item.d}
-                          </p>
+                          <p style={{ fontSize: '0.93rem', fontWeight: 700, color: 'var(--text-main)', marginBottom: '4px', lineHeight: 1.45 }}>{cleanTitle}</p>
+                          <p style={{ fontSize: '0.83rem', color: 'var(--text-sub)', lineHeight: 1.65 }}>{item.d}</p>
                         </div>
                       </div>
                     </div>
@@ -548,6 +586,37 @@ export default function AssessmentPage() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Jobs — Expandable Accordion */}
+        <div className="hover-lift" style={{ padding: '32px 28px', borderRadius: 'var(--r-xl)', background: 'var(--card-bg)', border: '1px solid var(--card-border)', backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', marginBottom: '24px' }}>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ff4b00', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <i className="fa-solid fa-briefcase" /> 💼 อาชีพที่เหมาะสม
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {resultData.Jobs?.map((item, i) => {
+              const cleanTitle = item.t.replace(/^อันดับ\s*\d+\s*:\s*/, '');
+              const isOpen = expandedJob === i;
+              return (
+                <div
+                  key={i}
+                  style={{ borderRadius: 'var(--r-md)', background: isOpen ? 'rgba(255,75,0,0.08)' : 'rgba(255,255,255,0.03)', border: `1px solid ${isOpen ? 'rgba(255,75,0,0.35)' : 'rgba(255,255,255,0.07)'}`, overflow: 'hidden', transition: 'all 0.25s ease' }}
+                >
+                  <button
+                    onClick={() => setExpandedJob(isOpen ? null : i)}
+                    style={{ width: '100%', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '14px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' }}
+                  >
+                    <div style={{ width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0, background: 'rgba(255,75,0,0.15)', color: '#ff4b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '0.88rem', border: '1px solid rgba(255,75,0,0.4)' }}>{i + 1}</div>
+                    <span style={{ flex: 1, fontSize: '0.97rem', fontWeight: 700, color: 'var(--text-main)' }}>{cleanTitle}</span>
+                    <i className={`fa-solid fa-chevron-${isOpen ? 'up' : 'down'}`} style={{ color: '#ff4b00', fontSize: '0.8rem', transition: 'transform 0.25s' }} />
+                  </button>
+                  <div style={{ maxHeight: isOpen ? '200px' : '0', overflow: 'hidden', transition: 'max-height 0.35s ease' }}>
+                    <p style={{ padding: '0 20px 18px 64px', fontSize: '0.88rem', color: 'var(--text-sub)', lineHeight: 1.75 }}>{item.d}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* References */}
