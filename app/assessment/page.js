@@ -320,7 +320,6 @@ export default function AssessmentPage() {
             <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.08em' }}>MATCH</span>
           </div>
           <div style={{ marginBottom: '20px' }}>
-            {/* Compute top matched skills */}
             {(() => {
               const skillNameMap = {
                 Tech: 'เทคโนโลยีดิจิทัล',
@@ -330,77 +329,50 @@ export default function AssessmentPage() {
                 Comm: 'การสื่อสาร',
                 Biz: 'ธุรกิจและการจัดการ',
               };
-              const skillEnMap = {
-                Tech: 'Digital Technology',
-                Logic: 'Analytical Thinking',
-                Creative: 'Creative Design',
-                Lead: 'Leadership',
-                Comm: 'Communication',
-                Biz: 'Business & Strategy',
-              };
               const tierColor = (pct) =>
                 pct >= 85 ? '#26de81' : pct >= 70 ? '#2bcbba' : pct >= 55 ? '#fed330' : pct >= 40 ? '#ffa502' : '#ff4d4d';
 
-              // Sort all skills by score descending
               const sorted = skillsData
                 .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0 }))
                 .sort((a, b) => b.pct - a.pct);
 
-              const topSkills = sorted.filter(s => s.pct >= 55);   // "match" threshold
-              const weakSkills = sorted.filter(s => s.pct < 55);
+              const topSkills  = sorted.filter(s => s.pct >= 55);
+              const weakSkills = sorted.filter(s => s.pct <  55);
 
               return (
                 <>
-                  {/* Primary matched skills headline */}
-                  <div style={{ marginBottom: '12px' }}>
-                    <p style={{ fontSize: '0.78rem', color: 'var(--accent-color)', letterSpacing: '0.1em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '8px' }}>
-                      สมรรถนะที่มีความโดดเด่น (Matched Competencies)
-                    </p>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '12px' }}>
-                      {topSkills.length > 0 ? topSkills.map(s => (
-                        <span key={s.id} style={{
-                          padding: '6px 16px', borderRadius: '999px',
-                          background: `${tierColor(s.pct)}18`,
-                          border: `1.5px solid ${tierColor(s.pct)}60`,
-                          color: tierColor(s.pct),
-                          fontSize: '0.85rem', fontWeight: 700,
-                          display: 'inline-flex', alignItems: 'center', gap: '6px',
-                        }}>
-                          <i className={`fa-solid ${skillsData.find(sk => sk.id === s.id)?.icon}`} style={{ fontSize: '0.75rem' }} />
-                          {skillNameMap[s.id]}
-                          <span style={{ fontSize: '0.72rem', opacity: 0.8 }}>· {s.pct}%</span>
-                        </span>
-                      )) : (
-                        <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>ยังไม่พบสมรรถนะที่โดดเด่น</span>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* AI-generated title as supporting context */}
-                  <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '10px', color: 'var(--text-main)' }}>
-                    {resultData.Title}
-                  </h2>
-
-                  {/* Formal description with matched vs needs-work split */}
-                  <p style={{ fontSize: '0.95rem', color: 'var(--text-sub)', maxWidth: '640px', margin: '0 auto 16px', lineHeight: 1.8 }}>
-                    {resultData.Desc}
+                  {/* Section label */}
+                  <p style={{ fontSize: '0.78rem', color: 'var(--accent-color)', letterSpacing: '0.1em', fontWeight: 700, textTransform: 'uppercase', marginBottom: '12px' }}>
+                    ทักษะที่คุณโดดเด่น
                   </p>
 
-                  {/* Formal skill match summary */}
-                  <div style={{ display: 'inline-flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center', fontSize: '0.82rem' }}>
-                    {topSkills.length > 0 && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#26de81' }}>
-                        <i className="fa-solid fa-circle-check" />
-                        <span>สมรรถนะที่ match: <strong>{topSkills.map(s => skillEnMap[s.id]).join(', ')}</strong></span>
-                      </div>
-                    )}
-                    {weakSkills.length > 0 && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#ffa502' }}>
-                        <i className="fa-solid fa-circle-arrow-up" />
-                        <span>ควรพัฒนา: <strong>{weakSkills.map(s => skillEnMap[s.id]).join(', ')}</strong></span>
-                      </div>
+                  {/* Skill badges */}
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '16px' }}>
+                    {topSkills.length > 0 ? topSkills.map(s => (
+                      <span key={s.id} style={{
+                        padding: '7px 18px', borderRadius: '999px',
+                        background: `${tierColor(s.pct)}18`,
+                        border: `1.5px solid ${tierColor(s.pct)}60`,
+                        color: tierColor(s.pct),
+                        fontSize: '0.88rem', fontWeight: 700,
+                        display: 'inline-flex', alignItems: 'center', gap: '7px',
+                      }}>
+                        <i className={`fa-solid ${skillsData.find(sk => sk.id === s.id)?.icon}`} style={{ fontSize: '0.78rem' }} />
+                        {skillNameMap[s.id]}
+                        <span style={{ fontSize: '0.75rem', opacity: 0.75 }}>· {s.pct}%</span>
+                      </span>
+                    )) : (
+                      <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>ยังไม่พบทักษะที่โดดเด่น</span>
                     )}
                   </div>
+
+                  {/* Needs-work row */}
+                  {weakSkills.length > 0 && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center', fontSize: '0.82rem', color: '#ffa502' }}>
+                      <i className="fa-solid fa-circle-arrow-up" />
+                      <span>ทักษะที่ควรพัฒนาเพิ่มเติม: <strong>{weakSkills.map(s => skillNameMap[s.id]).join(', ')}</strong></span>
+                    </div>
+                  )}
                 </>
               );
             })()}
