@@ -22,7 +22,7 @@ export default function GlassNav({ inline = false }) {
 
   const navClasses = inline
     ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
-    : "fixed z-[950] flex items-center justify-between md:justify-center gap-2 md:gap-6 p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col";
+    : "fixed z-[950] flex items-center justify-between md:justify-center gap-2 md:gap-6 p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:bottom-auto md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col";
 
   return (
     <nav 
@@ -68,7 +68,7 @@ export default function GlassNav({ inline = false }) {
               <i className={`fa-solid ${link.icon} text-lg md:text-xl transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110 group-hover:text-[#ff9d4d]'}`} />
               
               {/* Tooltip on Desktop */}
-              <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
+              <span className="absolute top-1/2 -translate-y-1/2 left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[var(--text-main)] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
                 {link.label}
               </span>
             </Link>
@@ -88,8 +88,8 @@ export default function GlassNav({ inline = false }) {
           background: 'transparent',
         }}
       >
-        <i className={`fa-solid fa-fw fa-arrow-right-from-bracket text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff4b00]`} />
-        <span className="absolute left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[#ff4b00] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
+        <i className={`fa-solid fa-arrow-right-from-bracket pl-1 text-lg md:text-xl transition-transform duration-300 group-hover:scale-110 group-hover:text-[#ff4b00]`} />
+        <span className="absolute top-1/2 -translate-y-1/2 left-[calc(100%+16px)] px-3 py-1 bg-[var(--glass-bg)] border border-[var(--glass-border)] backdrop-blur-md rounded-lg text-sm text-[#ff4b00] opacity-0 -translate-x-4 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hidden md:block whitespace-nowrap shadow-lg z-[999]">
           ออกจากระบบ
         </span>
       </button>
