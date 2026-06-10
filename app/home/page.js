@@ -154,10 +154,10 @@ export default function HomePage() {
         .stagger-3 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.3s; }
       `}</style>
 
-      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 pb-[120px] md:p-8 md:pl-[100px]">
+      <main className="relative z-10 flex flex-col justify-start items-center w-full min-h-screen px-4 pt-10 pb-[150px] md:p-8 md:pl-[100px]">
         <div className="flex w-full md:w-[95%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
           
-          <div className="flex-1 flex flex-col gap-8 md:gap-10 p-5 md:p-12" style={{ ...glassPanel }}>
+          <div className="flex-1 flex flex-col gap-8 md:gap-10 p-6 md:p-12 mb-[100px] md:mb-0" style={{ ...glassPanel }}>
           
           {/* Header Row (Hero Content) */}
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '24px', alignItems: 'center' }}>
@@ -184,8 +184,8 @@ export default function HomePage() {
                 ไม่มั่นใจว่าทักษะที่คุณมีเหมาะกับงานแบบไหน? ให้ระบบ AI อัจฉริยะช่วยวิเคราะห์ตัวตน เจาะลึกศักยภาพ และแนะนำสายงานที่ตรงกับคุณที่สุด
               </p>
             </div>
-            <div>
-              <Link href="/assessment" className="hover-glow-btn" style={{
+            <div className="w-full md:w-auto mt-4 md:mt-0">
+              <Link href="/assessment" className="hover-glow-btn w-full md:w-auto justify-center" style={{
                 display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '16px 32px', borderRadius: '30px',
                 background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', color: '#fff', textDecoration: 'none',
                 fontWeight: 700, fontSize: '1.1rem', boxShadow: '0 8px 32px rgba(255,107,0,0.4)'
