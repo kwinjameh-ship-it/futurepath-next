@@ -67,6 +67,7 @@ export default function SimulationPage() {
       <GlassNav />
 
       <div
+        className="no-print"
         style={{
           display: 'flex', flexDirection: 'column', alignItems: 'center',
           padding: '24px 20px 48px',
@@ -353,6 +354,75 @@ export default function SimulationPage() {
           )}
         </div>
       </div>
+
+      {/* ── PRINT ONLY LAYOUT ── */}
+      {step === 3 && evaluation && (
+        <div className="print-only" style={{ width: '100%', padding: '0', background: '#fff', color: '#000', fontFamily: "'Kanit', sans-serif" }}>
+          {/* Header */}
+          <div style={{ borderBottom: '2px solid #ff7a00', paddingBottom: '16px', marginBottom: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+              <div>
+                <h1 style={{ fontSize: '24px', fontWeight: 900, margin: 0, color: '#111827' }}>FUTUREPATH AI</h1>
+                <p style={{ fontSize: '14px', color: '#ff7a00', fontWeight: 700, margin: 0 }}>รายงานผลการทดลองงาน (Work Simulation Report)</p>
+              </div>
+              <div style={{ textAlign: 'right', fontSize: '12px', color: '#4b5563' }}>
+                <div style={{ fontWeight: 700, color: '#111827', fontSize: '14px' }}>ผู้ประเมิน: {user?.name || 'ไม่ระบุชื่อ'}</div>
+                <div>อีเมล: {user?.email || 'ไม่ระบุ'} | วันที่ประเมิน: {new Date().toLocaleDateString('th-TH')}</div>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, color: '#ff7a00', marginBottom: '8px' }}>ตำแหน่งที่ทดลอง: {jobTitle}</h2>
+          </div>
+
+          {/* โจทย์และผลงาน */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+             <div style={{ padding: '16px', border: '1px solid #e5e7eb', borderRadius: '8px', background: '#f9fafb' }}>
+               <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#374151', borderBottom: '1px solid #d1d5db', paddingBottom: '8px', marginBottom: '12px' }}>โจทย์จาก Senior Director</h3>
+               <div style={{ fontSize: '12px', color: '#4b5563', lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: formatTask(currentTask) }} />
+             </div>
+             <div style={{ padding: '16px', border: '1px solid #e5e7eb', borderRadius: '8px', background: '#fff' }}>
+               <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#374151', borderBottom: '1px solid #d1d5db', paddingBottom: '8px', marginBottom: '12px' }}>ผลงาน/วิธีแก้ปัญหาของคุณ</h3>
+               <div style={{ fontSize: '12px', color: '#111827', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{userWork}</div>
+             </div>
+          </div>
+
+          {/* ผลการประเมิน */}
+          <div style={{ marginBottom: '24px' }}>
+             <h3 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', borderBottom: '1px solid #e5e7eb', paddingBottom: '8px', marginBottom: '16px' }}>ผลการประเมิน (Performance Report)</h3>
+             <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                <div style={{ width: '100px', height: '100px', borderRadius: '50%', border: '4px solid #ff7a00', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: '32px', fontWeight: 900, color: '#ff7a00', lineHeight: 1 }}>{evaluation.score}</span>
+                  <span style={{ fontSize: '12px', color: '#6b7280' }}>/ 100</span>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#374151', marginBottom: '4px' }}>ความคิดเห็นจากผู้บริหาร</h4>
+                  <p style={{ fontSize: '13px', color: '#4b5563', lineHeight: 1.6 }}>{evaluation.feedback}</p>
+                </div>
+             </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>จุดเด่นที่ทำได้ดี</h4>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: 0 }}>
+                {evaluation.strengths?.map((s, i) => (
+                  <li key={i} style={{ fontSize: '12px', color: '#374151', marginBottom: '4px', lineHeight: 1.5 }}>{s}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#d97706', marginBottom: '8px' }}>ข้อเสนอแนะเพื่อพัฒนา</h4>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '20px', margin: 0 }}>
+                {evaluation.improvements?.map((s, i) => (
+                  <li key={i} style={{ fontSize: '12px', color: '#374151', marginBottom: '4px', lineHeight: 1.5 }}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
