@@ -154,7 +154,7 @@ export default function AssessmentPage() {
           scales: { 
             r: { 
               min: 0, max: 100, 
-              ticks: { stepSize: 20, font: { family: 'Kanit' }, color: 'rgba(255,179,71,0.6)' }, 
+              ticks: { stepSize: 20, font: { family: 'Kanit' }, color: 'rgba(255,179,71,0.6)', backdropColor: 'transparent' }, 
               pointLabels: { color: '#ffb347', font: { family: 'Kanit', size: 12, weight: '700' } },
               grid: { color: 'rgba(255,122,0,0.15)' }, 
               angleLines: { color: 'rgba(255,122,0,0.15)' } 
