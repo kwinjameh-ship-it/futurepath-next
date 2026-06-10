@@ -18,12 +18,17 @@ export default function HomePage() {
     f3: false,
     f4: false
   });
-  const [toastMsg, setToastMsg] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const usageRef = useRef(null);
   const chartInstance = useRef(null);
 
   useEffect(() => {
-    if (!loading && user.name) fetchDashboard();
+    if (!loading && user.name) {
+      fetchDashboard();
+      // Show TCAS portfolio modal automatically
+      const timer = setTimeout(() => setShowModal(true), 800);
+      return () => clearTimeout(timer);
+    }
   }, [loading, user.name]);
 
   async function fetchDashboard() {
@@ -42,11 +47,6 @@ export default function HomePage() {
       setStats({ users: 'Err', assess: 'Err', satisfaction: '0' });
     }
   }
-
-  const showToast = (msg) => {
-    setToastMsg(msg);
-    setTimeout(() => setToastMsg(null), 5000);
-  };
 
   function renderLineChart(monthlyUsage) {
     if (!usageRef.current) return;
@@ -212,29 +212,28 @@ export default function HomePage() {
 
               {[
                 {
-                  icon: 'fa-file-pdf', iconBg: 'linear-gradient(135deg,#ff0080,#ff8c00)', tag: 'ยอดฮิต',
-                  en: 'TCAS Portfolio Prep', th: 'ยื่นเข้ามหาวิทยาลัย',
-                  desc: 'ใช้ระบบสร้าง Portfolio 1 หน้าอัตโนมัติจากผลประเมิน พร้อมนำไปยื่นรอบพอร์ตได้ทันที',
-                  onClick: () => showToast(true),
-                  color: '#ff0080',
+                  icon: 'fa-robot', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'AI Powered',
+                  en: 'AI Chatbot', th: 'แชทบอทที่ปรึกษาอาชีพ',
+                  desc: 'สอบถามและวางแผนอนาคตกับ AI ที่เข้าใจคุณได้ตลอด 24 ชั่วโมง',
+                  href: '/chat', color: '#2bcbba',
                 },
                 {
-                  icon: 'fa-compass', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'ค้นหาตัวเอง',
+                  icon: 'fa-compass', iconBg: 'linear-gradient(135deg,#ff7a00,#ff4b00)', tag: 'ค้นหาตัวเอง',
                   en: 'Self Discovery', th: 'ค้นหาคณะและสายการเรียน',
                   desc: 'วิเคราะห์ศักยภาพเชิงลึกด้วย AI เพื่อเลือกคณะหรือสายการเรียน ม.ปลาย หมดปัญหาเรียนผิดสาย',
-                  href: '/assessment', color: '#2bcbba',
+                  href: '/assessment', color: '#ff7a00',
                 },
                 {
                   icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ประสบการณ์',
-                  en: 'Career Readiness', th: 'เตรียมพร้อมลงสนามทำงาน',
-                  desc: 'สร้างความได้เปรียบด้วยการทดลองงานเสมือนจริง ซ้อมสัมภาษณ์กับ AI HR และเช็คฐานเงินเดือน',
+                  en: 'Dream Job Simulation', th: 'ทดลองงานในฝัน',
+                  desc: 'สร้างความได้เปรียบด้วยการทดลองงานเสมือนจริง และประเมินความเหมาะสมก่อนเลือกอาชีพ',
                   href: '/simulation', color: '#fed330',
                 },
                 {
-                  icon: 'fa-user-tie', iconBg: 'linear-gradient(135deg,#a55eea,#7c3aed)', tag: 'ส่วนตัว',
-                  en: 'AI Career Mentor', th: 'ที่ปรึกษาอาชีพ 24 ชม.',
-                  desc: 'มี AI ผู้เชี่ยวชาญด้านอาชีพคอยตอบทุกข้อสงสัย แนะนำเส้นทางความก้าวหน้า และช่วยวางแผนอนาคต',
-                  href: '/chat', color: '#a55eea',
+                  icon: 'fa-microphone', iconBg: 'linear-gradient(135deg,#a55eea,#7c3aed)', tag: 'ฝึกฝน',
+                  en: 'Mock Interview', th: 'จำลองการสัมภาษณ์งาน',
+                  desc: 'ฝึกซ้อมสัมภาษณ์กับ AI HR จำลอง รับ Feedback แบบเรียลไทม์ เพื่อเพิ่มความมั่นใจ',
+                  href: '/interview', color: '#a55eea',
                 },
               ].map((f) => {
                 const innerCard = (
@@ -398,13 +397,13 @@ export default function HomePage() {
       </main>
 
       {/* Modal Notification */}
-      {toastMsg && (
+      {showModal && (
         <div style={{
           position: 'fixed', inset: 0, zIndex: 9999,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
           animation: 'fadeIn 0.3s ease-out'
-        }} onClick={() => setToastMsg(null)}>
+        }} onClick={() => setShowModal(false)}>
           <div 
             onClick={e => e.stopPropagation()}
             style={{
@@ -419,7 +418,7 @@ export default function HomePage() {
           >
             {/* Close button */}
             <button 
-              onClick={() => setToastMsg(null)} 
+              onClick={() => setShowModal(false)} 
               style={{ position: 'absolute', top: '16px', right: '16px', background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', padding: '8px', transition: 'color 0.2s' }}
               onMouseEnter={e => e.currentTarget.style.color = '#fff'}
               onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
@@ -446,7 +445,7 @@ export default function HomePage() {
             </p>
 
             <button 
-              onClick={() => setToastMsg(null)}
+              onClick={() => setShowModal(false)}
               className="hover-glow-btn"
               style={{
                 width: '100%', padding: '14px', borderRadius: '16px',
