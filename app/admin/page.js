@@ -71,7 +71,7 @@ export default function AdminDashboard() {
   const jobChartData = {
     labels: modernTrendingJobs.map(j => j.title),
     datasets: [{
-      label: 'ความต้องการในตลาด (ดัชนีความนิยม)',
+      label: 'จำนวนนักเรียนที่ได้อาชีพนี้',
       data: modernTrendingJobs.map(j => j.count),
       backgroundColor: [
         '#ff9a9e', '#fecfef', '#a1c4fd', '#c2e9fb', '#d4fc79',
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
       {/* Charts */}
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
         <div style={{ padding: '24px', background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-          <h3 style={{ marginBottom: '24px', color: '#334155', fontWeight: 600 }}>แนวโน้มอาชีพที่ได้รับความนิยม 10 อันดับ</h3>
+          <h3 style={{ marginBottom: '24px', color: '#334155', fontWeight: 600 }}>แนวโน้มอาชีพในโรงเรียนที่ได้รับความนิยม 10 อันดับ</h3>
           <div style={{ height: '350px' }}>
             <Bar data={jobChartData} options={chartOptions} />
           </div>
