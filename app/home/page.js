@@ -298,7 +298,17 @@ export default function HomePage() {
                 <div style={{ position: 'relative', width: '200px', height: '200px', margin: '0 auto' }}>
                   <svg width="200" height="200" viewBox="0 0 240 240" style={{ transform: 'rotate(-135deg)' }}>
                     <circle cx="120" cy="120" r="100" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="16" strokeDasharray="471" strokeDashoffset="0" strokeLinecap="round" />
-                    <circle cx="120" cy="120" r="100" fill="none" stroke="url(#orangeGrad)" strokeWidth="16" strokeDasharray="471" strokeDashoffset={471 - (471 * 0.96)} strokeLinecap="round" style={{ filter: 'drop-shadow(0 0 8px rgba(255,107,0,0.5))' }} />
+                    <circle 
+                      cx="120" cy="120" r="100" fill="none" 
+                      stroke="url(#orangeGrad)" strokeWidth="16" 
+                      strokeDasharray="471" 
+                      strokeDashoffset={isNaN(parseFloat(stats.satisfaction)) ? 471 : 471 - (471 * (parseFloat(stats.satisfaction) / 5.0))} 
+                      strokeLinecap="round" 
+                      style={{ 
+                        filter: 'drop-shadow(0 0 8px rgba(255,107,0,0.5))',
+                        transition: 'stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1)'
+                      }} 
+                    />
                     <defs>
                       <linearGradient id="orangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stopColor="#ffb347" />
@@ -320,35 +330,26 @@ export default function HomePage() {
 
                 {/* Sub-metrics */}
                 <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
-                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>ความแม่นยำของการวิเคราะห์ (AI)</span>
-                      <span style={{ color: '#ffb347', fontWeight: 600 }}>92%</span>
+                  {[
+                    { label: 'ความแม่นยำของการวิเคราะห์ (AI)', pct: 92 },
+                    { label: 'ประสบการณ์ใช้งานแพลตฟอร์ม', pct: 95 },
+                    { label: 'แนะนำให้เพื่อนใช้งานต่อ', pct: 98 },
+                  ].map((m, i) => (
+                    <div key={i}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
+                        <span style={{ color: 'rgba(255,255,255,0.7)' }}>{m.label}</span>
+                        <span style={{ color: '#ffb347', fontWeight: 600 }}>{m.pct}%</span>
+                      </div>
+                      <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
+                        <div style={{ 
+                          width: stats.satisfaction !== '...' ? `${m.pct}%` : '0%', 
+                          height: '100%', 
+                          background: 'linear-gradient(90deg, #ff4b00, #ffb347)',
+                          transition: `width 1.5s cubic-bezier(0.16, 1, 0.3, 1) ${0.2 * i}s`
+                        }} />
+                      </div>
                     </div>
-                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ width: '92%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
-                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>ประสบการณ์ใช้งานแพลตฟอร์ม</span>
-                      <span style={{ color: '#ffb347', fontWeight: 600 }}>95%</span>
-                    </div>
-                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ width: '95%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '6px' }}>
-                      <span style={{ color: 'rgba(255,255,255,0.7)' }}>แนะนำให้เพื่อนใช้งานต่อ</span>
-                      <span style={{ color: '#ffb347', fontWeight: 600 }}>98%</span>
-                    </div>
-                    <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', overflow: 'hidden' }}>
-                      <div style={{ width: '98%', height: '100%', background: 'linear-gradient(90deg, #ff4b00, #ffb347)' }} />
-                    </div>
-                  </div>
+                  ))}
                 </div>
 
               </div>
