@@ -21,8 +21,8 @@ export default function GlassNav({ inline = false }) {
   };
 
   const navClasses = inline
-    ? "flex flex-col items-center justify-center gap-6 py-6 px-3 shrink-0"
-    : "fixed z-[950] flex items-center justify-between md:justify-center gap-2 md:gap-6 p-3 md:py-6 md:px-3 left-4 right-4 bottom-4 md:bottom-auto md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col";
+    ? "flex flex-col items-center justify-center gap-6 py-8 px-3 shrink-0"
+    : "fixed z-[950] flex items-center justify-between md:justify-center gap-2 md:gap-6 p-3 md:py-8 md:px-3 left-4 right-4 bottom-4 md:bottom-auto md:right-auto md:left-6 md:top-1/2 md:-translate-y-1/2 md:flex-col";
 
   return (
     <nav 
