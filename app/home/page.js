@@ -377,18 +377,55 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Column 3: Monthly Usage Chart */}
+            {/* Column 3: Monthly Usage Chart & Feedback */}
             <div className="stagger-3" style={{ display: 'flex', flexDirection: 'column', gap: '16px', height: '100%' }}>
-              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>กราฟสถิติรายเดือน</h3>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>สถิติและการประเมิน</h3>
               <div 
                 className="hover-lift"
                 style={{ ...glassCard, flex: 1 }}
               >
                 <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#ffb347', marginBottom: '20px' }}>การลงทะเบียน (ผู้ใช้ใหม่)</h4>
-                <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 40px)', minHeight: '220px' }}>
+                <div style={{ position: 'relative', width: '100%', height: 'calc(100% - 40px)', minHeight: '160px' }}>
                   <canvas ref={usageRef} />
                 </div>
               </div>
+
+              {/* Feedback Card */}
+              <Link href="/feedback" style={{ textDecoration: 'none' }}>
+                <div
+                  className="hover-lift"
+                  style={{
+                    ...glassCard,
+                    padding: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '16px',
+                    background: 'linear-gradient(135deg, rgba(255,122,0,0.15), rgba(255,75,0,0.05))',
+                    border: '1px solid rgba(255,122,0,0.3)',
+                  }}
+                >
+                  <div style={{ 
+                    width: '48px', height: '48px', borderRadius: '14px', 
+                    background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    boxShadow: '0 4px 16px rgba(255, 122, 0, 0.4)'
+                  }}>
+                    <i className="fa-solid fa-star" style={{ color: '#fff', fontSize: '1.2rem' }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#fff', marginBottom: '4px' }}>ประเมินความพึงพอใจ</h4>
+                    <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.65)', margin: 0, lineHeight: 1.4 }}>
+                      ช่วยเราพัฒนาระบบ FUTUREPATH ให้ดียิ่งขึ้น
+                    </p>
+                  </div>
+                  <div style={{ 
+                    width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center' 
+                  }}>
+                    <i className="fa-solid fa-arrow-right" style={{ color: '#ffb347', fontSize: '0.9rem' }} />
+                  </div>
+                </div>
+              </Link>
             </div>
 
           </div>
