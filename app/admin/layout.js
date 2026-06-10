@@ -19,26 +19,39 @@ export default function AdminLayout({ children }) {
       return;
     }
 
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'admin_check', email })
-    })
-      .then(r => r.json())
-      .then(data => {
+    const checkAdminWithRetry = async (retries = 3) => {
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: 'admin_check', email })
+        });
+        const data = await res.json();
+
+        // If GAS returns a lock timeout error, retry up to 3 times
+        if (data.status === 'error' && data.message && data.message.includes('การล็อก') && retries > 0) {
+          setTimeout(() => checkAdminWithRetry(retries - 1), 2000);
+          return;
+        }
+
         if (data.status === 'success' && data.isAdmin) {
           setIsAdmin(true);
+          setLoading(false);
+        } else if (data.status === 'error') {
+          alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + data.message + '\nกรุณาลองเข้าใหม่อีกครั้ง');
+          router.push('/home');
         } else {
-          alert('คุณไม่มีสิทธิ์เข้าถึงหน้า Admin\\nอีเมลที่เช็ค: ' + email + '\\nสิ่งที่ระบบตอบกลับ: ' + JSON.stringify(data));
+          alert('คุณไม่มีสิทธิ์เข้าถึงหน้า Admin สำหรับอีเมล: ' + email);
           router.push('/home');
         }
-      })
-      .catch((error) => {
+      } catch (error) {
         alert('เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
         router.push('/home');
-      })
-      .finally(() => setLoading(false));
+      }
+    };
+
+    checkAdminWithRetry();
   }, [router]);
 
   if (loading) {
