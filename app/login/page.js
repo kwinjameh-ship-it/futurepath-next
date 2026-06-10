@@ -172,6 +172,15 @@ export default function LoginPage() {
               </div>
             </div>
 
+            {!isLogin && (
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '8px', marginBottom: '16px' }}>
+                <input type="checkbox" id="pdpa" required style={{ marginTop: '4px', accentColor: '#ff7a00', cursor: 'pointer', transform: 'scale(1.1)' }} />
+                <label htmlFor="pdpa" style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, cursor: 'pointer' }}>
+                  ฉันยินยอมให้ระบบประมวลผลข้อมูลส่วนบุคคลและวิเคราะห์ศักยภาพด้วย AI ข้อมูลจะถูกเก็บรักษาอย่างปลอดภัยตาม <span style={{ color: '#ffb347', textDecoration: 'underline' }}>นโยบายความเป็นส่วนตัว (PDPA)</span>
+                </label>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}

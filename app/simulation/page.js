@@ -271,6 +271,16 @@ export default function SimulationPage() {
           {/* ── Step 3 ── */}
           {step === 3 && evaluation && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
+                <button 
+                  onClick={() => window.print()}
+                  className="btn-primary hover-glow-btn"
+                  style={{ padding: '10px 20px', fontSize: '0.85rem' }}
+                >
+                  <i className="fa-solid fa-file-pdf mr-2" /> ดาวน์โหลดผลงาน (Portfolio)
+                </button>
+              </div>
+
               <div style={{ textAlign: 'center' }}>
                 <p className="section-eyebrow" style={{ marginBottom: '10px' }}>ผลการประเมิน</p>
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '0.1em', color: 'var(--accent-color)', marginBottom: '20px' }}>

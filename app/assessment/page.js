@@ -217,7 +217,11 @@ export default function AssessmentPage() {
         {step: 3, title: 'เส้นทางการศึกษา', desc: 'เข้าศึกษาต่อในคณะและสาขาที่สอดคล้องกับจุดแข็ง'},
         {step: 4, title: 'อาชีพเป้าหมาย', desc: 'มุ่งหน้าสู่อาชีพที่ใช่และเตรียมความพร้อมในการทำงาน'},
         {step: 5, title: 'ความสำเร็จ', desc: 'บรรลุเป้าหมายในสายอาชีพที่ตรงกับศักยภาพที่แท้จริงของคุณ'}
-      ]
+      ],
+      MarketData: {
+        salary: '25,000 - 45,000 บาท/เดือน',
+        demand: 'แนวโน้มการเติบโตสูงมากในยุค AI และอุตสาหกรรมดิจิทัล (+15% ต่อปี) เป็นที่ต้องการขององค์กรชั้นนำ'
+      }
     };
 
     let aiResult = fallback;
@@ -231,7 +235,7 @@ export default function AssessmentPage() {
 - บังคับ: ต้องให้คำแนะนำคณะ/สาขา (Edu) และ อาชีพ (Jobs) ให้ครบอย่างละ 5 อันดับเสมอ ห้ามให้น้อยกว่านี้เด็ดขาด
 - บังคับ: ในส่วนของคณะ/สาขา (Edu) ต้องระบุ "มหาวิทยาลัยชั้นนำ: (ชื่อมหาวิทยาลัย)" ต่อท้ายเหตุผลเสมอ ห้ามลืมเด็ดขาด
 
-ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และบังคับต่อท้ายด้วย 'มหาวิทยาลัยชั้นนำ: ...' เสมอ"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
+ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "MarketData": {"salary": "ช่วงเงินเดือนเริ่มต้น (บาท)", "demand": "ความต้องการตลาดในปัจจุบัน (เชิงอธิบายและระบุเปอร์เซ็นต์การเติบโตถ้าเป็นไปได้)"}, "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และบังคับต่อท้ายด้วย 'มหาวิทยาลัยชั้นนำ: ...' เสมอ"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะนี้ถึงจำเป็นต่ออาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริง"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -262,7 +266,8 @@ export default function AssessmentPage() {
                 Jobs: formatArr(extracted.Jobs || extracted.jobs) || fallback.Jobs,
                 Dev: formatArr(extracted.Dev || extracted.Development || extracted.dev || extracted.development) || fallback.Dev,
                 Refs: formatArr(extracted.Refs || extracted.References || extracted.refs || extracted.references) || fallback.Refs,
-                Roadmap: extracted.Roadmap || fallback.Roadmap
+                Roadmap: extracted.Roadmap || fallback.Roadmap,
+                MarketData: extracted.MarketData || fallback.MarketData
               };
               
               if (aiResult.Edu.length === 0) aiResult.Edu = fallback.Edu;
@@ -319,6 +324,17 @@ export default function AssessmentPage() {
       <GlassNav />
       <main style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
         <UserBar name={user.name} email={user.email} />
+
+        {/* Action Bar (Export) */}
+        <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
+          <button 
+            onClick={() => window.print()}
+            className="btn-primary hover-glow-btn"
+            style={{ padding: '12px 24px', fontSize: '0.95rem' }}
+          >
+            <i className="fa-solid fa-file-pdf mr-2" /> ดาวน์โหลด Portfolio (TCAS)
+          </button>
+        </div>
 
         {/* Match Score */}
         <div
@@ -526,6 +542,44 @@ export default function AssessmentPage() {
             <p style={{ fontSize: '1rem', color: 'var(--text-main)', lineHeight: 1.8, maxWidth: '800px', margin: '0 auto' }}>
               {resultData.AnalysisDetail}
             </p>
+          </div>
+        )}
+
+        {/* Market Data */}
+        {resultData.MarketData && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginBottom: '24px' }}>
+            <div
+              className="hover-lift"
+              style={{
+                padding: '28px', borderRadius: 'var(--r-xl)',
+                background: 'rgba(38,222,129,0.06)', 
+                border: '1px solid rgba(38,222,129,0.2)',
+                backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+              }}
+            >
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#26de81', marginBottom: '12px' }}>
+                <i className="fa-solid fa-sack-dollar mr-2" /> ฐานเงินเดือนเริ่มต้น
+              </h3>
+              <p style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
+                {resultData.MarketData.salary}
+              </p>
+            </div>
+            <div
+              className="hover-lift"
+              style={{
+                padding: '28px', borderRadius: 'var(--r-xl)',
+                background: 'rgba(43,203,186,0.06)', 
+                border: '1px solid rgba(43,203,186,0.2)',
+                backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
+              }}
+            >
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#2bcbba', marginBottom: '12px' }}>
+                <i className="fa-solid fa-arrow-trend-up mr-2" /> แนวโน้มตลาดแรงงาน
+              </h3>
+              <p style={{ fontSize: '1rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                {resultData.MarketData.demand}
+              </p>
+            </div>
           </div>
         )}
 
