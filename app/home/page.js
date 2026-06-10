@@ -145,14 +145,18 @@ export default function HomePage() {
         <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
       </div>
 
-      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8">
-        <div className="flex w-[90%] md:w-[85%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
-          
-          {/* Desktop Attached Nav */}
-          <div className="hidden md:block shrink-0 self-center relative z-[99]">
-            <GlassNav inline={true} />
-          </div>
+      <GlassNav />
 
+      <style>{`
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .stagger-1 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.1s; }
+        .stagger-2 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.2s; }
+        .stagger-3 { animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.3s; }
+      `}</style>
+
+      <main className="relative z-10 flex justify-center items-center w-full min-h-screen p-4 md:p-8" style={{ paddingLeft: '80px' }}>
+        <div className="flex w-[100%] md:w-[95%] max-w-[1400px] gap-2 md:gap-6" style={{ minHeight: '85vh' }}>
+          
           <div style={{ ...glassPanel, flex: 1, padding: '40px 48px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
           
           {/* Header Row (Hero Content) */}
@@ -195,137 +199,74 @@ export default function HomePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px' }}>
             
             {/* Column 1: Feature Cards */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ฟีเจอร์เด่นของเรา</h3>
-              
-              {/* 1. วิเคราะห์ศักยภาพ */}
-              <div className="hover-lift" style={{...(activeToggles.f1 ? activeCard : glassCard)}}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-brain" style={{ fontSize: '1.5rem', opacity: activeToggles.f1 ? 1 : 0.6 }} />
-                  <Toggle active={activeToggles.f1} onChange={() => setActiveToggles(p => ({...p, f1: !p.f1}))} />
-                </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Potential Assessment</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>วิเคราะห์ศักยภาพ</p>
+            <div className="stagger-1" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>ฟีเจอร์เด่นของเรา</h3>
 
-                <div style={{
-                  maxHeight: activeToggles.f1 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
-                  opacity: activeToggles.f1 ? 1 : 0, marginTop: activeToggles.f1 ? '16px' : '0', paddingTop: activeToggles.f1 ? '16px' : '0',
-                  borderTop: activeToggles.f1 ? '1px solid rgba(255,255,255,0.2)' : 'none'
-                }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-chart-pie" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ประเมินทักษะและความถนัดของคุณอย่างแม่นยำ</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-bullseye" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ค้นหาจุดแข็งที่ซ่อนอยู่เพื่อสร้างข้อได้เปรียบ</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <i className="fa-solid fa-handshake" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>จับคู่กับสายงานที่เหมาะสมกับคุณที่สุด</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* 2. AI Chatbot */}
-              <div className="hover-lift" style={{...(activeToggles.f2 ? activeCard : glassCard)}}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-robot" style={{ fontSize: '1.5rem', opacity: activeToggles.f2 ? 1 : 0.6 }} />
-                  <Toggle active={activeToggles.f2} onChange={() => setActiveToggles(p => ({...p, f2: !p.f2}))} />
-                </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>AI Chatbot</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>แชทบอทที่ปรึกษาอาชีพ</p>
-
-                <div style={{
-                  maxHeight: activeToggles.f2 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
-                  opacity: activeToggles.f2 ? 1 : 0, marginTop: activeToggles.f2 ? '16px' : '0', paddingTop: activeToggles.f2 ? '16px' : '0',
-                  borderTop: activeToggles.f2 ? '1px solid rgba(255,255,255,0.2)' : 'none'
-                }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-comments" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ปรึกษาและไขข้อข้องใจเรื่องสายอาชีพได้ 24 ชั่วโมง</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-user-astronaut" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>รับคำแนะนำที่ปรับแต่งตามโปรไฟล์ของคุณ</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <i className="fa-solid fa-lightbulb" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>แลกเปลี่ยนแนวคิดและวางแผนอนาคตกับ AI</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* 3. จำลองการสัมภาษณ์ */}
-              <div className="hover-lift" style={{...(activeToggles.f3 ? activeCard : glassCard)}}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-microphone" style={{ fontSize: '1.5rem', opacity: activeToggles.f3 ? 1 : 0.6 }} />
-                  <Toggle active={activeToggles.f3} onChange={() => setActiveToggles(p => ({...p, f3: !p.f3}))} />
-                </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Mock Interview</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>จำลองการสัมภาษณ์</p>
-
-                <div style={{
-                  maxHeight: activeToggles.f3 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
-                  opacity: activeToggles.f3 ? 1 : 0, marginTop: activeToggles.f3 ? '16px' : '0', paddingTop: activeToggles.f3 ? '16px' : '0',
-                  borderTop: activeToggles.f3 ? '1px solid rgba(255,255,255,0.2)' : 'none'
-                }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-user-tie" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ฝึกซ้อมตอบคำถามสัมภาษณ์งานกับ AI แบบเรียลไทม์</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-clipboard-check" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>รับ Feedback เพื่อปรับปรุงจุดอ่อนและเสริมความมั่นใจ</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <i className="fa-solid fa-building" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>จำลองสถานการณ์จริงจากบริษัทยอดฮิต</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              {/* 4. ทดลองงานในฝัน */}
-              <div className="hover-lift" style={{...(activeToggles.f4 ? activeCard : glassCard)}}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <i className="fa-solid fa-briefcase" style={{ fontSize: '1.5rem', opacity: activeToggles.f4 ? 1 : 0.6 }} />
-                  <Toggle active={activeToggles.f4} onChange={() => setActiveToggles(p => ({...p, f4: !p.f4}))} />
-                </div>
-                <h4 style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '4px' }}>Dream Job Simulation</h4>
-                <p style={{ fontSize: '0.85rem', opacity: 0.8 }}>ทดลองงานในฝัน</p>
-
-                <div style={{
-                  maxHeight: activeToggles.f4 ? '160px' : '0px', overflow: 'hidden', transition: 'max-height 0.4s ease-out, opacity 0.3s ease-out',
-                  opacity: activeToggles.f4 ? 1 : 0, marginTop: activeToggles.f4 ? '16px' : '0', paddingTop: activeToggles.f4 ? '16px' : '0',
-                  borderTop: activeToggles.f4 ? '1px solid rgba(255,255,255,0.2)' : 'none'
-                }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.85rem', lineHeight: 1.8, opacity: 0.9 }}>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-vr-cardboard" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>สัมผัสประสบการณ์จำลองการทำงานจริงในสายอาชีพต่างๆ</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '6px' }}>
-                      <i className="fa-solid fa-list-check" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ทำภารกิจและแก้ไขปัญหาที่มักพบในสายงานนั้น</span>
-                    </li>
-                    <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                      <i className="fa-solid fa-star" style={{ color: '#ffb347', marginTop: '4px' }}></i>
-                      <span>ประเมินความชอบและความถนัดก่อนตัดสินใจจริง</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              {[
+                {
+                  icon: 'fa-brain', iconBg: 'linear-gradient(135deg,#ff7a00,#ff4b00)', tag: 'แนะนำ',
+                  en: 'Potential Assessment', th: 'วิเคราะห์ศักยภาพ',
+                  desc: 'ประเมินทักษะและค้นพบจุดแข็งที่ซ่อนอยู่ด้วย AI ที่แม่นยำ',
+                  bullets: ['จับคู่กับสายงานที่เหมาะสม','วิเคราะห์ทักษะทั้ง 6 ด้าน','ผลลัพธ์เชิงลึกจาก AI'],
+                  href: '/assessment', color: '#ff7a00',
+                },
+                {
+                  icon: 'fa-robot', iconBg: 'linear-gradient(135deg,#2bcbba,#0a9e8f)', tag: 'AI Powered',
+                  en: 'AI Chatbot', th: 'แชทบอทที่ปรึกษาอาชีพ',
+                  desc: 'สอบถามและวางแผนอนาคตกับ AI ที่เข้าใจคุณได้ตลอด 24 ชั่วโมง',
+                  bullets: ['คำแนะนำเฉพาะบุคคล','ตอบได้ทุกคำถามด้านอาชีพ','ปรึกษาได้ทุกเวลา'],
+                  href: '/chat', color: '#2bcbba',
+                },
+                {
+                  icon: 'fa-microphone', iconBg: 'linear-gradient(135deg,#a55eea,#7c3aed)', tag: 'ฝึกฝน',
+                  en: 'Mock Interview', th: 'จำลองการสัมภาษณ์งาน',
+                  desc: 'ฝึกซ้อมสัมภาษณ์กับ AI HR จำลอง รับ Feedback แบบเรียลไทม์',
+                  bullets: ['AI HR สัมภาษณ์จริง','ประเมินคำตอบและให้คะแนน','เพิ่มความมั่นใจก่อนสมัครงาน'],
+                  href: '/interview', color: '#a55eea',
+                },
+                {
+                  icon: 'fa-briefcase', iconBg: 'linear-gradient(135deg,#fed330,#f7b731)', tag: 'ใหม่',
+                  en: 'Dream Job Simulation', th: 'ทดลองงานในฝัน',
+                  desc: 'สัมผัสประสบการณ์การทำงานจริงในสายอาชีพต่างๆ ก่อนตัดสินใจ',
+                  bullets: ['ภารกิจจำลองสถานการณ์จริง','ทดลองหลายสายอาชีพ','ประเมินความเหมาะสมก่อนเลือก'],
+                  href: '/assessment', color: '#fed330',
+                },
+              ].map((f) => (
+                <Link key={f.en} href={f.href} style={{ textDecoration: 'none' }}>
+                  <div
+                    className="hover-lift"
+                    style={{
+                      ...glassCard,
+                      cursor: 'pointer',
+                      padding: '20px 22px',
+                      transition: 'all 0.25s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = `${f.color}18`; e.currentTarget.style.borderColor = `${f.color}60`; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = glassCard.background; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                      {/* Icon circle */}
+                      <div style={{ width: '44px', height: '44px', borderRadius: '14px', background: f.iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${f.color}40` }}>
+                        <i className={`fa-solid ${f.icon}`} style={{ color: '#fff', fontSize: '1.1rem' }} />
+                      </div>
+                      {/* Text */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                          <span style={{ fontSize: '0.98rem', fontWeight: 800, color: '#fff' }}>{f.en}</span>
+                          <span style={{ fontSize: '0.65rem', fontWeight: 700, color: f.color, background: `${f.color}20`, border: `1px solid ${f.color}50`, borderRadius: '999px', padding: '1px 8px', letterSpacing: '0.05em' }}>{f.tag}</span>
+                        </div>
+                        <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.55)', margin: 0 }}>{f.th}</p>
+                      </div>
+                      <i className="fa-solid fa-chevron-right" style={{ color: f.color, fontSize: '0.8rem', opacity: 0.7 }} />
+                    </div>
+                  </div>
+                </Link>
+              ))}
             </div>
 
             {/* Column 2: Satisfaction Dial & Quick Stats */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>ภาพรวมสถิติระบบ</h3>
+            <div className="stagger-2" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>ภาพรวมสถิติระบบ</h3>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                 <div 
@@ -414,8 +355,8 @@ export default function HomePage() {
             </div>
 
             {/* Column 3: Monthly Usage Chart */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'rgba(255,255,255,0.8)', marginBottom: '8px' }}>กราฟสถิติรายเดือน</h3>
+            <div className="stagger-3" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <h3 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'rgba(255,255,255,0.6)', marginBottom: '4px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>กราฟสถิติรายเดือน</h3>
               <div 
                 className="hover-lift"
                 style={glassCard}
