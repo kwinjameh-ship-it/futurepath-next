@@ -4,9 +4,36 @@ import ThemeProvider from '@/components/ThemeProvider';
 import AdminFloatButton from '@/components/AdminFloatButton';
 
 export const metadata = {
-  title: 'FUTUREPATH AI | ระบบวิเคราะห์ศักยภาพและแนะแนวอาชีพ',
-  description: 'ระบบ AI วิเคราะห์ศักยภาพและแนะแนวอาชีพแห่งอนาคต ด้วยเทคโนโลยี Gemini AI',
-  icons: { icon: '/img/logo1.png' },
+  title: 'FUTUREPATH AI | ระบบค้นพบตัวตนและแนะแนวอาชีพด้วย AI',
+  description: 'ระบบ AI วิเคราะห์ศักยภาพ ทักษะ และแนะแนวอาชีพแห่งอนาคต สำหรับนักเรียนและสถานศึกษา ประมวลผลลึกถึง School DNA ด้วยเทคโนโลยี Gemini AI',
+  keywords: ['แนะแนวอาชีพ', 'ค้นหาตัวเอง', 'AI แนะแนว', 'FUTUREPATH AI', 'การศึกษา', 'แบบทดสอบอาชีพ', 'School DNA', 'วิเคราะห์ศักยภาพ'],
+  authors: [{ name: 'FUTUREPATH Team' }],
+  creator: 'FUTUREPATH AI',
+  publisher: 'FUTUREPATH AI',
+  robots: 'index, follow',
+  openGraph: {
+    title: 'FUTUREPATH AI | ค้นพบอาชีพที่ใช่ ด้วย AI วิเคราะห์ศักยภาพ',
+    description: 'ทดสอบทักษะ 6 ด้าน เพื่อค้นหาอาชีพที่เหมาะสมกับคุณที่สุด พร้อมแผนพัฒนาศักยภาพเฉพาะบุคคล',
+    url: 'https://futurepath-ai.vercel.app', // เปลี่ยนเป็น Domain จริงเมื่อพร้อม
+    siteName: 'FUTUREPATH AI',
+    images: [
+      {
+        url: '/img/logo1.png', // แนะนำให้สร้างภาพ OG Image ขนาด 1200x630 เพิ่มทีหลัง
+        width: 800,
+        height: 600,
+        alt: 'FUTUREPATH AI Logo',
+      },
+    ],
+    locale: 'th_TH',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FUTUREPATH AI | ระบบค้นพบตัวตนด้วย AI',
+    description: 'แนะแนวอาชีพที่ใช่ ผ่านการวิเคราะห์ทักษะด้วย AI สำหรับนักเรียนและโรงเรียน',
+    images: ['/img/logo1.png'],
+  },
+  icons: { icon: '/img/logo1.png', apple: '/img/logo1.png' },
 };
 
 export default function RootLayout({ children }) {

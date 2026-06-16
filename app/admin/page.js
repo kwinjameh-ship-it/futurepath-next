@@ -40,7 +40,7 @@ export default function AdminDashboard() {
       const res = await fetch('/api/admin-insight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ popularJobs, avgSatisfaction, totalAssessments })
+        body: JSON.stringify({ popularJobs, avgSatisfaction, totalAssessments, avgSkills: skillsData })
       });
       const d = await res.json();
       try {
@@ -121,25 +121,46 @@ export default function AdminDashboard() {
 
   // Radar chart data (use avgSkills if provided, otherwise mock)
   const mockSkills = [
-    { label: 'ตรรกะและการวิเคราะห์', score: 75 },
-    { label: 'การสื่อสารและภาษา', score: 82 },
-    { label: 'เทคโนโลยีและดิจิทัล', score: 88 },
-    { label: 'ความคิดสร้างสรรค์', score: 70 },
-    { label: 'การจัดการและผู้นำ', score: 65 },
-    { label: 'ความเข้าใจสังคม', score: 78 }
+    { label: 'ตรรกะและการวิเคราะห์', score: 81.2, icon: '🧠', color: '#6366f1' },
+    { label: 'การสื่อสารและภาษา',    score: 74.4, icon: '💬', color: '#0ea5e9' },
+    { label: 'เทคโนโลยีและดิจิทัล',  score: 92.0, icon: '💻', color: '#38ef7d' },
+    { label: 'ความคิดสร้างสรรค์',    score: 78.8, icon: '🎨', color: '#f59e0b' },
+    { label: 'การจัดการและผู้นำ',    score: 68.4, icon: '🏆', color: '#f43f5e' },
+    { label: 'ความเข้าใจสังคม',      score: 72.0, icon: '🤝', color: '#a855f7' }
   ];
-  const skillsData = avgSkills || mockSkills;
+  // iconMap และ colorMap สำหรับเติมให้ข้อมูลจริงจาก Apps Script ที่ไม่มี icon/color
+  const metaMap = {
+    'เทคโนโลยีและดิจิทัล':  { icon: '💻', color: '#38ef7d' },
+    'ตรรกะและการวิเคราะห์': { icon: '🧠', color: '#6366f1' },
+    'ความคิดสร้างสรรค์':    { icon: '🎨', color: '#f59e0b' },
+    'การจัดการและผู้นำ':    { icon: '🏆', color: '#f43f5e' },
+    'การสื่อสารและภาษา':    { icon: '💬', color: '#0ea5e9' },
+    'ความเข้าใจสังคม':      { icon: '🤝', color: '#a855f7' },
+  };
+  const rawSkills = (avgSkills && avgSkills.length > 0) ? avgSkills : mockSkills;
+  // normalize: แปลง score เป็น number เสมอ และเติม icon/color ถ้าไม่มี
+  const skillsData = rawSkills.map(s => ({
+    ...s,
+    score: parseFloat(s.score) || 0,
+    icon:  s.icon  || metaMap[s.label]?.icon  || '⭐',
+    color: s.color || metaMap[s.label]?.color || '#38ef7d',
+  }));
+  const topSkill = [...skillsData].sort((a, b) => b.score - a.score)[0];
+  const lowSkill = [...skillsData].sort((a, b) => a.score - b.score)[0];
+  const avgAll = (skillsData.reduce((s, x) => s + x.score, 0) / skillsData.length).toFixed(1);
 
   const radarChartData = {
     labels: skillsData.map(s => s.label),
     datasets: [{
       label: 'คะแนนเฉลี่ยระดับโรงเรียน (%)',
       data: skillsData.map(s => s.score),
-      backgroundColor: 'rgba(56, 239, 125, 0.2)',
-      borderColor: 'rgba(56, 239, 125, 1)',
-      borderWidth: 2,
-      pointBackgroundColor: 'rgba(56, 239, 125, 1)',
+      backgroundColor: 'rgba(56, 239, 125, 0.15)',
+      borderColor: 'rgba(56, 239, 125, 0.9)',
+      borderWidth: 2.5,
+      pointBackgroundColor: skillsData.map(s => s.color || 'rgba(56, 239, 125, 1)'),
       pointBorderColor: '#fff',
+      pointRadius: 5,
+      pointHoverRadius: 7,
       pointHoverBackgroundColor: '#fff',
       pointHoverBorderColor: 'rgba(56, 239, 125, 1)'
     }]
@@ -181,39 +202,145 @@ export default function AdminDashboard() {
       </div>
 
       {/* AI Insight Box */}
-      <div style={{ marginBottom: '32px', padding: '24px', background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '16px', color: 'white', boxShadow: '0 10px 15px -3px rgba(15, 23, 42, 0.3)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1, fontSize: '120px' }}>
-          <i className="fa-solid fa-brain"></i>
-        </div>
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '16px', color: '#38ef7d', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <i className="fa-solid fa-sparkles"></i> AI Executive Summary
-          </h3>
-          
-          {aiInsight ? (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '16px', marginTop: '16px' }}>
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #38ef7d' }}>
-                <h4 style={{ color: '#38ef7d', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-bullseye mr-2"></i>ภาพรวมศักยภาพ</h4>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.overall}</p>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #0ea5e9' }}>
-                <h4 style={{ color: '#0ea5e9', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-star mr-2"></i>จุดเด่นที่ค้นพบ</h4>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.strengths}</p>
-              </div>
-              <div style={{ background: 'rgba(255,255,255,0.1)', padding: '16px', borderRadius: '12px', borderLeft: '4px solid #fcd34d' }}>
-                <h4 style={{ color: '#fcd34d', marginBottom: '8px', fontWeight: 600, fontSize: '1.05rem' }}><i className="fa-solid fa-lightbulb mr-2"></i>ข้อเสนอแนะเชิงนโยบาย</h4>
-                <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.9 }}>{aiInsight.recommendation}</p>
-              </div>
-            </div>
-          ) : (
-            <div>
-              <p style={{ color: '#94a3b8', marginBottom: '16px' }}>วิเคราะห์ข้อมูลภาพรวมในระบบด้วย AI เพื่อทำบทสรุปผู้บริหารเชิงนโยบาย (คลิกเพื่อประมวลผล)</p>
-              <button className="no-print" onClick={getInsight} disabled={loadingInsight} style={{ background: '#38ef7d', color: '#0f172a', border: 'none', padding: '8px 24px', borderRadius: '8px', cursor: loadingInsight ? 'not-allowed' : 'pointer', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                {loadingInsight ? <><i className="fa-solid fa-circle-notch fa-spin"></i> กำลังวิเคราะห์ข้อมูล...</> : <><i className="fa-solid fa-wand-magic-sparkles"></i> เริ่มประมวลผล</>}
-              </button>
-            </div>
+      <div style={{ marginBottom: '32px', background: 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)', borderRadius: '20px', color: 'white', boxShadow: '0 10px 40px rgba(15,23,42,0.4)', overflow: 'hidden' }}>
+        {/* Header */}
+        <div style={{ padding: '24px 28px 20px', borderBottom: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#38ef7d', display: 'flex', alignItems: 'center', gap: '10px', margin: 0 }}>
+              <i className="fa-solid fa-brain"></i> AI Executive Summary
+            </h3>
+            <p style={{ color: '#64748b', fontSize: '0.82rem', marginTop: '4px', margin: '4px 0 0' }}>วิเคราะห์โดย AI — ผลการประเมินทักษะนักเรียนเชิงลึกสำหรับผู้บริหาร</p>
+          </div>
+          {!aiInsight && (
+            <button className="no-print" onClick={getInsight} disabled={loadingInsight}
+              style={{ background: 'linear-gradient(135deg,#38ef7d,#11998e)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', cursor: loadingInsight ? 'not-allowed' : 'pointer', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+              {loadingInsight ? <><i className="fa-solid fa-circle-notch fa-spin"></i> กำลังวิเคราะห์...</> : <><i className="fa-solid fa-wand-magic-sparkles"></i> ประมวลผล</>}
+            </button>
+          )}
+          {aiInsight && (
+            <button className="no-print" onClick={() => { setAiInsight(null); }}
+              style={{ background: 'rgba(255,255,255,0.08)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.12)', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '0.82rem' }}>
+              <i className="fa-solid fa-rotate-right mr-1"></i> วิเคราะห์ใหม่
+            </button>
           )}
         </div>
+
+        {!aiInsight && !loadingInsight && (
+          <div style={{ padding: '40px 28px', textAlign: 'center' }}>
+            <i className="fa-solid fa-chart-pie" style={{ fontSize: '3rem', color: '#334155', marginBottom: '16px', display: 'block' }}></i>
+            <p style={{ color: '#64748b', fontSize: '0.95rem' }}>กดปุ่ม <strong style={{color:'#38ef7d'}}>"ประมวลผล"</strong> เพื่อให้ AI วิเคราะห์ข้อมูลนักเรียนทั้งโรงเรียน<br/>และสร้างรายงานเชิงลึกพร้อมแผนพัฒนาให้อัตโนมัติ</p>
+          </div>
+        )}
+        {loadingInsight && (
+          <div style={{ padding: '40px 28px', textAlign: 'center' }}>
+            <i className="fa-solid fa-circle-notch fa-spin" style={{ fontSize: '2.5rem', color: '#38ef7d', marginBottom: '16px', display: 'block' }}></i>
+            <p style={{ color: '#94a3b8' }}>AI กำลังวิเคราะห์ข้อมูลนักเรียน {totalAssessments} คน...</p>
+          </div>
+        )}
+
+        {aiInsight && (
+          <div style={{ padding: '24px 28px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+            {/* Row 1: ภาพรวม + จุดแข็ง */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div style={{ background: 'rgba(56,239,125,0.08)', border: '1px solid rgba(56,239,125,0.25)', borderRadius: '14px', padding: '18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(56,239,125,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-bullseye" style={{ color: '#38ef7d', fontSize: '0.9rem' }}></i>
+                  </div>
+                  <h4 style={{ color: '#38ef7d', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>ภาพรวมศักยภาพ</h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.overall}</p>
+              </div>
+              <div style={{ background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '14px', padding: '18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(14,165,233,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-star" style={{ color: '#0ea5e9', fontSize: '0.9rem' }}></i>
+                  </div>
+                  <h4 style={{ color: '#0ea5e9', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>จุดแข็งที่ค้นพบ</h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.strengths}</p>
+              </div>
+            </div>
+
+            {/* Row 2: ทักษะที่ต้องพัฒนา + แนวโน้มอาชีพ */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div style={{ background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.25)', borderRadius: '14px', padding: '18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(251,191,36,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-triangle-exclamation" style={{ color: '#fbbf24', fontSize: '0.9rem' }}></i>
+                  </div>
+                  <h4 style={{ color: '#fbbf24', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>ทักษะที่ต้องพัฒนา</h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.weakness_analysis || aiInsight.recommendation}</p>
+              </div>
+              <div style={{ background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.25)', borderRadius: '14px', padding: '18px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(168,85,247,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <i className="fa-solid fa-chart-line" style={{ color: '#a855f7', fontSize: '0.9rem' }}></i>
+                  </div>
+                  <h4 style={{ color: '#a855f7', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>แนวโน้มอาชีพ</h4>
+                </div>
+                <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.career_trend || '-'}</p>
+              </div>
+            </div>
+
+            {/* Row 3: แผนพัฒนา 3 ระยะ */}
+            {aiInsight.action_steps && Array.isArray(aiInsight.action_steps) && (
+              <div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
+                  <i className="fa-solid fa-list-check" style={{ color: '#f43f5e' }}></i>
+                  <h4 style={{ color: '#f43f5e', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>แผนพัฒนานักเรียน (3 ระยะ)</h4>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+                  {aiInsight.action_steps.map((step, i) => {
+                    const colors = ['#f43f5e','#f59e0b','#06b6d4'];
+                    const bgColors = ['rgba(244,63,94,0.08)','rgba(245,158,11,0.08)','rgba(6,182,212,0.08)'];
+                    const borderColors = ['rgba(244,63,94,0.3)','rgba(245,158,11,0.3)','rgba(6,182,212,0.3)'];
+                    const icons = ['fa-bolt','fa-clock','fa-rocket'];
+                    return (
+                      <div key={i} style={{ background: bgColors[i], border: `1px solid ${borderColors[i]}`, borderRadius: '12px', padding: '16px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                          <i className={`fa-solid ${icons[i]}`} style={{ color: colors[i], fontSize: '0.8rem' }}></i>
+                          <span style={{ color: colors[i], fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{step.priority}</span>
+                        </div>
+                        <p style={{ color: '#e2e8f0', fontWeight: 700, fontSize: '0.88rem', marginBottom: '8px', margin: '0 0 8px' }}>{step.title}</p>
+                        <p style={{ color: '#94a3b8', fontSize: '0.82rem', lineHeight: 1.7, margin: 0 }}>{step.detail}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Row 4: KPI + ความพึงพอใจ */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              {aiInsight.kpi_suggestion && (
+                <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '14px', padding: '18px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(16,185,129,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <i className="fa-solid fa-gauge-high" style={{ color: '#10b981', fontSize: '0.9rem' }}></i>
+                    </div>
+                    <h4 style={{ color: '#10b981', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>KPI ที่ควรติดตาม</h4>
+                  </div>
+                  <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.kpi_suggestion}</p>
+                </div>
+              )}
+              {aiInsight.satisfaction_note && (
+                <div style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: '14px', padding: '18px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <i className="fa-solid fa-heart" style={{ color: '#ef4444', fontSize: '0.9rem' }}></i>
+                    </div>
+                    <h4 style={{ color: '#ef4444', fontWeight: 700, fontSize: '0.95rem', margin: 0 }}>ความพึงพอใจ {avgSatisfaction}/5</h4>
+                  </div>
+                  <p style={{ fontSize: '0.88rem', lineHeight: 1.75, color: '#cbd5e1', margin: 0 }}>{aiInsight.satisfaction_note}</p>
+                </div>
+              )}
+            </div>
+
+          </div>
+        )}
       </div>
       
       {/* Stat Cards with Gradients */}
@@ -267,12 +394,50 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div style={{ padding: '24px', background: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-          <h3 style={{ marginBottom: '24px', color: '#334155', fontWeight: 600, display: 'flex', justifyContent: 'space-between' }}>
-            <span>School DNA (ศักยภาพรวม)</span>
-          </h3>
-          <div style={{ height: '320px' }}>
+        <div style={{ padding: '24px', background: '#ffffff', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+          {/* Header */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '4px' }}>
+            <div>
+              <h3 style={{ color: '#0f172a', fontWeight: 700, fontSize: '1.05rem', margin: 0 }}>🧬 School DNA (ศักยภาพรวม)</h3>
+              <p style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '4px' }}>ค่าเฉลี่ยทักษะของนักเรียนทั้งโรงเรียน</p>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0f172a', lineHeight: 1 }}>{avgAll}%</div>
+              <div style={{ fontSize: '0.75rem', color: '#64748b' }}>คะแนนเฉลี่ยรวม</div>
+            </div>
+          </div>
+
+          {/* Summary badges */}
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '12px', flexWrap: 'wrap' }}>
+            <span style={{ background: '#dcfce7', color: '#166534', padding: '3px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>
+              🏆 จุดแข็ง: {topSkill?.label} ({topSkill?.score}%)
+            </span>
+            <span style={{ background: '#fef9c3', color: '#854d0e', padding: '3px 10px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>
+              📈 พัฒนา: {lowSkill?.label} ({lowSkill?.score}%)
+            </span>
+          </div>
+
+          {/* Radar Chart */}
+          <div style={{ height: '240px' }}>
             <Radar data={radarChartData} options={radarOptions} />
+          </div>
+
+          {/* Legend grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginTop: '12px' }}>
+            {skillsData.map((s, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 8px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #f1f5f9' }}>
+                <span style={{ fontSize: '0.95rem' }}>{s.icon || '⭐'}</span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{s.label}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
+                    <div style={{ flex: 1, height: '4px', background: '#e2e8f0', borderRadius: '2px', overflow: 'hidden' }}>
+                      <div style={{ width: `${s.score}%`, height: '100%', background: s.color || '#38ef7d', borderRadius: '2px', transition: 'width 0.6s ease' }} />
+                    </div>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0f172a', minWidth: '32px', textAlign: 'right' }}>{s.score}%</span>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

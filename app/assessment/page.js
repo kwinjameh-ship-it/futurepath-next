@@ -303,11 +303,15 @@ export default function AssessmentPage() {
       } catch { aiResult = fallback; }
     }
 
+    // บันทึกชื่ออาชีพอันดับ 1 จาก Jobs[0] แทนชื่อสไตล์ DNA
+    const topJobTitle = aiResult.Jobs?.[0]?.t
+      ? aiResult.Jobs[0].t.replace(/^\u0e2d\u0e31\u0e19\u0e14\u0e31\u0e1a\s*\d+:\s*/i, '').trim()
+      : aiResult.Title;
     try {
       await fetch(SHEET_WEBAPP_URL, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'assessment', name: user.name, email: user.email, matchPct, scores: newScores, aiTitle: aiResult.Title }),
+        body: JSON.stringify({ action: 'assessment', name: user.name, email: user.email, matchPct, scores: newScores, aiTitle: topJobTitle }),
       });
     } catch {}
 
