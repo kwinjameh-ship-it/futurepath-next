@@ -282,66 +282,161 @@ export default function SimulationPage() {
                 </button>
               </div>
 
-              <div style={{ textAlign: 'center' }}>
-                <p className="section-eyebrow" style={{ marginBottom: '10px' }}>ผลการประเมิน</p>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 900, letterSpacing: '0.1em', color: 'var(--accent-color)', marginBottom: '20px' }}>
-                  PERFORMANCE REPORT
-                </h2>
-                <div
-                  style={{
-                    width: '120px', height: '120px', borderRadius: '50%',
-                    border: '4px solid var(--secondary-color)',
-                    boxShadow: '0 0 24px var(--secondary-glow)',
-                    background: 'var(--card-bg)',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                    margin: '0 auto 10px',
-                  }}
-                >
-                  <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--secondary-color)', lineHeight: 1 }}>{evaluation.score}</span>
-                  <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', letterSpacing: '0.06em' }}>/ 100</span>
+              {/* ─── HERO SCORE BANNER ─── */}
+              <div style={{
+                borderRadius: 'var(--r-lg)',
+                background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0c1445 100%)',
+                border: '1px solid rgba(99,102,241,0.35)',
+                boxShadow: '0 0 60px rgba(99,102,241,0.15), 0 24px 48px rgba(0,0,0,0.4)',
+                overflow: 'hidden',
+                position: 'relative',
+              }}>
+                {/* decorative circles */}
+                <div style={{ position: 'absolute', top: '-60px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)' }} />
+                <div style={{ position: 'absolute', bottom: '-40px', left: '-40px', width: '180px', height: '180px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(14,165,233,0.15) 0%, transparent 70%)' }} />
+
+                <div style={{ position: 'relative', zIndex: 1, padding: '28px 28px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
+                  {/* Left: title + metadata */}
+                  <div>
+                    <div style={{ fontSize: '0.72rem', color: 'rgba(148,163,184,0.7)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '6px' }}>
+                      Work Simulation · FUTUREPATH AI
+                    </div>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#f1f5f9', margin: '0 0 4px', letterSpacing: '0.04em' }}>
+                      PERFORMANCE REPORT
+                    </h2>
+                    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '10px' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#94a3b8' }}>
+                        <i className="fa-solid fa-user" style={{ color: '#a78bfa' }} /> {user?.name}
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#94a3b8' }}>
+                        <i className="fa-solid fa-briefcase" style={{ color: '#38bdf8' }} /> {jobTitle}
+                      </span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', color: '#94a3b8' }}>
+                        <i className="fa-solid fa-calendar" style={{ color: '#4ade80' }} /> {new Date().toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Right: Big Score */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
+                    {/* Score ring */}
+                    <div style={{
+                      width: '130px', height: '130px', borderRadius: '50%',
+                      background: `conic-gradient(
+                        ${evaluation.score >= 80 ? '#4ade80' : evaluation.score >= 60 ? '#facc15' : '#f87171'} ${evaluation.score * 3.6}deg,
+                        rgba(255,255,255,0.06) 0deg
+                      )`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: `0 0 32px ${evaluation.score >= 80 ? 'rgba(74,222,128,0.35)' : evaluation.score >= 60 ? 'rgba(250,204,21,0.35)' : 'rgba(248,113,113,0.35)'}`,
+                    }}>
+                      <div style={{
+                        width: '106px', height: '106px', borderRadius: '50%',
+                        background: '#0f172a',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        <span style={{
+                          fontSize: '2.6rem', fontWeight: 900, lineHeight: 1,
+                          color: evaluation.score >= 80 ? '#4ade80' : evaluation.score >= 60 ? '#facc15' : '#f87171',
+                        }}>
+                          {evaluation.score}
+                        </span>
+                        <span style={{ fontSize: '0.65rem', color: '#64748b', letterSpacing: '0.1em' }}>/ 100</span>
+                      </div>
+                    </div>
+                    {/* Grade Badge */}
+                    <div style={{
+                      padding: '4px 18px', borderRadius: '20px', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.08em',
+                      background: evaluation.score >= 80 ? 'rgba(74,222,128,0.15)' : evaluation.score >= 60 ? 'rgba(250,204,21,0.15)' : 'rgba(248,113,113,0.15)',
+                      color: evaluation.score >= 80 ? '#4ade80' : evaluation.score >= 60 ? '#facc15' : '#f87171',
+                      border: `1px solid ${evaluation.score >= 80 ? 'rgba(74,222,128,0.3)' : evaluation.score >= 60 ? 'rgba(250,204,21,0.3)' : 'rgba(248,113,113,0.3)'}`,
+                    }}>
+                      {evaluation.score >= 90 ? '🏆 Excellent' : evaluation.score >= 80 ? '⭐ Good' : evaluation.score >= 60 ? '📈 Average' : '🔧 Need Improvement'}
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              <div
-                style={{
-                  padding: '20px 22px', borderRadius: 'var(--r-md)',
-                  background: 'var(--card-bg)', border: '1px solid var(--card-border)',
-                }}
-              >
-                <h3 style={{ fontWeight: 700, marginBottom: '10px', color: 'var(--secondary-color)', fontSize: '0.95rem' }}>
-                  <i className="fa-solid fa-comment-dots mr-2" />ความคิดเห็นจากผู้บริหาร
-                </h3>
-                <p style={{ fontSize: '0.93rem', lineHeight: 1.75, color: 'var(--text-sub)', fontWeight: 400 }}>
-                  {evaluation.feedback}
+              {/* ─── โจทย์ + คำตอบของผู้ใช้ ─── */}
+              <div style={{ textAlign: 'left', background: 'rgba(255,255,255,0.03)', padding: '20px', borderRadius: 'var(--r-md)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                <h4 style={{ fontSize: '0.85rem', color: 'var(--accent-color)', marginBottom: '8px', fontWeight: 700 }}>
+                  <i className="fa-solid fa-briefcase mr-2" />โจทย์ที่ได้รับ:
+                </h4>
+                <p style={{ fontSize: '0.9rem', color: 'var(--text-sub)', marginBottom: '16px', lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: formatTask(currentTask) }} />
+
+                <h4 style={{ fontSize: '0.85rem', color: 'var(--secondary-color)', marginBottom: '8px', fontWeight: 700 }}>
+                  <i className="fa-solid fa-pen-nib mr-2" />คำตอบ/วิธีแก้ปัญหาของคุณ:
+                </h4>
+                <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6, whiteSpace: 'pre-wrap', background: 'rgba(0,0,0,0.2)', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid var(--secondary-color)' }}>
+                  {userWork}
                 </p>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
-                <div style={{ padding: '18px', borderRadius: 'var(--r-md)', borderTop: '2px solid #ff7a00', background: 'rgba(79,172,254,0.06)' }}>
-                  <h4 style={{ fontWeight: 700, marginBottom: '12px', color: '#ff7a00', fontSize: '0.9rem' }}>
-                    <i className="fa-solid fa-circle-check mr-2" />จุดเด่นที่ทำได้ดี
+
+              <div
+                style={{
+                  padding: '24px 28px', borderRadius: 'var(--r-lg)',
+                  background: 'linear-gradient(145deg, var(--card-bg), rgba(255,255,255,0.02))', 
+                  border: '1px solid var(--card-border)',
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.15)'
+                }}
+              >
+                <h3 style={{ fontWeight: 800, marginBottom: '14px', color: 'var(--accent-color)', fontSize: '1.1rem', letterSpacing: '0.02em' }}>
+                  <i className="fa-solid fa-bolt mr-2" /> Executive Summary
+                </h3>
+                <p style={{ fontSize: '1.05rem', lineHeight: 1.6, color: 'var(--text-main)', fontWeight: 600, marginBottom: '20px' }}>
+                  {evaluation.executive_summary || evaluation.feedback}
+                </p>
+
+                {evaluation.detailed_analysis && (
+                  <>
+                    <div style={{ height: '1px', background: 'rgba(255,255,255,0.08)', margin: '20px 0' }} />
+                    <h4 style={{ fontWeight: 700, marginBottom: '10px', color: 'var(--secondary-color)', fontSize: '0.95rem' }}>
+                      <i className="fa-solid fa-microscope mr-2" /> บทวิเคราะห์เชิงลึก (Detailed Analysis)
+                    </h4>
+                    <p style={{ fontSize: '0.93rem', lineHeight: 1.8, color: 'var(--text-sub)', fontWeight: 400 }}>
+                      {evaluation.detailed_analysis}
+                    </p>
+                  </>
+                )}
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px' }}>
+                <div style={{ padding: '20px', borderRadius: 'var(--r-md)', borderTop: '3px solid #00f2fe', background: 'rgba(0,242,254,0.04)', border: '1px solid rgba(0,242,254,0.1)' }}>
+                  <h4 style={{ fontWeight: 800, marginBottom: '16px', color: '#00f2fe', fontSize: '0.95rem' }}>
+                    <i className="fa-solid fa-medal mr-2" /> สิ่งที่คุณทำได้ยอดเยี่ยม
                   </h4>
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {evaluation.strengths?.map((s, i) => (
-                      <li key={i} style={{ fontSize: '0.87rem', color: 'var(--text-sub)', paddingLeft: '16px', position: 'relative', lineHeight: 1.5 }}>
-                        <span style={{ position: 'absolute', left: 0, color: '#ff7a00' }}>✓</span>{s}
+                      <li key={i} style={{ fontSize: '0.88rem', color: 'var(--text-sub)', paddingLeft: '20px', position: 'relative', lineHeight: 1.6 }}>
+                        <span style={{ position: 'absolute', left: 0, color: '#00f2fe' }}><i className="fa-solid fa-check" /></span>{s}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div style={{ padding: '18px', borderRadius: 'var(--r-md)', borderTop: '2px solid #fee140', background: 'rgba(254,225,64,0.06)' }}>
-                  <h4 style={{ fontWeight: 700, marginBottom: '12px', color: '#fee140', fontSize: '0.9rem' }}>
-                    <i className="fa-solid fa-triangle-exclamation mr-2" />ข้อเสนอแนะ
+                <div style={{ padding: '20px', borderRadius: 'var(--r-md)', borderTop: '3px solid #ff0844', background: 'rgba(255,8,68,0.04)', border: '1px solid rgba(255,8,68,0.1)' }}>
+                  <h4 style={{ fontWeight: 800, marginBottom: '16px', color: '#ff0844', fontSize: '0.95rem' }}>
+                    <i className="fa-solid fa-arrow-trend-up mr-2" /> สิ่งที่ต้องอัปเกรดด่วน
                   </h4>
-                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '7px' }}>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {evaluation.improvements?.map((s, i) => (
-                      <li key={i} style={{ fontSize: '0.87rem', color: 'var(--text-sub)', paddingLeft: '16px', position: 'relative', lineHeight: 1.5 }}>
-                        <span style={{ position: 'absolute', left: 0, color: '#fee140' }}>→</span>{s}
+                      <li key={i} style={{ fontSize: '0.88rem', color: 'var(--text-sub)', paddingLeft: '20px', position: 'relative', lineHeight: 1.6 }}>
+                        <span style={{ position: 'absolute', left: 0, color: '#ff0844' }}><i className="fa-solid fa-xmark" /></span>{s}
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
+
+              {evaluation.next_action && (
+                <div style={{ padding: '20px 24px', borderRadius: 'var(--r-md)', background: 'linear-gradient(90deg, rgba(255,179,71,0.1), transparent)', borderLeft: '4px solid #ffb347' }}>
+                  <h4 style={{ fontWeight: 800, marginBottom: '8px', color: '#ffb347', fontSize: '1rem' }}>
+                    <i className="fa-solid fa-compass mr-2" /> Next Action (ก้าวต่อไปของคุณ)
+                  </h4>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--text-main)', lineHeight: 1.6 }}>
+                    {evaluation.next_action}
+                  </p>
+                </div>
+              )}
 
               <button
                 onClick={() => { setStep(1); setJobTitle(''); setCurrentTask(''); setUserWork(''); setEvaluation(null); }}
