@@ -11,7 +11,7 @@ import {
 Chart.register(RadarController, RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 const SHEET_WEBAPP_URL =
-  'https://script.google.com/macros/s/AKfycbzu9Jv7aaKSJf9JcqWn9FWM3XLEXuATwtCfysr0cw7lzEX5L_KShNTmjmAhZl4-d2t1dw/exec';
+  'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
 
 const levelConfig = {
   1: { label: 'น้อยที่สุด', color: '#ff4d4d' },
@@ -260,16 +260,23 @@ export default function AssessmentPage() {
           Object.entries(newScores).map(([k, v]) => [scoreLabels[k] || k, `${v} / 100`])
         );
 
-        const promptText = `วิเคราะห์คะแนนทักษะของผู้ทำแบบประเมินต่อไปนี้: ${JSON.stringify(mappedScores)}
+        // หาจุดแข็งและจุดอ่อนเพื่อบังคับ AI
+        const sortedKeys = Object.keys(newScores).sort((a, b) => newScores[b] - newScores[a]);
+        const highestSkill = scoreLabels[sortedKeys[0]];
+        const lowestSkill = scoreLabels[sortedKeys[sortedKeys.length - 1]];
 
-กฎสำคัญในการเขียน:
-- วิเคราะห์จากคะแนนที่ให้ไป "เท่านั้น" โดยต้องยึด "ทักษะที่ได้คะแนนสูงสุด" เป็นแกนหลักในการแนะนำอาชีพและคณะ
-- ใช้ภาษาที่ฟันธง ชัดเจน และน่าเชื่อถือ เช่น "คุณมีความสามารถ...", "ผลการวิเคราะห์ชี้ว่า...", "จุดแข็งของคุณคือ..."
-- ห้ามใช้คำที่ไม่แน่นอน เช่น อาจจะ, น่าจะ, คงจะ, อาจ, บางที, หรืออาจ, ถ้าหาก ทุกประโยคต้องฟันธงเท่านั้น
-- บังคับ: ต้องให้คำแนะนำคณะ/สาขา (Edu) และ อาชีพ (Jobs) ให้ครบอย่างละ 5 อันดับเสมอ อาชีพอันดับ 1 ต้องตรงกับทักษะสูงสุดที่สุด
-- บังคับ: ในส่วนของคณะ/สาขา (Edu) ต้องระบุ "มหาวิทยาลัยชั้นนำ: (ชื่อมหาวิทยาลัย)" ต่อท้ายเหตุผลเสมอ ห้ามลืมเด็ดขาด
+        const promptText = `ผู้ทำแบบประเมินมีคะแนนทักษะดังนี้: ${JSON.stringify(mappedScores)}
+จุดแข็งที่สุด (คะแนนสูงสุด): ${highestSkill}
+จุดที่ควรพัฒนา (คะแนนต่ำสุด): ${lowestSkill}
 
-ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "MarketData": {"salary": "ช่วงเงินเดือนเริ่มต้นสำหรับเด็กจบใหม่ในไทย (อ้างอิงฐานจริง ไม่เวอร์เกินไป เช่น 18,000 - 25,000 บาท หรือตามสายงานจริง)", "demand": "ความต้องการตลาดในปัจจุบัน (เชิงอธิบายและระบุเปอร์เซ็นต์การเติบโตถ้าเป็นไปได้)"}, "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ... สาขา...", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และบังคับต่อท้ายด้วย 'มหาวิทยาลัยชั้นนำ: ...' เสมอ"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะที่ได้คะแนนสูงสุดของคุณถึงเหมาะสมกับอาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริงเพื่ออุดช่องโหว่ของทักษะที่ได้คะแนนน้อยที่สุด"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
+กฎสำคัญในการเขียน (ต้องปฏิบัติตามอย่างเคร่งครัด):
+1. อาชีพ (Jobs) และ คณะ (Edu) "ทั้ง 5 อันดับ" จะต้องเป็นสายงานที่ใช้จุดแข็งที่สุด (${highestSkill}) เท่านั้น!
+2. คำเตือนร้ายแรง: ห้ามแนะนำคณะ/สาขา หรืออาชีพที่เกี่ยวข้องกับจุดที่ควรพัฒนา (${lowestSkill}) โดยเด็ดขาด! (เช่น ถ้าเทคโนโลยีได้คะแนนน้อยสุด ห้ามแนะนำวิศวะคอมฯ หรือ IT เด็ดขาด)
+3. หัวข้อที่ควรฝึก (Dev) "ต้อง" เกี่ยวข้องกับการพัฒนาจุดที่ได้คะแนนน้อยที่สุด (${lowestSkill}) เพื่ออุดช่องโหว่
+4. ใช้ภาษาฟันธง ชัดเจน ห้ามใช้คำว่า อาจจะ, น่าจะ, คงจะ, อาจ, บางที
+5. สำหรับคณะ (Edu): หัวข้อ (t) ต้องมีแค่ "อันดับ: ชื่อคณะ สาขา..." เท่านั้น ห้ามใส่ชื่อมหาวิทยาลัยในหัวข้อเด็ดขาด! ให้ย้ายชื่อมหาวิทยาลัยไปแนะนำไว้ที่ประโยคสุดท้ายของคำอธิบาย (d)
+
+ตอบกลับเป็นออบเจกต์ JSON เท่านั้น โครงสร้างนี้: {"Title": "ชื่อสไตล์จุดแข็ง", "Desc": "คำอธิบายสั้นๆ ที่ฟันธง ไม่ใช้คำไม่แน่นอน", "AnalysisDetail": "รายละเอียดเชิงลึกของการวิเคราะห์ ทิศทางแนวโน้มตลาดแรงงาน และคำแนะนำเชิงลึก เขียนอธิบายอย่างละเอียดเจาะลึก 5-7 ประโยค ทุกประโยคต้องฟันธง", "MarketData": {"salary": "ช่วงเงินเดือนเริ่มต้นสำหรับเด็กจบใหม่ในไทย (อ้างอิงฐานจริง ไม่เวอร์เกินไป เช่น 18,000 - 25,000 บาท หรือตามสายงานจริง)", "demand": "ความต้องการตลาดในปัจจุบัน (เชิงอธิบายและระบุเปอร์เซ็นต์การเติบโตถ้าเป็นไปได้)"}, "Roadmap": [{"step": 1, "title": "ชื่อก้าว", "desc": "รายละเอียดเชิงลึกว่าต้องทำอะไรบ้างในขั้นตอนนี้ (2-3 ประโยค)"}...ถึง 5], "Edu": [{"t": "อันดับ 1: คณะ(ชื่อคณะ) สาขา(ชื่อสาขา)", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' อธิบายความสอดคล้องกับทักษะ (2-3 ประโยค) และประโยคสุดท้ายบังคับพิมพ์ว่า 'มหาวิทยาลัยชั้นนำที่แนะนำ: ...'"}...ถึง 5], "Jobs": [{"t": "อันดับ 1: อาชีพ", "d": "ขึ้นต้นประโยคด้วยคำว่า 'คุณมี...' แล้วตามด้วยการอธิบายเชิงลึกว่าทำไมทักษะที่ได้คะแนนสูงสุดของคุณถึงเหมาะสมกับอาชีพนี้ (2-3 ประโยค)"}...ถึง 5], "Dev": [{"t": "ทักษะที่ควรฝึก", "d": "คำแนะนำเชิงลึกที่ฟันธงและนำไปใช้ได้จริงเพื่ออุดช่องโหว่ของทักษะที่ได้คะแนนน้อยที่สุด (2-3 ประโยค)"}...ถึง 3], "Refs": [{"t": "ชื่อแหล่งข้อมูลอ้างอิง", "d": "เนื้อหาอ้างอิงที่เกี่ยวข้องกับทักษะนี้"}]}`;
         const res = await fetch('/api/proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -324,7 +331,7 @@ export default function AssessmentPage() {
       await fetch(SHEET_WEBAPP_URL, {
         method: 'POST', mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ action: 'assessment', name: user.name, email: user.email, matchPct, scores: newScores, aiTitle: topJobTitle }),
+        body: JSON.stringify({ action: 'assessment', name: user.name, email: user.email, matchPct, scores: newScores, aiTitle: topJobTitle, resultData: { ...aiResult, matchPct } }),
       });
     } catch {}
 
@@ -354,8 +361,111 @@ export default function AssessmentPage() {
       Biz: 'ธุรกิจและการจัดการ',
     };
     const sortedSkills = skillsData
-      .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0, score: scores[sk.id] || 0 }))
+      .map(sk => ({ id: sk.id, pct: scores[sk.id] || 0, score: scores[sk.id] || 0, title: sk.title, th: sk.th, icon: sk.icon }))
       .sort((a, b) => b.pct - a.pct);
+
+    const handleExportPDF = () => {
+      const win = window.open('', '_blank');
+      
+      const skillRows = sortedSkills.map(s => `
+        <tr>
+          <td>${s.th} (${s.title})</td>
+          <td>
+            <div style="background:#e2e8f0;border-radius:4px;height:10px;width:100%">
+              <div style="background:${s.pct >= 80 ? '#10b981' : s.pct >= 60 ? '#f59e0b' : '#ef4444'};width:${s.pct}%;height:100%;border-radius:4px"></div>
+            </div>
+          </td>
+          <td style="text-align:right;font-weight:700">${s.pct}%</td>
+        </tr>`).join('');
+
+      const jobList = (resultData.Jobs || []).map(j => `<li style="margin-bottom:8px"><strong>${j.t}</strong>: ${j.d}</li>`).join('');
+      const eduList = (resultData.Edu || []).map(e => `<li style="margin-bottom:8px"><strong>${e.t}</strong>: ${e.d}</li>`).join('');
+      const devList = (resultData.Dev || []).map(d => `<li style="margin-bottom:8px"><strong>${d.t}</strong>: ${d.d}</li>`).join('');
+
+      const html = `<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Assessment Report - ${user?.name || 'User'}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Kanit', sans-serif; background: #fff; color: #111827; font-size: 11pt; padding: 20mm; }
+    @page { size: A4; margin: 15mm; }
+    h1 { font-size: 22pt; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
+    h2 { font-size: 14pt; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+    h3 { font-size: 11pt; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    p { font-size: 10pt; line-height: 1.7; color: #334155; margin-bottom: 12px; }
+    .header { border-bottom: 4px solid #ff7a00; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .score-box { text-align: center; background: #fff7ed; border: 2px solid #fed7aa; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .score-box .score { font-size: 32pt; font-weight: 900; color: #ff7a00; line-height: 1; }
+    .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 20px; page-break-inside: avoid; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; font-size: 10pt; margin-bottom: 16px; }
+    th { background: #f1f5f9; color: #475569; font-weight: 700; padding: 8px 12px; text-align: left; }
+    td { padding: 7px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+    .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 8.5pt; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>FUTUREPATH AI</h1>
+      <p style="color:#ff7a00;font-weight:700;font-size:12pt;margin:0">รายงานผลการประเมินค้นหาตัวตน (DNA Analysis Portfolio)</p>
+    </div>
+    <div style="text-align:right;font-size:10pt">
+      <div style="font-weight:700;color:#0f172a">ชื่อผู้รับการประเมิน: ${user?.name || 'ไม่ระบุ'}</div>
+      <div>อีเมล: ${user?.email || '-'}</div>
+      <div>วันที่ประเมิน: ${new Date().toLocaleDateString('th-TH')}</div>
+    </div>
+  </div>
+
+  <div class="score-box">
+    <h3>ความเหมาะสมกับอาชีพเป้าหมาย (MATCH SCORE)</h3>
+    <div class="score">${displayPct}%</div>
+    <div style="margin-top:8px;font-weight:700;color:#c2410c">
+      ทักษะโดดเด่น: ${sortedSkills[0]?.th}
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>🧬 สรุปสมรรถนะ (Competency Summary)</h2>
+    <table>
+      <thead><tr><th>ทักษะ</th><th>ระดับ</th><th style="text-align:right">คะแนน</th></tr></thead>
+      <tbody>${skillRows}</tbody>
+    </table>
+  </div>
+
+  <div class="box">
+    <h2>📊 บทวิเคราะห์เชิงลึก (AI Analysis)</h2>
+    <p><strong>ผลการวิเคราะห์:</strong> ${resultData.AnalysisDetail}</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="box" style="border-top:3px solid #00f2fe">
+      <h3 style="color:#0284c7">💼 อาชีพที่เหมาะสม (Top Jobs)</h3>
+      <ul style="padding-left:20px;font-size:9.5pt">${jobList}</ul>
+    </div>
+    <div class="box" style="border-top:3px solid #8b5cf6">
+      <h3 style="color:#6d28d9">🎓 คณะที่แนะนำ (Top Education)</h3>
+      <ul style="padding-left:20px;font-size:9.5pt">${eduList}</ul>
+    </div>
+  </div>
+
+  <div class="box" style="border-top:3px solid #f59e0b">
+    <h3 style="color:#d97706">📈 ทักษะที่ควรพัฒนาเพิ่มเติม</h3>
+    <ul style="padding-left:20px;font-size:9.5pt">${devList}</ul>
+  </div>
+
+  <div class="footer">
+    ประเมินโดยระบบปัญญาประดิษฐ์ FUTUREPATH AI | เอกสารนี้สามารถใช้เป็นส่วนหนึ่งของแฟ้มสะสมผลงาน (Portfolio)
+  </div>
+</body>
+</html>`;
+      win.document.write(html);
+      win.document.close();
+      win.onload = () => win.print();
+    };
 
     return (
       <div style={{ minHeight: '100vh', background: '#120c0a', color: 'var(--text-main)', fontFamily: "'Kanit', sans-serif" }}>
@@ -379,7 +489,7 @@ export default function AssessmentPage() {
         {/* Action Bar (Export) */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '24px' }}>
           <button 
-            onClick={() => window.print()}
+            onClick={handleExportPDF}
             className="btn-primary hover-glow-btn"
             style={{ padding: '12px 24px', fontSize: '0.95rem' }}
           >
@@ -756,7 +866,7 @@ export default function AssessmentPage() {
           <a href="/home" className="btn-outline" style={{ textDecoration: 'none' }}>
             <i className="fa-solid fa-house" /> หน้าหลัก
           </a>
-          <button onClick={() => window.print()} className="btn-primary" style={{ background: '#fff', color: '#000', boxShadow: 'none' }}>
+          <button onClick={handleExportPDF} className="btn-primary" style={{ background: '#fff', color: '#000', boxShadow: 'none' }}>
             <i className="fa-solid fa-print" /> พิมพ์ PDF
           </button>
           <button onClick={() => { setShowResult(false); setCurrentTab(0); }} className="btn-outline">

@@ -4,6 +4,8 @@ import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
 
 export default function SimulationPage() {
+  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+
   const { user, loading } = useAuth();
   const [step,        setStep]        = useState(1);
   const [jobTitle,    setJobTitle]    = useState('');
@@ -37,7 +39,26 @@ export default function SimulationPage() {
       const data = await res.json();
       if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
         let txt = data.candidates[0].content.parts[0].text.replace(/```json/g,'').replace(/```/g,'').trim();
-        setEvaluation(JSON.parse(txt));
+        const parsedEval = JSON.parse(txt);
+        setEvaluation(parsedEval);
+        // Save to Google Sheets
+        try {
+          fetch(SHEET_WEBAPP_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify({ 
+              action: 'save_simulation', 
+              name: user?.name, 
+              email: user?.email, 
+              jobTitle, 
+              task: currentTask, 
+              userWork, 
+              score: parsedEval.score || "0",
+              evaluation: parsedEval 
+            }),
+          });
+        } catch (e) { console.error(e); }
+
         setStep(3);
       } else { alert('ระบบขัดข้อง'); }
     } catch { alert('เกิดข้อผิดพลาดในการแปลผล AI'); }
@@ -45,6 +66,95 @@ export default function SimulationPage() {
   }
 
   const formatTask = (t) => t.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+
+  const handleExportPDF = () => {
+    const win = window.open('', '_blank');
+    const strengthsHTML = (evaluation?.strengths || []).map(s => `<li style="margin-bottom:8px">✔️ ${s}</li>`).join('');
+    const improvementsHTML = (evaluation?.improvements || []).map(s => `<li style="margin-bottom:8px">❌ ${s}</li>`).join('');
+    
+    const html = `<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Work Simulation Report - ${user?.name || 'User'}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Kanit', sans-serif; background: #fff; color: #111827; font-size: 11pt; padding: 20mm; }
+    @page { size: A4; margin: 15mm; }
+    h1 { font-size: 22pt; font-weight: 900; color: #0f172a; margin-bottom: 4px; }
+    h2 { font-size: 14pt; font-weight: 700; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+    h3 { font-size: 11pt; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    p { font-size: 10pt; line-height: 1.7; color: #334155; margin-bottom: 12px; }
+    .header { border-bottom: 4px solid #ff7a00; padding-bottom: 16px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .score-box { text-align: center; background: #f8fafc; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; margin-bottom: 24px; }
+    .score-box .score { font-size: 32pt; font-weight: 900; color: #ff7a00; line-height: 1; }
+    .box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 20px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 8.5pt; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>FUTUREPATH AI</h1>
+      <p style="color:#ff7a00;font-weight:700;font-size:12pt;margin:0">รายงานผลการทดลองงาน (Work Simulation Report)</p>
+    </div>
+    <div style="text-align:right;font-size:10pt">
+      <div style="font-weight:700;color:#0f172a">ผู้ทดสอบ: ${user?.name || 'ไม่ระบุ'}</div>
+      <div>ตำแหน่ง: ${jobTitle}</div>
+      <div>วันที่: ${new Date().toLocaleDateString('th-TH')}</div>
+    </div>
+  </div>
+
+  <div class="score-box">
+    <h3>คะแนนประเมิน (PERFORMANCE SCORE)</h3>
+    <div class="score">${evaluation?.score || 0} <span style="font-size:14pt;color:#64748b">/ 100</span></div>
+    <div style="margin-top:8px;font-weight:700;color:${evaluation?.score >= 80 ? '#16a34a' : evaluation?.score >= 60 ? '#ca8a04' : '#dc2626'}">
+      ${evaluation?.score >= 90 ? '🏆 Excellent' : evaluation?.score >= 80 ? '⭐ Good' : evaluation?.score >= 60 ? '📈 Average' : '🔧 Need Improvement'}
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>⚡ Executive Summary</h2>
+    <p><strong>สรุปภาพรวม:</strong> ${evaluation?.executive_summary || evaluation?.feedback}</p>
+    ${evaluation?.detailed_analysis ? `<p><strong>บทวิเคราะห์เชิงลึก:</strong> ${evaluation.detailed_analysis}</p>` : ''}
+  </div>
+
+  <div class="box">
+    <h2>💼 รายละเอียดงาน (Task & Solution)</h2>
+    <h3>โจทย์ที่ได้รับ:</h3>
+    <p style="background:#fff;padding:12px;border:1px solid #e2e8f0;border-radius:6px">${formatTask(currentTask)}</p>
+    <h3>คำตอบ/วิธีแก้ปัญหาของคุณ:</h3>
+    <p style="background:#fff;padding:12px;border:1px solid #e2e8f0;border-radius:6px;white-space:pre-wrap">${userWork}</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="box" style="border-top:3px solid #00f2fe">
+      <h3 style="color:#0284c7">สิ่งที่คุณทำได้ยอดเยี่ยม</h3>
+      <ul style="list-style:none">${strengthsHTML}</ul>
+    </div>
+    <div class="box" style="border-top:3px solid #ff0844">
+      <h3 style="color:#e11d48">สิ่งที่ต้องอัปเกรดด่วน</h3>
+      <ul style="list-style:none">${improvementsHTML}</ul>
+    </div>
+  </div>
+
+  ${evaluation?.next_action ? `
+  <div class="box" style="background:#fff7ed;border-color:#fed7aa">
+    <h3 style="color:#c2410c">🧭 Next Action (ก้าวต่อไปของคุณ)</h3>
+    <p style="margin:0">${evaluation.next_action}</p>
+  </div>` : ''}
+
+  <div class="footer">
+    ประเมินโดย AI ผู้เชี่ยวชาญระดับสูง (Senior Expert) สร้างอัตโนมัติผ่านระบบ FUTUREPATH AI
+  </div>
+</body>
+</html>`;
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => win.print();
+  };
 
   if (loading) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Kanit,sans-serif', color: 'var(--text-sub)' }}>
@@ -274,7 +384,7 @@ export default function SimulationPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               <div className="no-print" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
                 <button 
-                  onClick={() => window.print()}
+                  onClick={handleExportPDF}
                   className="btn-primary hover-glow-btn"
                   style={{ padding: '10px 20px', fontSize: '0.85rem' }}
                 >

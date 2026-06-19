@@ -83,10 +83,12 @@ export default function AdminDashboard() {
     maintainAspectRatio: false,
     scales: {
       r: {
+        min: 0,
+        max: 100,
         angleLines: { color: 'rgba(0,0,0,0.05)' },
         grid: { color: 'rgba(0,0,0,0.05)' },
         pointLabels: { font: { family: "'Kanit', sans-serif", size: 13 }, color: '#475569' },
-        ticks: { backdropColor: 'transparent', color: '#94a3b8', display: false }
+        ticks: { backdropColor: 'transparent', color: '#94a3b8', display: false, stepSize: 20 }
       }
     },
     plugins: { legend: { display: false } }
@@ -176,18 +178,208 @@ export default function AdminDashboard() {
     return <span style={{ background: '#f1f5f9', color: '#475569', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', fontWeight: 600, marginLeft: '8px' }}>🟡 ทั่วไป</span>;
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handleExportPDF = () => {
+    const win = window.open('', '_blank');
+    const skillRows = skillsData.map(s => `
+      <tr>
+        <td>${s.icon || ''} ${s.label}</td>
+        <td>
+          <div style="background:#e2e8f0;border-radius:4px;height:10px;width:100%">
+            <div style="background:${s.color};width:${s.score}%;height:100%;border-radius:4px"></div>
+          </div>
+        </td>
+        <td style="text-align:right;font-weight:700">${s.score}%</td>
+      </tr>`).join('');
+
+    const jobRows = popularJobs.slice(0, 10).map((j, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${j.ai_title || '-'}</td>
+        <td style="text-align:center">${j.count}</td>
+      </tr>`).join('');
+
+    const viewRows = viewsByPath.map(v => `
+      <tr>
+        <td>${v.path === '/' ? '/home (หน้าหลัก)' : v.path}</td>
+        <td style="text-align:center">${v.count}</td>
+      </tr>`).join('');
+
+    const insightHTML = aiInsight ? `
+      <div class="section">
+        <h2>🤖 AI Executive Summary</h2>
+        ${aiInsight.overall ? `<p><strong>ภาพรวม:</strong> ${aiInsight.overall}</p>` : ''}
+        ${aiInsight.strengths ? `<p><strong>⭐ จุดเด่น:</strong> ${aiInsight.strengths}</p>` : ''}
+        ${aiInsight.weaknesses ? `<p><strong>⚠️ ทักษะที่ต้องพัฒนา:</strong> ${aiInsight.weaknesses}</p>` : ''}
+        ${aiInsight.career_trend ? `<p><strong>📈 แนวโน้มอาชีพ:</strong> ${aiInsight.career_trend}</p>` : ''}
+        ${aiInsight.action_plan_short ? `<p><strong>🚀 แผนระยะสั้น:</strong> ${aiInsight.action_plan_short}</p>` : ''}
+        ${aiInsight.action_plan_mid ? `<p><strong>📅 แผนระยะกลาง:</strong> ${aiInsight.action_plan_mid}</p>` : ''}
+        ${aiInsight.action_plan_long ? `<p><strong>🏆 แผนระยะยาว:</strong> ${aiInsight.action_plan_long}</p>` : ''}
+        ${aiInsight.kpi_suggestion ? `<p><strong>📊 KPI ที่แนะนำ:</strong> ${aiInsight.kpi_suggestion}</p>` : ''}
+        ${aiInsight.satisfaction_note ? `<p><strong>❤️ ความพึงพอใจ:</strong> ${aiInsight.satisfaction_note}</p>` : ''}
+      </div>` : '';
+
+    const html = `<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Executive Dashboard Report - FUTUREPATH AI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Kanit', sans-serif; background: #fff; color: #0f172a; font-size: 11pt; padding: 20mm; }
+    @page { size: A4; margin: 15mm; }
+    h1 { font-size: 20pt; font-weight: 800; color: #0f172a; margin-bottom: 4px; }
+    h2 { font-size: 13pt; font-weight: 700; color: #0f172a; margin: 0 0 12px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
+    p { font-size: 10pt; line-height: 1.7; color: #334155; margin-bottom: 8px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #0f172a; }
+    .header-meta { font-size: 9pt; color: #64748b; text-align: right; }
+    .section { margin-bottom: 24px; page-break-inside: avoid; }
+    .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+    .stat-card { padding: 16px; border-radius: 10px; color: white; }
+    .stat-card.blue { background: linear-gradient(135deg,#00c6ff,#0072ff); }
+    .stat-card.green { background: linear-gradient(135deg,#11998e,#38ef7d); }
+    .stat-card.pink { background: linear-gradient(135deg,#f2709c,#ff9472); }
+    .stat-card h3 { font-size: 9pt; font-weight: 500; opacity: 0.9; margin-bottom: 4px; }
+    .stat-card .num { font-size: 22pt; font-weight: 800; line-height: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+    th { background: #f1f5f9; color: #475569; font-weight: 700; padding: 8px 12px; text-align: left; }
+    td { padding: 7px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+    tr:last-child td { border-bottom: none; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+    .badge { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 8.5pt; font-weight: 600; margin-right: 6px; }
+    .badge.green { background: #dcfce7; color: #166534; }
+    .badge.yellow { background: #fef9c3; color: #854d0e; }
+    .footer { margin-top: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 8.5pt; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>📊 ภาพรวมระบบ (Executive Dashboard)</h1>
+      <p style="color:#64748b;font-size:9.5pt">FUTUREPATH AI — รายงานสถิติและข้อมูลสรุปการใช้งานสำหรับผู้บริหาร</p>
+    </div>
+    <div class="header-meta">
+      <div style="font-weight:700;font-size:10pt">รายงาน ณ วันที่</div>
+      <div>${new Date().toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
+    </div>
+  </div>
+
+  ${insightHTML}
+
+  <div class="section">
+    <h2>📈 สถิติภาพรวม</h2>
+    <div class="stat-grid">
+      <div class="stat-card blue">
+        <h3>ยอดเข้าชมทั้งหมด</h3>
+        <div class="num">${totalViews}</div>
+      </div>
+      <div class="stat-card green">
+        <h3>ผู้เข้ารับการประเมิน</h3>
+        <div class="num">${totalAssessments}</div>
+      </div>
+      <div class="stat-card pink">
+        <h3>ความพึงพอใจเฉลี่ย</h3>
+        <div class="num">${avgSatisfaction} <span style="font-size:14pt">/ 5</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col section">
+    <div class="box">
+      <h2>🧬 School DNA (ศักยภาพรวม)</h2>
+      <div style="margin-bottom:10px">
+        <span class="badge green">🏆 จุดแข็ง: ${topSkill?.label} (${topSkill?.score}%)</span>
+        <span class="badge yellow">📈 พัฒนา: ${lowSkill?.label} (${lowSkill?.score}%)</span>
+      </div>
+      <table>
+        <thead><tr><th>ทักษะ</th><th>คะแนน</th><th>%</th></tr></thead>
+        <tbody>${skillRows}</tbody>
+      </table>
+    </div>
+    <div class="box">
+      <h2>🏆 อาชีพยอดนิยม 10 อันดับ</h2>
+      <table>
+        <thead><tr><th>#</th><th>อาชีพ</th><th style="text-align:center">จำนวน</th></tr></thead>
+        <tbody>${jobRows}</tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:20px">
+    <h2>🔗 สถิติการเข้าชมรายหน้า</h2>
+    <table>
+      <thead><tr><th>หน้า</th><th style="text-align:center">จำนวนครั้ง</th></tr></thead>
+      <tbody>${viewRows}</tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    FUTUREPATH AI — ระบบวิเคราะห์ศักยภาพและแนะแนวอาชีพด้วยปัญญาประดิษฐ์ | รายงานสร้างอัตโนมัติ
+  </div>
+</body>
+</html>`;
+
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => win.print();
   };
+
 
   return (
     <div className="admin-container">
       <style dangerouslySetInnerHTML={{__html: `
         @media print {
-          .no-print { display: none !important; }
-          .admin-container { background: white; padding: 0 !important; }
-          body { background: white; }
+          /* ซ่อนปุ่มและ nav */
+          .no-print, nav, header { display: none !important; }
+
+          /* รีเซ็ต background และสี */
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+
+          body, html {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            font-size: 11pt !important;
+          }
+
+          .admin-container {
+            background: white !important;
+            padding: 12px !important;
+            max-width: 100% !important;
+          }
+
+          /* ปรับ Card / Box ให้แสดงบนหน้ากระดาษ */
+          div[style*="background: linear-gradient"],
+          div[style*="background:linear-gradient"] {
+            -webkit-print-color-adjust: exact !important;
+          }
+
+          /* ตัดขอบหน้า */
+          @page {
+            size: A4 landscape;
+            margin: 12mm;
+          }
+
+          /* ป้องกัน Content ถูกตัดกลางหน้า */
           .print-break { page-break-before: always; }
+          table, tr, td, th { page-break-inside: avoid; }
+          h1, h2, h3, h4 { page-break-after: avoid; }
+
+          /* Chart.js canvas — บังคับให้แสดง */
+          canvas {
+            max-width: 100% !important;
+            height: auto !important;
+          }
+
+          /* Grid layout ที่ใช้ใน Dashboard — จัดให้พอดีหน้า */
+          div[style*="grid-template-columns"] {
+            display: grid !important;
+          }
         }
       `}} />
 
@@ -196,7 +388,7 @@ export default function AdminDashboard() {
           <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#0f172a', marginBottom: '8px' }}>ภาพรวมระบบ (Executive Dashboard)</h1>
           <p style={{ color: '#64748b' }}>สถิติและข้อมูลสรุปการใช้งานสำหรับผู้บริหาร</p>
         </div>
-        <button className="no-print" onClick={handlePrint} style={{ background: '#0f172a', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+        <button className="no-print" onClick={handleExportPDF} style={{ background: '#0f172a', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
           <i className="fa-solid fa-download"></i> Export PDF
         </button>
       </div>
@@ -350,9 +542,6 @@ export default function AdminDashboard() {
             <div>
               <h3 style={{ fontSize: '1rem', fontWeight: 500, marginBottom: '8px', opacity: 0.9 }}>ยอดเข้าชมทั้งหมด</h3>
               <p style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1 }}>{totalViews}</p>
-              <div style={{ marginTop: '12px', fontSize: '0.85rem', background: 'rgba(255,255,255,0.2)', display: 'inline-block', padding: '2px 8px', borderRadius: '12px' }}>
-                <i className="fa-solid fa-arrow-trend-up"></i> +12% สัปดาห์นี้
-              </div>
             </div>
             <div style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px' }}><i className="fa-solid fa-eye fa-lg"></i></div>
           </div>
@@ -363,9 +552,6 @@ export default function AdminDashboard() {
             <div>
               <h3 style={{ fontSize: '1rem', fontWeight: 500, marginBottom: '8px', opacity: 0.9 }}>ผู้เข้ารับการประเมิน</h3>
               <p style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1 }}>{totalAssessments}</p>
-              <div style={{ marginTop: '12px', fontSize: '0.85rem', background: 'rgba(255,255,255,0.2)', display: 'inline-block', padding: '2px 8px', borderRadius: '12px' }}>
-                <i className="fa-solid fa-arrow-trend-up"></i> +18% สัปดาห์นี้
-              </div>
             </div>
             <div style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px' }}><i className="fa-solid fa-clipboard-check fa-lg"></i></div>
           </div>

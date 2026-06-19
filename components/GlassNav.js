@@ -4,6 +4,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 const navLinks = [
   { href: '/home',       label: 'หน้าหลัก',                       icon: 'fa-house' },
+  { href: '/dashboard',  label: 'แดชบอร์ดของฉัน',                  icon: 'fa-chart-pie' },
   { href: '/assessment', label: 'วิเคราะห์ศักยภาพ',                icon: 'fa-brain' },
   { href: '/chat',       label: 'AI ChatBot',                      icon: 'fa-comments' },
   { href: '/interview',  label: 'จำลองสัมภาษณ์เสียง',              icon: 'fa-microphone' },

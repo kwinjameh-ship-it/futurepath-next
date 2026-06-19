@@ -3,8 +3,8 @@ import { useState } from 'react';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
 
-const FEEDBACK_URL =
-  'https://script.google.com/macros/s/AKfycbxFcPBEtvQlnPs51nwASaSkKsAWQkmgO-mLJfii3tTevoZPB_WTp4HNpE7CAbf-hwTbnQ/exec';
+const SHEET_WEBAPP_URL =
+  'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
 
 const surveyData = [
   { category: 'หมวดที่ 1: การออกแบบและการใช้งาน (UI/UX)', icon: 'fa-palette', items: [
@@ -63,7 +63,7 @@ export default function FeedbackPage() {
     surveyData.forEach(cat => cat.items.forEach(item => { payload[`q${item.id}`] = ratings[item.id] || ''; }));
 
     try {
-      const res  = await fetch(FEEDBACK_URL, { method: 'POST', body: JSON.stringify(payload) });
+      const res  = await fetch(SHEET_WEBAPP_URL, { method: 'POST', body: JSON.stringify(payload) });
       const data = await res.json();
       if (data.status === 'success') {
         alert('ขอบคุณสำหรับความคิดเห็นและการประเมินระบบครับ!');

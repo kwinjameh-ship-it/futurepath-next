@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbxqypnfiegVaYMK6sTYq8GBpnsoIQyDmLEh2H6k3KQXKsVG9zivQHGaNPiY1l3Cag5J4g/exec';
+  'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
 
 export default function LoginPage() {
   const router = useRouter();
