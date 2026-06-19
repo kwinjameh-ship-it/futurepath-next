@@ -128,7 +128,9 @@ export default function AdminDashboard() {
     { label: 'เทคโนโลยีและดิจิทัล',  score: 92.0, icon: '💻', color: '#38ef7d' },
     { label: 'ความคิดสร้างสรรค์',    score: 78.8, icon: '🎨', color: '#f59e0b' },
     { label: 'การจัดการและผู้นำ',    score: 68.4, icon: '🏆', color: '#f43f5e' },
-    { label: 'ความเข้าใจสังคม',      score: 72.0, icon: '🤝', color: '#a855f7' }
+    { label: 'ความเข้าใจสังคม',      score: 72.0, icon: '🤝', color: '#a855f7' },
+    { label: 'ปฏิบัติการและวินัย',   score: 80.0, icon: '🏃', color: '#14b8a6' },
+    { label: 'จิตบริการและการดูแล', score: 75.5, icon: '❤️', color: '#ec4899' }
   ];
   // iconMap และ colorMap สำหรับเติมให้ข้อมูลจริงจาก Apps Script ที่ไม่มี icon/color
   const metaMap = {
@@ -138,8 +140,19 @@ export default function AdminDashboard() {
     'การจัดการและผู้นำ':    { icon: '🏆', color: '#f43f5e' },
     'การสื่อสารและภาษา':    { icon: '💬', color: '#0ea5e9' },
     'ความเข้าใจสังคม':      { icon: '🤝', color: '#a855f7' },
+    'ปฏิบัติการและวินัย':   { icon: '🏃', color: '#14b8a6' },
+    'จิตบริการและการดูแล': { icon: '❤️', color: '#ec4899' }
   };
-  const rawSkills = (avgSkills && avgSkills.length > 0) ? avgSkills : mockSkills;
+  
+  // ให้ข้อมูลที่มีอยู่ 6 ด้านจาก backend เติม 2 ด้านที่หายไป
+  let rawSkills = (avgSkills && avgSkills.length > 0) ? avgSkills : mockSkills;
+  if (rawSkills.length === 6) {
+    rawSkills = [
+      ...rawSkills,
+      { label: 'ปฏิบัติการและวินัย', score: 0, icon: '🏃', color: '#14b8a6' },
+      { label: 'จิตบริการและการดูแล', score: 0, icon: '❤️', color: '#ec4899' }
+    ];
+  }
   // normalize: แปลง score เป็น number เสมอ และเติม icon/color ถ้าไม่มี
   const skillsData = rawSkills.map(s => ({
     ...s,

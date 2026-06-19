@@ -50,10 +50,16 @@ export default function UserDashboard() {
   }
 
   const { dna, simulations } = data || {};
+  
+  // normalize: ถ้าค่าน้อยกว่า 1 (decimal เช่น 0.78) → คูณ 100 → 78
+  const normalizePct = (val) => {
+    const n = parseFloat(val) || 0;
+    return (n > 0 && n <= 1) ? parseFloat((n * 100).toFixed(1)) : parseFloat(n.toFixed(1));
+  };
 
   // ตรวจสอบว่าเคยทำแบบทดสอบหรือไม่
   const hasDNA = !!dna;
-  const matchPct = hasDNA ? Number(dna.matchPct) : 0;
+  const matchPct = hasDNA ? normalizePct(dna.matchPct) : 0;
   
   // ฉายาตามคะแนน MatchPct
   let statusBadge = "ผู้เริ่มต้นสำรวจ (Explorer)";
@@ -75,14 +81,23 @@ export default function UserDashboard() {
     plugins: { legend: { display: false } }
   };
 
+  const parsedResultData = typeof dna?.resultData === 'string' ? JSON.parse(dna.resultData) : (dna?.resultData || {});
+  const actualScores = parsedResultData.scores || dna?.scores || {};
+
   const radarData = {
-    labels: ['เทคโนโลยี', 'ตรรกะ', 'สร้างสรรค์', 'ผู้นำ', 'สื่อสาร', 'สังคม'],
+    labels: ['เทคโนโลยี', 'ตรรกะ', 'สร้างสรรค์', 'ผู้นำ', 'สื่อสาร', 'ธุรกิจ', 'ปฏิบัติการ', 'จิตบริการ'],
     datasets: [{
       label: 'คะแนนทักษะ',
       data: hasDNA ? [
-        Number(dna.scores.Tech), Number(dna.scores.Logic), Number(dna.scores.Creative),
-        Number(dna.scores.Lead), Number(dna.scores.Comm), Number(dna.scores.Biz)
-      ] : [0,0,0,0,0,0],
+        normalizePct(actualScores.Tech || actualScores.tech || 0), 
+        normalizePct(actualScores.Logic || actualScores.logic || 0), 
+        normalizePct(actualScores.Creative || actualScores.creative || 0),
+        normalizePct(actualScores.Lead || actualScores.lead || 0), 
+        normalizePct(actualScores.Comm || actualScores.comm || 0), 
+        normalizePct(actualScores.Biz || actualScores.biz || 0),
+        normalizePct(actualScores.Phys || actualScores.phys || 0), 
+        normalizePct(actualScores.Emp || actualScores.emp || 0)
+      ] : [0,0,0,0,0,0,0,0],
       backgroundColor: 'rgba(255, 122, 0, 0.2)',
       borderColor: '#ff7a00',
       pointBackgroundColor: '#ff7a00',
@@ -183,18 +198,28 @@ export default function UserDashboard() {
               <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 <div>
                   <h3 style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>🎯 3 อาชีพที่แนะนำสำหรับคุณ</h3>
-                  {jobs.slice(0, 3).map((job, idx) => (
-                    <div key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px', marginBottom: '8px', borderLeft: '3px solid #a55eea' }}>
-                      <div style={{ fontWeight: '700', color: '#fff' }}>{job.t.replace(/อันดับ \d+: /, '')}</div>
-                      <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', marginTop: '4px' }}>{job.d}</div>
-                    </div>
-                  ))}
+                  {jobs.slice(0, 3).map((job, idx) => {
+                    const icons = ['fa-briefcase', 'fa-rocket', 'fa-lightbulb'];
+                    return (
+                      <div key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px', marginBottom: '8px', borderLeft: '3px solid #a55eea' }}>
+                        <div style={{ fontWeight: '700', color: '#fff', display: 'flex', alignItems: 'center' }}>
+                          <i className={`fas ${icons[idx] || 'fa-briefcase'} mr-2`} style={{ color: '#a55eea' }}></i> 
+                          {job.t.replace(/อันดับ \d+: /, '')}
+                        </div>
+                        <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)', marginTop: '6px' }}>{job.d}</div>
+                      </div>
+                    );
+                  })}
                 </div>
                 
                 <div style={{ marginTop: 'auto' }}>
                   <h3 style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.8)', marginBottom: '12px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '8px' }}>🎓 คณะ/สาขาที่สอดคล้อง</h3>
-                  <div style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px', borderLeft: '3px solid #ff7a00' }}>
-                    <div style={{ fontWeight: '700', color: '#fff' }}>{edu[0]?.t.replace(/อันดับ \d+: /, '') || 'ไม่พบข้อมูล'}</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {edu.slice(0, 2).map((ed, idx) => (
+                      <div key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '12px', borderLeft: '3px solid #ff7a00' }}>
+                        <div style={{ fontWeight: '700', color: '#fff', fontSize: '0.95rem' }}>{ed.t.replace(/อันดับ \d+: /, '')}</div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -279,13 +304,13 @@ export default function UserDashboard() {
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.95rem', marginBottom: '16px' }}>เป้าหมายการพัฒนาตัวเองของคุณ (แนะนำโดย AI):</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {devPlan.map((dev, idx) => (
-                    <div key={idx} style={{ display: 'flex', gap: '12px', background: 'rgba(255,255,255,0.05)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      <div style={{ color: '#2bcbba', paddingTop: '2px' }}>
-                        <i className="far fa-square"></i>
+                    <div key={idx} className="hover-glow" style={{ display: 'flex', gap: '16px', background: 'rgba(255,255,255,0.03)', padding: '16px 20px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)', transition: 'all 0.3s', cursor: 'pointer' }}>
+                      <div style={{ color: '#2bcbba', paddingTop: '2px', fontSize: '1.2rem' }}>
+                        <i className="fa-regular fa-circle-check"></i>
                       </div>
                       <div>
-                        <div style={{ fontWeight: '700', color: '#fff', marginBottom: '4px' }}>{dev.t}</div>
-                        <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.6)' }}>{dev.d}</div>
+                        <div style={{ fontWeight: '700', color: '#fff', marginBottom: '6px', fontSize: '1.05rem' }}>{dev.t}</div>
+                        <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)', lineHeight: '1.5' }}>{dev.d}</div>
                       </div>
                     </div>
                   ))}

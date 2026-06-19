@@ -22,6 +22,22 @@ const cleanJobTitle = (raw) => {
   return raw.replace(/^\u0e2d\u0e31\u0e19\u0e14\u0e31\u0e1a\s*\d+:\s*/i, '').trim();
 };
 
+const getTopJob = (user) => {
+  try {
+    const data = typeof user.result_data === 'string' ? JSON.parse(user.result_data) : user.result_data;
+    if (data && data.Jobs && data.Jobs.length > 0) {
+      return data.Jobs[0].t.replace(/^\u0e2d\u0e31\u0e19\u0e14\u0e31\u0e1a\s*\d+:\s*/i, '').trim();
+    }
+  } catch(e) {}
+  try {
+    const data2 = typeof user.resultData === 'string' ? JSON.parse(user.resultData) : user.resultData;
+    if (data2 && data2.Jobs && data2.Jobs.length > 0) {
+      return data2.Jobs[0].t.replace(/^\u0e2d\u0e31\u0e19\u0e14\u0e31\u0e1a\s*\d+:\s*/i, '').trim();
+    }
+  } catch(e) {}
+  return cleanJobTitle(user.ai_title);
+};
+
 const SKILLS = [
   { key: 'tech',     label: 'เทคโนโลยี',    icon: '💻', color: '#0ea5e9' },
   { key: 'logic',    label: 'การวิเคราะห์',  icon: '🧠', color: '#8b5cf6' },
@@ -29,6 +45,8 @@ const SKILLS = [
   { key: 'lead',     label: 'ภาวะผู้นำ',     icon: '🏆', color: '#f59e0b' },
   { key: 'comm',     label: 'การสื่อสาร',    icon: '💬', color: '#10b981' },
   { key: 'biz',      label: 'ธุรกิจ',        icon: '📊', color: '#64748b' },
+  { key: 'phys',     label: 'ปฏิบัติการ',     icon: '🏃', color: '#14b8a6' },
+  { key: 'emp',      label: 'จิตบริการ',      icon: '❤️', color: '#ec4899' },
 ];
 
 const getTier = (pct) => {
@@ -42,7 +60,15 @@ function RadarModal({ user, onClose }) {
   const radarRef = useRef(null);
   const chartRef = useRef(null);
 
-  const scores = SKILLS.map(s => normalizePct(user.scores?.[s.key]));
+  const parsedResultData = typeof user.result_data === 'string' ? JSON.parse(user.result_data) : (user.result_data || {});
+  const actualScores = parsedResultData.scores || user.scores || {};
+  
+  // แปลงให้รองรับทั้งคีย์แบบตัวพิมพ์ใหญ่และพิมพ์เล็ก
+  const scores = SKILLS.map(s => {
+    const keyLower = s.key.toLowerCase();
+    const keyTitle = s.key.charAt(0).toUpperCase() + s.key.slice(1);
+    return normalizePct(actualScores[keyLower] || actualScores[keyTitle]);
+  });
   const matchPct = normalizePct(user.match_pct);
   const tier = getTier(matchPct);
   const topSkill = SKILLS.reduce((a, s, i) => scores[i] > scores[SKILLS.indexOf(a)] ? s : a, SKILLS[0]);
@@ -113,7 +139,7 @@ function RadarModal({ user, onClose }) {
             </div>
             <div style={{ flex: 1, background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '12px 16px' }}>
               <div style={{ fontSize: '0.72rem', color: '#64748b', marginBottom: '4px' }}>🎯 อาชีพที่ AI แนะนำ</div>
-              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#38bdf8' }} title={user.ai_title}>{cleanJobTitle(user.ai_title)}</div>
+              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#38bdf8' }} title={getTopJob(user)}>{getTopJob(user)}</div>
             </div>
             <div style={{ background: tier.bg, borderRadius: '12px', padding: '12px 16px', display: 'flex', flexDirection: 'column', justifyContent: 'center', border: `1px solid ${tier.color}22` }}>
               <div style={{ fontSize: '0.72rem', color: '#64748b', marginBottom: '4px' }}>ระดับ</div>
@@ -281,7 +307,7 @@ export default function AdminResults() {
                     <span
                       style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#eff6ff', color: '#1d4ed8', padding: '5px 12px', borderRadius: '20px', fontSize: '0.82rem', fontWeight: 700 }}
                     >
-                      🎯 {cleanJobTitle(r.ai_title)}
+                      🎯 {getTopJob(r)}
                     </span>
                   </td>
                   <td style={{ padding: '14px 20px', textAlign: 'center' }}>
