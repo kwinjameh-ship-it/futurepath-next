@@ -263,14 +263,16 @@ export default function AssessmentPage() {
         // หาจุดแข็งและจุดอ่อนเพื่อบังคับ AI
         const sortedKeys = Object.keys(newScores).sort((a, b) => newScores[b] - newScores[a]);
         const highestSkill = scoreLabels[sortedKeys[0]];
+        const secondHighestSkill = scoreLabels[sortedKeys[1]];
         const lowestSkill = scoreLabels[sortedKeys[sortedKeys.length - 1]];
 
         const promptText = `ผู้ทำแบบประเมินมีคะแนนทักษะดังนี้: ${JSON.stringify(mappedScores)}
-จุดแข็งที่สุด (คะแนนสูงสุด): ${highestSkill}
+จุดแข็งอันดับ 1: ${highestSkill}
+จุดแข็งอันดับ 2: ${secondHighestSkill}
 จุดที่ควรพัฒนา (คะแนนต่ำสุด): ${lowestSkill}
 
 กฎสำคัญในการเขียน (ต้องปฏิบัติตามอย่างเคร่งครัด):
-1. อาชีพ (Jobs) และ คณะ (Edu) "ทั้ง 5 อันดับ" จะต้องเป็นสายงานที่ใช้จุดแข็งที่สุด (${highestSkill}) เท่านั้น!
+1. ความหลากหลาย: อาชีพ (Jobs) และ คณะ (Edu) ทั้ง 5 อันดับ จะต้องเป็นการ "ผสมผสาน (Combine)" ระหว่างจุดแข็งอันดับ 1 (${highestSkill}) และ จุดแข็งอันดับ 2 (${secondHighestSkill}) อย่างลงตัว เพื่อให้เกิดอาชีพที่หลากหลาย แปลกใหม่ และไม่ซ้ำซาก (มีทั้งกระแสหลักและสายเฉพาะทาง)
 2. คำเตือนร้ายแรง: ห้ามแนะนำคณะ/สาขา หรืออาชีพที่เกี่ยวข้องกับจุดที่ควรพัฒนา (${lowestSkill}) โดยเด็ดขาด! (เช่น ถ้าเทคโนโลยีได้คะแนนน้อยสุด ห้ามแนะนำวิศวะคอมฯ หรือ IT เด็ดขาด)
 3. หัวข้อที่ควรฝึก (Dev) "ต้อง" เกี่ยวข้องกับการพัฒนาจุดที่ได้คะแนนน้อยที่สุด (${lowestSkill}) เพื่ออุดช่องโหว่
 4. ใช้ภาษาฟันธง ชัดเจน ห้ามใช้คำว่า อาจจะ, น่าจะ, คงจะ, อาจ, บางที

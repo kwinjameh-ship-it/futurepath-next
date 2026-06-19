@@ -74,7 +74,7 @@ export async function POST(request) {
     const requestBody = {
       model: GROQ_MODEL,
       messages,
-      temperature: 0.7,
+      temperature: 0.85,
     };
 
     if (useJsonMode) {
