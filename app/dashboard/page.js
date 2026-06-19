@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import GlassNav from '@/components/GlassNav';
+import ShareCardModal from '@/components/ShareCardModal';
 import useAuth from '@/lib/useAuth';
 import { Radar } from 'react-chartjs-2';
 import {
@@ -19,6 +20,7 @@ export default function UserDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedSim, setSelectedSim] = useState(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user?.email) {
@@ -165,17 +167,22 @@ export default function UserDashboard() {
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>ทักษะโดดเด่น</div>
-                    <div style={{ fontSize: '1.2rem', fontWeight: '700', color: '#ffb347' }}>{dna.aiTitle}</div>
+                    <div style={{ fontSize: '1rem', fontWeight: '700', color: '#ff7a00' }}>{dna.aiTitle}</div>
                   </div>
                 </div>
-                
-                <div style={{ height: '220px', width: '100%', position: 'relative' }}>
+
+                <div style={{ flexGrow: 1, position: 'relative', minHeight: '250px', marginBottom: '20px' }}>
                   <Radar data={radarData} options={radarOptions} />
                 </div>
-                
-                <button onClick={() => router.push('/assessment')} style={{ width: '100%', marginTop: '20px', textAlign: 'center', background: 'rgba(255,122,0,0.15)', border: '1px solid #ff7a00', color: '#ffb347', padding: '12px', borderRadius: '16px', fontWeight: 600, cursor: 'pointer' }}>
-                  ทำแบบประเมินใหม่ <i className="fas fa-arrow-right ml-2"></i>
-                </button>
+
+                <div style={{ display: 'flex', gap: '12px' }}>
+                  <button onClick={() => router.push('/assessment')} style={{ flex: 1, padding: '14px', borderRadius: '16px', background: 'rgba(255,122,0,0.1)', color: '#ffb347', fontWeight: '700', border: '1px solid rgba(255,122,0,0.3)', cursor: 'pointer', transition: 'all 0.2s' }} className="hover:bg-[rgba(255,122,0,0.2)]">
+                    ทำแบบประเมินใหม่ <i className="fas fa-arrow-right ml-2"></i>
+                  </button>
+                  <button onClick={() => setIsShareModalOpen(true)} style={{ padding: '14px 20px', borderRadius: '16px', background: 'linear-gradient(135deg, #ff7a00, #ff4b00)', color: '#fff', fontWeight: '700', border: 'none', cursor: 'pointer', transition: 'all 0.2s', boxShadow: '0 4px 15px rgba(255,122,0,0.3)' }} className="hover-lift">
+                    <i className="fas fa-share-nodes"></i>
+                  </button>
+                </div>
               </>
             ) : (
               <div style={{ textAlign: 'center', padding: '40px 0', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -423,6 +430,12 @@ export default function UserDashboard() {
           border-color: rgba(255, 122, 0, 0.4);
         }
       `}} />
+      <ShareCardModal 
+        isOpen={isShareModalOpen} 
+        onClose={() => setIsShareModalOpen(false)} 
+        user={user} 
+        dna={dna} 
+      />
     </div>
   );
 }
