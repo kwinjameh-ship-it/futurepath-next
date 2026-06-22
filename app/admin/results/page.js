@@ -60,14 +60,23 @@ function RadarModal({ user, onClose }) {
   const radarRef = useRef(null);
   const chartRef = useRef(null);
 
-  const parsedResultData = typeof user.result_data === 'string' ? JSON.parse(user.result_data) : (user.result_data || {});
+  // รองรับทั้ง result_data (snake_case) และ resultData (camelCase)
+  // รองรับทั้ง JSON string และ object
+  const parsedResultData = (() => {
+    const raw = user.result_data || user.resultData;
+    if (!raw) return {};
+    if (typeof raw === 'string') {
+      try { return JSON.parse(raw); } catch { return {}; }
+    }
+    return raw;
+  })();
   const actualScores = parsedResultData.scores || user.scores || {};
   
   // แปลงให้รองรับทั้งคีย์แบบตัวพิมพ์ใหญ่และพิมพ์เล็ก
   const scores = SKILLS.map(s => {
     const keyLower = s.key.toLowerCase();
     const keyTitle = s.key.charAt(0).toUpperCase() + s.key.slice(1);
-    return normalizePct(actualScores[keyLower] || actualScores[keyTitle]);
+    return normalizePct(actualScores[keyLower] || actualScores[keyTitle] || 0);
   });
   const matchPct = normalizePct(user.match_pct);
   const tier = getTier(matchPct);

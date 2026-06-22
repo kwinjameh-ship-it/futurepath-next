@@ -83,7 +83,16 @@ export default function UserDashboard() {
     plugins: { legend: { display: false } }
   };
 
-  const parsedResultData = typeof dna?.resultData === 'string' ? JSON.parse(dna.resultData) : (dna?.resultData || {});
+  // Parse resultData safely — รองรับทั้ง camelCase (resultData) และ snake_case (result_data)
+  // และรองรับทั้ง JSON string และ object
+  const parsedResultData = (() => {
+    const raw = dna?.resultData || dna?.result_data;
+    if (!raw) return {};
+    if (typeof raw === 'string') {
+      try { return JSON.parse(raw); } catch { return {}; }
+    }
+    return raw;
+  })();
   const actualScores = parsedResultData.scores || dna?.scores || {};
 
   const radarData = {
@@ -108,9 +117,9 @@ export default function UserDashboard() {
   };
 
   // ดึง Top Job และ Education จาก resultData (ที่เก็บเป็น JSON)
-  const jobs = dna?.resultData?.Jobs || [];
-  const edu = dna?.resultData?.Edu || [];
-  const devPlan = dna?.resultData?.Dev || [];
+  const jobs = parsedResultData?.Jobs || [];
+  const edu = parsedResultData?.Edu || [];
+  const devPlan = parsedResultData?.Dev || [];
 
   return (
     <div style={{ minHeight: '100vh', paddingTop: '80px', paddingBottom: '60px', fontFamily: "'Kanit', sans-serif", color: '#fff', background: '#120c0a' }}>
