@@ -11,7 +11,7 @@ import {
 
 ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
-const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
 export default function UserDashboard() {
   const { user, loading: authLoading } = useAuth();
@@ -74,10 +74,13 @@ export default function UserDashboard() {
     maintainAspectRatio: false,
     scales: {
       r: {
+        min: 0,
+        max: 100,
+        beginAtZero: true,
         angleLines: { color: 'rgba(255,255,255,0.1)' },
         grid: { color: 'rgba(255,255,255,0.1)' },
         pointLabels: { font: { family: "'Kanit', sans-serif", size: 12 }, color: '#e2e8f0' },
-        ticks: { backdropColor: 'transparent', display: false, min: 0, max: 100 }
+        ticks: { backdropColor: 'transparent', display: false, stepSize: 20 }
       }
     },
     plugins: { legend: { display: false } }

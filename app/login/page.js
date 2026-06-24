@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 const GOOGLE_SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+  'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
 export default function LoginPage() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [form, setForm] = useState({ name: '', email: '', password: '', schoolName: '' });
   const [showPwd, setShowPwd] = useState(false);
 
   function handleChange(e) {
@@ -18,14 +18,20 @@ export default function LoginPage() {
 
   function toggleForm() {
     setIsLogin(!isLogin);
-    setForm({ name: '', email: '', password: '' });
+    setForm({ name: '', email: '', password: '', schoolName: '' });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     const actionType = isLogin ? 'login' : 'register';
-    const payload = { action: actionType, name: form.name, email: form.email, password: form.password };
+    const payload = { 
+      action: actionType, 
+      name: form.name, 
+      email: form.email, 
+      password: form.password,
+      schoolCode: form.schoolName // ส่งเป็น key schoolCode เพื่อให้ฝั่ง API รับค่าได้เหมือนเดิม 
+    };
 
     try {
       const res = await fetch(GOOGLE_SCRIPT_URL, {
@@ -44,6 +50,9 @@ export default function LoginPage() {
         } else {
           localStorage.setItem('futurepath_user_name', data.name);
           localStorage.setItem('futurepath_user_email', form.email);
+          if (data.schoolCode) {
+            localStorage.setItem('futurepath_school_code', data.schoolCode);
+          }
           router.push('/home');
         }
       } else {
@@ -124,6 +133,23 @@ export default function LoginPage() {
                 />
               </div>
             )}
+
+          {/* School Name (พิมพ์เอง) */}
+          {!isLogin && (
+            <div style={{ background: 'rgba(255, 255, 255, 0.05)', border: '1px solid rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <i className="fa-solid fa-school text-indigo-400"></i>
+              <input
+                type="text"
+                name="schoolName"
+                value={form.schoolName}
+                onChange={handleChange}
+                placeholder="ชื่อโรงเรียน (พิมพ์ชื่อโรงเรียนของคุณ)"
+                className="w-full text-white placeholder-gray-400 outline-none"
+                style={{ background: 'transparent' }}
+                required
+              />
+            </div>
+          )}
 
             <div>
               <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginBottom: '8px', letterSpacing: '0.04em' }}>

@@ -7,7 +7,7 @@ import { Chart, LineElement, PointElement, LineController, CategoryScale, Linear
 
 Chart.register(LineElement, PointElement, LineController, CategoryScale, LinearScale, Filler, Tooltip);
 
-const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
 export default function HomePage() {
   const { user, loading } = useAuth();

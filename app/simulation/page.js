@@ -4,7 +4,7 @@ import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
 
 export default function SimulationPage() {
-  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+  const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
   const { user, loading } = useAuth();
   const [step,        setStep]        = useState(1);

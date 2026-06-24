@@ -4,7 +4,7 @@ import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
 
 const SHEET_WEBAPP_URL =
-  'https://script.google.com/macros/s/AKfycby-qewa8CfMVp1V5GimbZtprRKDTPlRBNxa2siekCfM8mdKAXo1MAE9htIjidMlei2fqQ/exec';
+  'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
 const surveyData = [
   { category: 'หมวดที่ 1: การออกแบบและการใช้งาน (UI/UX)', icon: 'fa-palette', items: [

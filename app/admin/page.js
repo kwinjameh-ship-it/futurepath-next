@@ -144,14 +144,13 @@ export default function AdminDashboard() {
     'จิตบริการและการดูแล': { icon: '❤️', color: '#ec4899' }
   };
   
-  // ให้ข้อมูลที่มีอยู่ 6 ด้านจาก backend เติม 2 ด้านที่หายไป
   let rawSkills = (avgSkills && avgSkills.length > 0) ? avgSkills : mockSkills;
-  if (rawSkills.length === 6) {
-    rawSkills = [
-      ...rawSkills,
-      { label: 'ปฏิบัติการและวินัย', score: 0, icon: '🏃', color: '#14b8a6' },
-      { label: 'จิตบริการและการดูแล', score: 0, icon: '❤️', color: '#ec4899' }
-    ];
+  // ถ้า backend ส่งมาไม่ครบ 8 ให้เติม phys/emp จาก mockSkills แทนที่จะเป็น 0
+  if (rawSkills.length < 8) {
+    const physMock = mockSkills.find(s => s.label === 'ปฏิบัติการและวินัย');
+    const empMock  = mockSkills.find(s => s.label === 'จิตบริการและการดูแล');
+    if (!rawSkills.find(s => s.label === 'ปฏิบัติการและวินัย') && physMock) rawSkills = [...rawSkills, physMock];
+    if (!rawSkills.find(s => s.label === 'จิตบริการและการดูแล') && empMock)  rawSkills = [...rawSkills, empMock];
   }
   // normalize: แปลง score เป็น number เสมอ และเติม icon/color ถ้าไม่มี
   const skillsData = rawSkills.map(s => ({

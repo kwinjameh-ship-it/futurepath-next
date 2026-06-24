@@ -59,9 +59,34 @@ const getTier = (pct) => {
 function RadarModal({ user, onClose }) {
   const radarRef = useRef(null);
   const chartRef = useRef(null);
+  const [fullScores, setFullScores] = useState(null);
+
+  // ดึง result_data แบบ full จาก getUserDashboard เพื่อให้ได้ phys/emp ด้วย
+  useEffect(() => {
+    async function loadFullData() {
+      try {
+        const res = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST', mode: 'cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'getUserDashboard', email: user.email })
+        });
+        const d = await res.json();
+        if (d?.dna?.scores) {
+          setFullScores(d.dna.scores);
+        } else if (d?.dna?.resultData?.scores) {
+          setFullScores(d.dna.resultData.scores);
+        } else if (d?.dna?.result_data) {
+          try {
+            const rd = typeof d.dna.result_data === 'string' ? JSON.parse(d.dna.result_data) : d.dna.result_data;
+            if (rd?.scores) setFullScores(rd.scores);
+          } catch(e) {}
+        }
+      } catch(e) { console.warn('Could not load full scores:', e); }
+    }
+    if (user?.email) loadFullData();
+  }, [user?.email]);
 
   // รองรับทั้ง result_data (snake_case) และ resultData (camelCase)
-  // รองรับทั้ง JSON string และ object
   const parsedResultData = (() => {
     const raw = user.result_data || user.resultData;
     if (!raw) return {};
@@ -70,14 +95,28 @@ function RadarModal({ user, onClose }) {
     }
     return raw;
   })();
-  const actualScores = parsedResultData.scores || user.scores || {};
-  
+
+  // ใช้ fullScores (จาก getUserDashboard) ก่อน → fallback ไป parsedResultData → fallback ไป user.scores
+  // Merge: เอาค่าสูงสุดระหว่าง fullScores กับ user.scores เพื่อไม่ให้ค่าลดลง
+  const mergedScores = (() => {
+    const base = user.scores || {};
+    if (!fullScores) return parsedResultData.scores || base;
+    const merged = {};
+    SKILLS.forEach(s => {
+      const kL = s.key;
+      const kU = s.key.charAt(0).toUpperCase() + s.key.slice(1);
+      const fromFull = parseFloat(fullScores[kL] || fullScores[kU] || 0);
+      const fromBase = parseFloat(base[kL] || base[kU] || 0);
+      // normalize ถ้าเป็น decimal
+      const normFull = (fromFull > 0 && fromFull <= 1) ? fromFull * 100 : fromFull;
+      const normBase = (fromBase > 0 && fromBase <= 1) ? fromBase * 100 : fromBase;
+      merged[kL] = Math.max(normFull, normBase);
+    });
+    return merged;
+  })();
+
   // แปลงให้รองรับทั้งคีย์แบบตัวพิมพ์ใหญ่และพิมพ์เล็ก
-  const scores = SKILLS.map(s => {
-    const keyLower = s.key.toLowerCase();
-    const keyTitle = s.key.charAt(0).toUpperCase() + s.key.slice(1);
-    return normalizePct(actualScores[keyLower] || actualScores[keyTitle] || 0);
-  });
+  const scores = SKILLS.map(s => normalizePct(mergedScores[s.key] || 0));
   const matchPct = normalizePct(user.match_pct);
   const tier = getTier(matchPct);
   const topSkill = SKILLS.reduce((a, s, i) => scores[i] > scores[SKILLS.indexOf(a)] ? s : a, SKILLS[0]);
@@ -116,7 +155,7 @@ function RadarModal({ user, onClose }) {
       },
     });
     return () => { if (chartRef.current) chartRef.current.destroy(); };
-  }, [user]);
+  }, [user, fullScores]); // re-build chart เมื่อ fullScores โหลดมาใหม่
 
   return (
     <div
