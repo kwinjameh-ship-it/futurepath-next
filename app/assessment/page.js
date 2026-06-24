@@ -524,7 +524,7 @@ export default function AssessmentPage() {
         <div style={{ position: 'absolute', bottom: '-20%', right: '-15%', width: '70vw', height: '70vw', background: 'radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%)', filter: 'blur(100px)', mixBlendMode: 'screen' }} />
       </div>
       <GlassNav />
-      <main className="no-print" style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
+      <main className="no-print" style={{ position: 'relative', zIndex: 10, maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 120px', paddingTop: '80px' }}>
         <UserBar name={user.name} email={user.email} />
 
         {/* Action Bar (Export) */}
@@ -1077,7 +1077,7 @@ export default function AssessmentPage() {
       </div>
       <GlassNav />
 
-      <main style={{ position: 'relative', zIndex: 10,  maxWidth: '1000px', margin: '0 auto', padding: '80px 24px 80px'  }}>
+      <main style={{ position: 'relative', zIndex: 10, maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 120px', paddingTop: '80px' }}>
         <UserBar name={user.name} email={user.email} />
 
         {/* API Status */}

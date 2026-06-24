@@ -49,11 +49,10 @@ export default function SchoolCommandCenter() {
   useEffect(() => {
     async function fetchData() {
       try {
-        // ใช้ POST แบบเดียวกับหน้า admin ปกติ
-        const res = await fetch(GOOGLE_SCRIPT_URL, {
+        // ใช้ Next.js API route เป็นตัว proxy เพื่อหลีกเลี่ยงปัญหา CORS
+        const res = await fetch('/api/sheet-proxy', {
           method: 'POST',
-          mode: 'cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'admin_get_results' })
         });
         const data = await res.json();

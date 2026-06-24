@@ -142,7 +142,7 @@ export default function UserDashboard() {
 
       <GlassNav />
 
-      <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 20px' }}>
+      <div className="relative z-10" style={{ maxWidth: '1100px', margin: '0 auto', padding: '80px 16px 120px' }}>
         
         {/* 1. Welcome & Status Banner */}
         <div className="glass-panel" style={{ padding: '30px', borderRadius: '16px', marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '20px' }}>
@@ -162,7 +162,7 @@ export default function UserDashboard() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '24px', marginBottom: '24px' }}>
           
           {/* 2. My DNA Profile */}
           <div className="glass-panel hover-glow" style={{ padding: '24px', borderRadius: '28px', display: 'flex', flexDirection: 'column' }}>
