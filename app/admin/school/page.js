@@ -11,14 +11,14 @@ Chart.register(RadarController, RadialLinearScale, PointElement, LineElement, Fi
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxpQPsyzmtqFyc-VDB5LPt4UbGcsGwCzl_rFkN1ePJ_dWeWnrs40SJ9lxKkWlkKIKSo7Q/exec';
 
 const SKILLS = [
-  { key: 'tech',     label: 'เทคโนโลยี',    icon: '💻', color: '#0ea5e9' },
-  { key: 'logic',    label: 'การวิเคราะห์',  icon: '🧠', color: '#8b5cf6' },
-  { key: 'creative', label: 'สร้างสรรค์',    icon: '🎨', color: '#f43f5e' },
-  { key: 'lead',     label: 'ภาวะผู้นำ',     icon: '🏆', color: '#f59e0b' },
-  { key: 'comm',     label: 'การสื่อสาร',    icon: '💬', color: '#10b981' },
-  { key: 'biz',      label: 'ธุรกิจ',        icon: '📊', color: '#64748b' },
-  { key: 'phys',     label: 'ปฏิบัติการ',    icon: '🏃', color: '#14b8a6' },
-  { key: 'emp',      label: 'จิตบริการ',     icon: '❤️', color: '#ec4899' },
+  { key: 'tech',     label: 'เทคโนโลยี',    icon: '💻', color: '#4f46e5' },
+  { key: 'logic',    label: 'การวิเคราะห์',  icon: '🧠', color: '#7c3aed' },
+  { key: 'creative', label: 'สร้างสรรค์',    icon: '🎨', color: '#9333ea' },
+  { key: 'lead',     label: 'ภาวะผู้นำ',     icon: '🏆', color: '#6366f1' },
+  { key: 'comm',     label: 'การสื่อสาร',    icon: '💬', color: '#0ea5e9' },
+  { key: 'biz',      label: 'ธุรกิจ',        icon: '📊', color: '#06b6d4' },
+  { key: 'phys',     label: 'ปฏิบัติการ',    icon: '🏃', color: '#10b981' },
+  { key: 'emp',      label: 'จิตบริการ',     icon: '❤️', color: '#a78bfa' },
 ];
 
 const normalizePct = (val) => {
@@ -27,9 +27,9 @@ const normalizePct = (val) => {
 };
 
 const STATUS_MAP = {
-  high:     { label: 'ดาวรุ่งพุ่งแรง',     color: '#059669', bg: '#d1fae5', border: '#a7f3d0' },
-  rising:   { label: 'ผู้พัฒนาต่อเนื่อง',  color: '#d97706', bg: '#fef3c7', border: '#fde68a' },
-  explorer: { label: 'ผู้เริ่มต้นสำรวจ',   color: '#475569', bg: '#f1f5f9', border: '#e2e8f0' },
+  high:     { label: 'ดาวรุ่งพุ่งแรง',    color: '#4f46e5', bg: '#eef2ff', border: '#c7d2fe' },
+  rising:   { label: 'ผู้พัฒนาต่อเนื่อง', color: '#7c3aed', bg: '#f5f3ff', border: '#ddd6fe' },
+  explorer: { label: 'ผู้เริ่มต้นสำรวจ',  color: '#64748b', bg: '#f8fafc', border: '#e2e8f0' },
 };
 
 export default function SchoolCommandCenter() {
@@ -193,7 +193,7 @@ export default function SchoolCommandCenter() {
   }
 
   return (
-    <div className="admin-container" style={{ minHeight: '100vh', background: '#f8fafc', fontFamily: "'Kanit', sans-serif", color: '#0f172a' }}>
+    <div className="admin-container" style={{ minHeight: '100vh', background: '#f0f2ff', fontFamily: "'Kanit', sans-serif", color: '#1e1b4b' }}>
       <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '40px 24px' }}>
 
         {/* HEADER */}
@@ -227,10 +227,14 @@ export default function SchoolCommandCenter() {
         {/* STAT CARDS */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
           {[
-            { icon: '👨‍🎓', label: 'นักเรียนทั้งหมด', value: totalStudents, unit: 'คน', grad: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', shadow: 'rgba(99,102,241,0.3)' },
-            { icon: '🎯', label: 'แมตช์เฉลี่ย', value: `${avgMatch}%`, unit: '', grad: 'linear-gradient(135deg, #a855f7 0%, #7e22ce 100%)', shadow: 'rgba(168,85,247,0.3)' },
-            { icon: '⭐', label: 'ดาวรุ่งพุ่งแรง', value: highCount, unit: 'คน', grad: 'linear-gradient(135deg, #14b8a6 0%, #0d9488 100%)', shadow: 'rgba(20,184,166,0.3)' },
-            { icon: '🏆', label: 'ทักษะโดดเด่น', value: topSkill?.label || '-', unit: `${topSkill?.score || 0}%`, grad: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', shadow: 'rgba(245,158,11,0.3)' },
+            { icon: '👨‍🎓', label: 'นักเรียนทั้งหมด', value: totalStudents, unit: 'คน',
+              grad: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)', shadow: 'rgba(79,70,229,0.25)' },
+            { icon: '🎯', label: 'แมตช์เฉลี่ย', value: `${avgMatch}%`, unit: '',
+              grad: 'linear-gradient(135deg, #6366f1 0%, #7c3aed 100%)', shadow: 'rgba(99,102,241,0.25)' },
+            { icon: '⭐', label: 'ดาวรุ่งพุ่งแรง', value: highCount, unit: 'คน',
+              grad: 'linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%)', shadow: 'rgba(14,165,233,0.25)' },
+            { icon: '🏆', label: 'ทักษะโดดเด่น', value: topSkill?.label || '-', unit: `${topSkill?.score || 0}%`,
+              grad: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)', shadow: 'rgba(139,92,246,0.25)' },
           ].map((c, i) => (
             <div key={i} style={{ background: c.grad, borderRadius: '18px', padding: '22px', color: 'white', boxShadow: `0 10px 15px -3px ${c.shadow}` }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
@@ -278,7 +282,7 @@ export default function SchoolCommandCenter() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                   {topCareers.map(([career, count], i) => {
                     const pct = Math.round((count / totalStudents) * 100);
-                    const colors = ['#6366f1','#8b5cf6','#ec4899','#f43f5e','#f59e0b'];
+                    const colors = ['#4f46e5','#7c3aed','#9333ea','#6366f1','#0ea5e9'];
                     return (
                       <div key={i}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -331,7 +335,7 @@ export default function SchoolCommandCenter() {
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '2px' }}>{st.grade}</div>
                   </div>
                   <div style={{ textAlign: 'center', minWidth: '70px', padding: '0 16px', borderLeft: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>
-                    <div style={{ fontSize: '1.6rem', fontWeight: 800, color: st.match_pct >= 80 ? '#059669' : st.match_pct >= 60 ? '#d97706' : '#64748b', lineHeight: 1 }}>{st.match_pct}%</div>
+                    <div style={{ fontSize: '1.6rem', fontWeight: 800, color: st.match_pct >= 80 ? '#4f46e5' : st.match_pct >= 60 ? '#7c3aed' : '#94a3b8', lineHeight: 1 }}>{st.match_pct}%</div>
                     <div style={{ fontSize: '0.75rem', color: '#64748b' }}>ความเข้ากันได้</div>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '8px', minWidth: '220px' }}>
