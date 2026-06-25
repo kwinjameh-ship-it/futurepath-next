@@ -53,7 +53,7 @@ export default function SchoolCommandCenter() {
         const res = await fetch('/api/sheet-proxy', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'admin_get_results' })
+          body: JSON.stringify({ action: 'admin_get_school_data' })
         });
         const data = await res.json();
         
