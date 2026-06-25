@@ -1,6 +1,29 @@
 'use client';
 import { useEffect, useState } from 'react';
 
+const surveyMap = {
+  '1.1': 'ดีไซน์การออกแบบสวยงามและทันสมัย',
+  '1.2': 'การจัดวางเมนูและหน้าต่างใช้งานง่าย ไม่ซับซ้อน',
+  '1.3': 'การแสดงผลบนสมาร์ตโฟนและแท็บเล็ตใช้งานได้ดี',
+  '1.4': 'การใช้กราฟหรือแผนผังแสดงข้อมูลดูเข้าใจง่าย',
+  '1.5': 'ความยากง่ายในการทำแบบทดสอบหรือการกรอกข้อมูล',
+  '2.1': 'ความเสถียรของระบบโดยรวม ไม่มีอาการค้าง',
+  '2.2': 'ความเร็วในการโหลดข้อมูลและการประมวลผล',
+  '2.3': 'ระบบจดจำสถานะสมาชิกและบันทึกข้อมูลได้แม่นยำ',
+  '2.4': 'ความปลอดภัยของการล็อกอินและข้อมูลส่วนตัว',
+  '2.5': 'การเข้าถึงลิงก์หรือเนื้อหาภายนอกทำได้อย่างถูกต้อง',
+  '3.1': 'ความแม่นยำและการวิเคราะห์ผลของระบบ AI',
+  '3.2': 'แชทบอทให้คำปรึกษาและข้อมูลที่เป็นประโยชน์',
+  '3.3': 'ข้อมูลเส้นทางอาชีพและแนวโน้มมีความชัดเจน',
+  '3.4': 'คำแนะนำการพัฒนาทักษะ (Skill) ตรงกับความต้องการ',
+  '3.5': 'ระบบช่วยให้คุณเห็นแนวทางพัฒนาตนเองได้จริง',
+  '4.1': 'ระบบการค้นหาข้อมูลอาชีพมีประสิทธิภาพ',
+  '4.2': 'ระบบประเมินคะแนนทักษะมีรูปแบบที่เหมาะสม',
+  '4.3': 'ฟังก์ชันการทำงานมีความหลากหลายและตอบโจทย์',
+  '4.4': 'ความพึงพอใจในภาพรวมต่อแพลตฟอร์ม',
+  '4.5': 'คุณจะแนะนำระบบนี้ให้แก่เพื่อนหรือคนรู้จักใช้งานต่อ'
+};
+
 export default function SatisfactionSurvey() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +39,16 @@ export default function SatisfactionSurvey() {
       .then(res => res.json())
       .then(data => {
         if (data.status === 'success') {
-          setQuestions(data.questions || []);
+          // map question code to full text if possible
+          const mapped = (data.questions || []).map(q => {
+            const qCode = q.question.toString().trim();
+            const fullText = surveyMap[qCode];
+            return {
+              ...q,
+              displayTitle: fullText ? `${qCode} ${fullText}` : qCode
+            };
+          });
+          setQuestions(mapped);
         } else {
           setErrorMsg(data.message || 'เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
@@ -56,7 +88,7 @@ export default function SatisfactionSurvey() {
         {questions.map((q, idx) => (
           <div key={idx} style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#1e293b', marginBottom: '16px', display: 'flex', justifyContent: 'space-between' }}>
-              <span>{idx + 1}. {q.question}</span>
+              <span>{idx + 1}. {q.displayTitle || q.question}</span>
               <span style={{ color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <i className="fa-solid fa-star"></i> {q.average} <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>({q.total} คน)</span>
               </span>
