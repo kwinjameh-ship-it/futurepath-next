@@ -8,18 +8,19 @@ const showModal = (icon, title, text) => {
     icon,
     title,
     text,
-    background: 'transparent',
+    background: 'rgba(255, 255, 255, 0.08)',
     color: '#f0f4ff',
     confirmButtonColor: '#ff7a00',
     backdrop: 'rgba(0, 0, 0, 0.5)',
     customClass: {
-      popup: '!rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(255,122,0,0.3)]',
-      title: 'font-kanit text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ff7a00]',
-      htmlContainer: 'font-kanit text-white/90 text-lg',
+      popup: '!rounded-[40px] backdrop-blur-[40px] border border-[rgba(255,255,255,0.15)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.2),0_24px_64px_rgba(0,0,0,0.4)] px-4 py-8',
+      title: 'font-kanit text-[1.8rem] font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-[#ff7a00] to-white',
+      htmlContainer: 'font-kanit text-[rgba(255,255,255,0.6)] text-[0.88rem] mt-2 font-normal',
       confirmButton: '!rounded-full font-kanit px-8 py-3 text-lg font-semibold shadow-lg shadow-[#ff7a00]/30 transition-all hover:scale-105'
     }
   });
 };
+
 
 
 
