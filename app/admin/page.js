@@ -52,7 +52,7 @@ export default function AdminDashboard() {
         const schoolData = await resSchool.json();
         if (schoolData.status === 'success') {
           const formatted = (schoolData.results || []).map(st => ({
-            school: (st.school_code || '').toString().trim(),
+            school: (st.school || '').toString().trim(),
             ai_title: st.ai_title || '-',
             scores: st.scores || {}
           })).filter(st => st.school === selectedSchool);
@@ -503,7 +503,11 @@ export default function AdminDashboard() {
         {loadingInsight && (
           <div style={{ padding: '40px 28px', textAlign: 'center' }}>
             <i className="fa-solid fa-circle-notch fa-spin" style={{ fontSize: '2.5rem', color: '#38ef7d', marginBottom: '16px', display: 'block' }}></i>
-            <p style={{ color: '#94a3b8' }}>AI กำลังวิเคราะห์ข้อมูลนักเรียน {totalAssessments} คน...</p>
+            <p style={{ color: '#94a3b8' }}>
+              {selectedSchool === 'all' 
+                ? `AI กำลังวิเคราะห์ข้อมูลนักเรียนทั้งหมด ${totalAssessments} คน...`
+                : `AI กำลังวิเคราะห์ข้อมูลนักเรียนของ ${selectedSchool}...`}
+            </p>
           </div>
         )}
 
