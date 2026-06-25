@@ -66,20 +66,28 @@ export default function SatisfactionSurvey() {
               {[5, 4, 3, 2, 1].map(star => {
                 const count = q.tallies[star.toString()] || 0;
                 const pct = q.total > 0 ? (count / q.total) * 100 : 0;
+                const respondents = (q.responses || []).filter(r => r.score === star).map(r => r.name);
                 return (
-                  <div key={star} style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem' }}>
-                    <div style={{ width: '60px', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
-                      <span>{star}</span> <i className="fa-solid fa-star" style={{ color: '#cbd5e1', fontSize: '0.8rem' }}></i>
+                  <div key={star} style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem' }}>
+                      <div style={{ width: '60px', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
+                        <span>{star}</span> <i className="fa-solid fa-star" style={{ color: '#cbd5e1', fontSize: '0.8rem' }}></i>
+                      </div>
+                      <div style={{ flex: 1, background: '#f1f5f9', height: '12px', borderRadius: '6px', overflow: 'hidden', margin: '0 16px' }}>
+                        <div style={{ width: `${pct}%`, height: '100%', background: star >= 4 ? '#10b981' : star === 3 ? '#f59e0b' : '#ef4444', borderRadius: '6px', transition: 'width 1s ease-out' }}></div>
+                      </div>
+                      <div style={{ width: '60px', textAlign: 'right', color: '#475569', fontWeight: 500 }}>
+                        {count} คน
+                      </div>
+                      <div style={{ width: '50px', textAlign: 'right', color: '#94a3b8', fontSize: '0.8rem' }}>
+                        {pct.toFixed(0)}%
+                      </div>
                     </div>
-                    <div style={{ flex: 1, background: '#f1f5f9', height: '12px', borderRadius: '6px', overflow: 'hidden', margin: '0 16px' }}>
-                      <div style={{ width: `${pct}%`, height: '100%', background: star >= 4 ? '#10b981' : star === 3 ? '#f59e0b' : '#ef4444', borderRadius: '6px', transition: 'width 1s ease-out' }}></div>
-                    </div>
-                    <div style={{ width: '60px', textAlign: 'right', color: '#475569', fontWeight: 500 }}>
-                      {count} คน
-                    </div>
-                    <div style={{ width: '50px', textAlign: 'right', color: '#94a3b8', fontSize: '0.8rem' }}>
-                      {pct.toFixed(0)}%
-                    </div>
+                    {respondents.length > 0 && (
+                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', paddingLeft: '76px', paddingRight: '110px' }}>
+                        {respondents.join(', ')}
+                      </div>
+                    )}
                   </div>
                 );
               })}
