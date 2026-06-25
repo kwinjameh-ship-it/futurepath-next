@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
+import toast from 'react-hot-toast';
 
 const SHEET_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -53,7 +54,7 @@ export default function FeedbackPage() {
     for (const cat of surveyData) {
       for (const item of cat.items) {
         if (!ratings[item.id]) {
-          alert(`กรุณาตอบคำถามข้อ ${item.id.replace('_', '.')} ก่อนครับ`);
+          toast.error(`กรุณาตอบคำถามข้อ ${item.id.replace('_', '.')} ก่อนครับ`);
           return;
         }
       }
@@ -66,10 +67,12 @@ export default function FeedbackPage() {
       const res  = await fetch(SHEET_WEBAPP_URL, { method: 'POST', body: JSON.stringify(payload) });
       const data = await res.json();
       if (data.status === 'success') {
-        alert('ขอบคุณสำหรับความคิดเห็นและการประเมินระบบครับ!');
-        window.location.href = '/home';
-      } else { alert('บันทึกไม่สำเร็จ: ' + data.message); }
-    } catch { alert('เกิดข้อผิดพลาดในการเชื่อมต่อ'); }
+        toast.success('ขอบคุณสำหรับความคิดเห็นและการประเมินระบบครับ!');
+        setTimeout(() => {
+          window.location.href = '/home';
+        }, 1500);
+      } else { toast.error('บันทึกไม่สำเร็จ: ' + data.message); }
+    } catch { toast.error('เกิดข้อผิดพลาดในการเชื่อมต่อ'); }
     setSubmitting(false);
   }
 

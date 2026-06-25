@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
+import toast from 'react-hot-toast';
 
 export default function SimulationPage() {
   const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -16,7 +17,7 @@ export default function SimulationPage() {
   const [loadingEval, setLoadingEval] = useState(false);
 
   async function getTask() {
-    if (!jobTitle.trim()) { alert('โปรดระบุตำแหน่งงานก่อนครับ'); return; }
+    if (!jobTitle.trim()) { toast.error('โปรดระบุตำแหน่งงานก่อนครับ'); return; }
     setLoadingTask(true);
     try {
       const res  = await fetch('/api/proxy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_task', jobTitle }) });
@@ -25,13 +26,13 @@ export default function SimulationPage() {
       if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
         setCurrentTask(data.candidates[0].content.parts[0].text);
         setStep(2);
-      } else { alert('ระบบขัดข้อง โปรดลองใหม่'); }
-    } catch { alert('เชื่อมต่อ AI ล้มเหลว'); }
+      } else { toast.error('ระบบขัดข้อง โปรดลองใหม่'); }
+    } catch { toast.error('เชื่อมต่อ AI ล้มเหลว'); }
     setLoadingTask(false);
   }
 
   async function submitWork() {
-    if (!userWork.trim()) { alert('โปรดพิมพ์ผลงานก่อนส่งครับ'); return; }
+    if (!userWork.trim()) { toast.error('โปรดพิมพ์ผลงานก่อนส่งครับ'); return; }
     setLoadingEval(true);
     try {
       const res  = await fetch('/api/proxy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'evaluate_work', jobTitle, task: currentTask, userWork }) });
@@ -60,8 +61,8 @@ export default function SimulationPage() {
         } catch (e) { console.error(e); }
 
         setStep(3);
-      } else { alert('ระบบขัดข้อง'); }
-    } catch { alert('เกิดข้อผิดพลาดในการแปลผล AI'); }
+      } else { toast.error('ระบบขัดข้อง'); }
+    } catch { toast.error('เกิดข้อผิดพลาดในการแปลผล AI'); }
     setLoadingEval(false);
   }
 

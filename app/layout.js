@@ -2,6 +2,7 @@ import './globals.css';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import ThemeProvider from '@/components/ThemeProvider';
 import AdminFloatButton from '@/components/AdminFloatButton';
+import { Toaster } from 'react-hot-toast';
 
 export const metadata = {
   title: 'FUTUREPATH AI | ระบบค้นพบตัวตนและแนะแนวอาชีพด้วย AI',
@@ -57,6 +58,7 @@ export default function RootLayout({ children }) {
       <body style={{ fontFamily: "'Kanit', sans-serif" }}>
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
           <AnalyticsTracker />
+          <Toaster position="top-center" reverseOrder={false} toastOptions={{ style: { fontFamily: "'Kanit', sans-serif", fontSize: '16px' } }} />
           {children}
           <AdminFloatButton />
         </ThemeProvider>

@@ -1,6 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 const GOOGLE_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -45,7 +46,7 @@ export default function LoginPage() {
 
       if (data.status === 'success') {
         if (!isLogin) {
-          alert('✨ ลงทะเบียนสำเร็จแล้ว! กรุณาเข้าสู่ระบบด้วยบัญชีของคุณ');
+          toast.success('✨ ลงทะเบียนสำเร็จแล้ว! กรุณาเข้าสู่ระบบด้วยบัญชีของคุณ');
           setIsLogin(true);
         } else {
           localStorage.setItem('futurepath_user_name', data.name);
@@ -53,13 +54,14 @@ export default function LoginPage() {
           if (data.schoolCode) {
             localStorage.setItem('futurepath_school_code', data.schoolCode);
           }
+          toast.success('ยินดีต้อนรับเข้าสู่ระบบ');
           router.push('/home');
         }
       } else {
-        alert('🛑 ล้มเหลว: ' + data.message);
+        toast.error('🛑 ล้มเหลว: ' + data.message);
       }
     } catch {
-      alert('❌ เกิดข้อผิดพลาดในการเชื่อมต่อ');
+      toast.error('❌ เกิดข้อผิดพลาดในการเชื่อมต่อ');
     } finally {
       setLoading(false);
     }

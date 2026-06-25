@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
+import toast from 'react-hot-toast';
 
 const SYSTEM_PROMPT = (name) =>
   `คุณคือ "คุณวีรพล" เจ้าหน้าที่ฝ่ายบุคคล (HR) อาวุโส จากบริษัทชั้นนำระดับโลก มีประสบการณ์สัมภาษณ์งานมากกว่า 15 ปี บุคลิกภาพ: จริงจัง มืออาชีพ สุภาพแต่เด็ดขาด
@@ -184,7 +185,7 @@ export default function InterviewPage() {
 
   /* ── Mic toggle ── */
   function toggleMic() {
-    if (!recognitionRef.current) { alert('เบราว์เซอร์นี้ไม่รองรับระบบเสียง'); return; }
+    if (!recognitionRef.current) { toast.error('เบราว์เซอร์นี้ไม่รองรับระบบเสียง'); return; }
     if (status === 'recording') {
       recognitionRef.current.stop();
     } else {
@@ -196,6 +197,7 @@ export default function InterviewPage() {
   /* ── Reset ── */
   function resetInterview() {
     if (!confirm('เริ่มการสัมภาษณ์ใหม่?')) return;
+    toast.success('เริ่มการสัมภาษณ์ใหม่');
     setMessages([{ sender: 'ai', text: INIT_MSG }]);
     setHistory([
       { role: 'system', parts: [{ text: SYSTEM_PROMPT(user.name) }] },

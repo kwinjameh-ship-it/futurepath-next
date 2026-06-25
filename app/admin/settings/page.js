@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec";
 
@@ -40,9 +41,9 @@ export default function AdminSettings() {
       // Since no-cors doesn't return JSON cleanly, we just assume success and re-fetch after delay
       setNewEmail('');
       setTimeout(() => fetchAdmins(), 1500);
-      alert('ส่งคำสั่งเพิ่ม Admin แล้ว (รีเฟรชสักครู่)');
+      toast.success('ส่งคำสั่งเพิ่ม Admin แล้ว (รีเฟรชสักครู่)');
     } catch (error) {
-      alert('เกิดข้อผิดพลาดในการเพิ่ม Admin');
+      toast.error('เกิดข้อผิดพลาดในการเพิ่ม Admin');
     }
   };
 
@@ -57,9 +58,12 @@ export default function AdminSettings() {
         body: JSON.stringify({ action: 'admin_remove', id })
       });
       
-      setTimeout(() => fetchAdmins(), 1500);
+      setTimeout(() => {
+        fetchAdmins();
+        toast.success('ลบสิทธิ์ Admin เรียบร้อยแล้ว');
+      }, 1500);
     } catch (error) {
-      alert('เกิดข้อผิดพลาดในการลบ Admin');
+      toast.error('เกิดข้อผิดพลาดในการลบ Admin');
     }
   };
 
