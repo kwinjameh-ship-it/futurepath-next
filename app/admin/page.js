@@ -15,6 +15,7 @@ export default function AdminDashboard() {
   const [aiInsight, setAiInsight] = useState('');
   const [loadingInsight, setLoadingInsight] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [selectedSchool, setSelectedSchool] = useState('all');
 
   useEffect(() => {
     fetch(GOOGLE_SCRIPT_URL, {
@@ -38,10 +39,59 @@ export default function AdminDashboard() {
   const getInsight = async () => {
     setLoadingInsight(true);
     try {
+      let targetPopularJobs = popularJobs;
+      let targetAvgSkills = skillsData;
+      let targetTotalAssessments = totalAssessments;
+
+      if (selectedSchool !== 'all') {
+        const resSchool = await fetch('/api/sheet-proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'admin_get_school_data' })
+        });
+        const schoolData = await resSchool.json();
+        if (schoolData.status === 'success') {
+          const formatted = (schoolData.results || []).map(st => ({
+            school: (st.school_code || '').toString().trim(),
+            ai_title: st.ai_title || '-',
+            scores: st.scores || {}
+          })).filter(st => st.school === selectedSchool);
+
+          targetTotalAssessments = formatted.length;
+          
+          const careerDist = formatted.reduce((acc, s) => {
+            if (s.ai_title && s.ai_title !== '-') {
+              acc[s.ai_title] = (acc[s.ai_title] || 0) + 1;
+            }
+            return acc;
+          }, {});
+          targetPopularJobs = Object.entries(careerDist).sort((a,b) => b[1]-a[1]).slice(0,10).map(x => ({ ai_title: x[0], count: x[1] }));
+
+          const baseSkills = [
+            { key: 'tech', label: 'เทคโนโลยี', icon: '💻', color: '#38ef7d' },
+            { key: 'logic', label: 'การวิเคราะห์', icon: '🧠', color: '#6366f1' },
+            { key: 'creative', label: 'สร้างสรรค์', icon: '🎨', color: '#f59e0b' },
+            { key: 'lead', label: 'ภาวะผู้นำ', icon: '🏆', color: '#f43f5e' },
+            { key: 'comm', label: 'การสื่อสาร', icon: '💬', color: '#0ea5e9' },
+            { key: 'biz', label: 'ธุรกิจ', icon: '📊', color: '#06b6d4' },
+            { key: 'phys', label: 'ปฏิบัติการ', icon: '🏃', color: '#10b981' },
+            { key: 'emp', label: 'จิตบริการ', icon: '❤️', color: '#a78bfa' },
+          ];
+
+          targetAvgSkills = baseSkills.map(sk => {
+            const avg = formatted.reduce((sum, st) => {
+              const n = parseFloat(st.scores[sk.key]) || 0;
+              return sum + (n > 0 && n <= 1 ? n * 100 : n);
+            }, 0) / (formatted.length || 1);
+            return { label: sk.label, score: Math.round(avg), icon: sk.icon, color: sk.color };
+          });
+        }
+      }
+
       const res = await fetch('/api/admin-insight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ popularJobs, avgSatisfaction, totalAssessments, avgSkills: skillsData })
+        body: JSON.stringify({ popularJobs: targetPopularJobs, avgSatisfaction, totalAssessments: targetTotalAssessments, avgSkills: targetAvgSkills })
       });
       const d = await res.json();
       try {
@@ -416,18 +466,32 @@ export default function AdminDashboard() {
             </h3>
             <p style={{ color: '#64748b', fontSize: '0.82rem', marginTop: '4px', margin: '4px 0 0' }}>วิเคราะห์โดย AI — ผลการประเมินทักษะนักเรียนเชิงลึกสำหรับผู้บริหาร</p>
           </div>
-          {!aiInsight && (
-            <button className="no-print" onClick={getInsight} disabled={loadingInsight}
-              style={{ background: 'linear-gradient(135deg,#38ef7d,#11998e)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', cursor: loadingInsight ? 'not-allowed' : 'pointer', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
-              {loadingInsight ? <><i className="fa-solid fa-circle-notch fa-spin"></i> กำลังวิเคราะห์...</> : <><i className="fa-solid fa-wand-magic-sparkles"></i> ประมวลผล</>}
-            </button>
-          )}
-          {aiInsight && (
-            <button className="no-print" onClick={() => { setAiInsight(null); }}
-              style={{ background: 'rgba(255,255,255,0.08)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.12)', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '0.82rem' }}>
-              <i className="fa-solid fa-rotate-right mr-1"></i> วิเคราะห์ใหม่
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            {data?.schools?.length > 0 && (
+              <select
+                value={selectedSchool}
+                onChange={(e) => setSelectedSchool(e.target.value)}
+                style={{ background: 'rgba(255,255,255,0.05)', color: '#cbd5e1', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px', padding: '8px 12px', fontSize: '0.85rem', outline: 'none', cursor: 'pointer' }}
+              >
+                <option value="all">ทุกโรงเรียน</option>
+                {data.schools.map((s, idx) => (
+                  <option key={idx} value={s}>{s}</option>
+                ))}
+              </select>
+            )}
+            {!aiInsight && (
+              <button className="no-print" onClick={getInsight} disabled={loadingInsight}
+                style={{ background: 'linear-gradient(135deg,#38ef7d,#11998e)', color: '#0f172a', border: 'none', padding: '10px 22px', borderRadius: '10px', cursor: loadingInsight ? 'not-allowed' : 'pointer', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+                {loadingInsight ? <><i className="fa-solid fa-circle-notch fa-spin"></i> กำลังวิเคราะห์...</> : <><i className="fa-solid fa-wand-magic-sparkles"></i> ประมวลผล</>}
+              </button>
+            )}
+            {aiInsight && (
+              <button className="no-print" onClick={() => { setAiInsight(null); }}
+                style={{ background: 'rgba(255,255,255,0.08)', color: '#94a3b8', border: '1px solid rgba(255,255,255,0.12)', padding: '8px 16px', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '0.82rem' }}>
+                <i className="fa-solid fa-rotate-right mr-1"></i> วิเคราะห์ใหม่
+              </button>
+            )}
+          </div>
         </div>
 
         {!aiInsight && !loadingInsight && (
