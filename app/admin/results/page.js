@@ -65,9 +65,9 @@ function RadarModal({ user, onClose }) {
   useEffect(() => {
     async function loadFullData() {
       try {
-        const res = await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST', mode: 'cors',
-          headers: { 'Content-Type': 'text/plain' },
+        const res = await fetch('/api/sheet-proxy', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ action: 'getUserDashboard', email: user.email })
         });
         const d = await res.json();
@@ -273,9 +273,9 @@ export default function AdminResults() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST', mode: 'cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    fetch('/api/sheet-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'admin_get_results' })
     })
       .then(r => r.json())
