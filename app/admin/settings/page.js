@@ -7,18 +7,19 @@ const showModal = (icon, title, text) => {
     icon,
     title,
     text,
-    background: 'rgba(20, 15, 30, 0.4)',
+    background: 'transparent',
     color: '#f0f4ff',
     confirmButtonColor: '#ff7a00',
-    backdrop: 'rgba(0, 0, 0, 0.6)',
+    backdrop: 'rgba(0, 0, 0, 0.5)',
     customClass: {
-      popup: '!rounded-[40px] backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(255,122,0,0.2)]',
+      popup: '!rounded-[40px] bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(255,122,0,0.3)]',
       title: 'font-kanit text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ff7a00]',
-      htmlContainer: 'font-kanit text-white/80 text-lg',
+      htmlContainer: 'font-kanit text-white/90 text-lg',
       confirmButton: '!rounded-full font-kanit px-8 py-3 text-lg font-semibold shadow-lg shadow-[#ff7a00]/30 transition-all hover:scale-105'
     }
   });
 };
+
 
 
 
