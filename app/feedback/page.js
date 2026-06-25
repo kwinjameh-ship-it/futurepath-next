@@ -9,17 +9,19 @@ const showModal = (icon, title, text) => {
     icon,
     title,
     text,
-    background: '#12102e',
+    background: 'rgba(20, 15, 30, 0.4)',
     color: '#f0f4ff',
     confirmButtonColor: '#ff7a00',
+    backdrop: 'rgba(0, 0, 0, 0.6)',
     customClass: {
-      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
-      title: 'font-kanit',
-      htmlContainer: 'font-kanit text-white/70',
-      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+      popup: 'backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_rgba(255,122,0,0.2)] rounded-3xl',
+      title: 'font-kanit text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ff7a00]',
+      htmlContainer: 'font-kanit text-white/80 text-lg',
+      confirmButton: 'font-kanit rounded-xl px-8 py-3 text-lg font-semibold shadow-lg shadow-[#ff7a00]/30 transition-all hover:scale-105'
     }
   });
 };
+
 
 const SHEET_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
