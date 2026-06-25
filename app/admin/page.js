@@ -14,6 +14,7 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [aiInsight, setAiInsight] = useState('');
   const [loadingInsight, setLoadingInsight] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   useEffect(() => {
     fetch(GOOGLE_SCRIPT_URL, {
@@ -569,13 +570,16 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div style={{ padding: '24px', background: 'linear-gradient(135deg, #f2709c 0%, #ff9472 100%)', borderRadius: '16px', color: 'white', boxShadow: '0 10px 15px -3px rgba(255, 148, 114, 0.3)' }}>
+        <div 
+          onClick={() => setShowFeedbackModal(true)}
+          style={{ padding: '24px', background: 'linear-gradient(135deg, #f2709c 0%, #ff9472 100%)', borderRadius: '16px', color: 'white', boxShadow: '0 10px 15px -3px rgba(255, 148, 114, 0.3)', cursor: 'pointer', transition: 'transform 0.2s', ':hover': { transform: 'scale(1.02)' } }}
+        >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h3 style={{ fontSize: '1rem', fontWeight: 500, marginBottom: '8px', opacity: 0.9 }}>ความพึงพอใจเฉลี่ย</h3>
               <p style={{ fontSize: '2.5rem', fontWeight: 800, lineHeight: 1 }}>{avgSatisfaction} <span style={{fontSize:'1.2rem'}}>/ 5</span></p>
               <div style={{ marginTop: '12px', fontSize: '0.85rem', background: 'rgba(255,255,255,0.2)', display: 'inline-block', padding: '2px 8px', borderRadius: '12px' }}>
-                <i className="fa-solid fa-star"></i> มาตรฐานดีเยี่ยม
+                <i className="fa-solid fa-star"></i> ดูข้อเสนอแนะรายบุคคล
               </div>
             </div>
             <div style={{ padding: '12px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px' }}><i className="fa-solid fa-star fa-lg"></i></div>
@@ -693,6 +697,48 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+      
+      {/* Feedback Modal */}
+      {showFeedbackModal && (
+        <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ background: '#fff', borderRadius: '16px', width: '90%', maxWidth: '600px', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#0f172a', margin: 0 }}>
+                <i className="fa-solid fa-comments" style={{ color: '#f2709c', marginRight: '8px' }}></i> ข้อเสนอแนะรายบุคคล
+              </h2>
+              <button onClick={() => setShowFeedbackModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.5rem', color: '#64748b', cursor: 'pointer', padding: '0 8px' }}>&times;</button>
+            </div>
+            <div style={{ padding: '24px', overflowY: 'auto', flex: 1, backgroundColor: '#fdfdfd' }}>
+              {recentFeedback && recentFeedback.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {recentFeedback.map((fb, idx) => (
+                    <div key={idx} style={{ padding: '16px', background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.95rem' }}>{fb.name || 'ไม่ระบุชื่อ'}</div>
+                          <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{fb.email || '-'} &bull; {fb.created_at ? new Date(fb.created_at).toLocaleString('th-TH') : ''}</div>
+                        </div>
+                        {fb.score ? (
+                          <div style={{ display: 'flex', gap: '2px', color: '#f59e0b' }}>
+                            {[1,2,3,4,5].map(s => (
+                              <i key={s} className={`fa-solid fa-star`} style={{ opacity: s <= fb.score ? 1 : 0.3, fontSize: '0.85rem' }}></i>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                      <div style={{ fontSize: '0.9rem', color: '#334155', lineHeight: 1.5, background: '#f8fafc', padding: '10px 12px', borderRadius: '8px', borderLeft: '3px solid #cbd5e1' }}>
+                        {fb.comment || '-'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div style={{ textAlign: 'center', color: '#64748b', padding: '40px 0' }}>ยังไม่มีข้อเสนอแนะในขณะนี้</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
