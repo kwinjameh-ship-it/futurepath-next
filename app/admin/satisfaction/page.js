@@ -33,6 +33,7 @@ const categoryMap = {
 
 export default function SatisfactionSurvey() {
   const [questions, setQuestions] = useState([]);
+  const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -67,6 +68,7 @@ export default function SatisfactionSurvey() {
           });
           
           setQuestions(grouped);
+          setComments(data.comments || []);
         } else {
           setErrorMsg(data.message || 'เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
@@ -158,6 +160,31 @@ export default function SatisfactionSurvey() {
             ไม่พบข้อมูลคำถาม โปรดตรวจสอบว่ามีผู้ทำแบบประเมินแล้วหรือไม่
           </div>
         )}
+
+        {/* Comments Section */}
+        {comments.length > 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', padding: '12px 20px', background: '#f8fafc', borderRadius: '12px', borderLeft: '4px solid #64748b' }}>
+              <i className="fa-solid fa-comments fa-lg" style={{ color: '#64748b', marginRight: '16px' }}></i>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>ข้อเสนอแนะเพิ่มเติม</h2>
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '20px' }}>
+              {comments.map((c, idx) => (
+                <div key={idx} style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <div style={{ fontWeight: 600, color: '#0f172a' }}>{c.name}</div>
+                    {c.date && <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{new Date(c.date).toLocaleDateString('th-TH')}</div>}
+                  </div>
+                  <div style={{ fontSize: '0.95rem', color: '#334155', lineHeight: 1.6, background: '#f1f5f9', padding: '12px 16px', borderRadius: '8px', borderLeft: '3px solid #cbd5e1' }}>
+                    {c.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
