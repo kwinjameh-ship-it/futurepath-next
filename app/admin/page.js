@@ -124,25 +124,25 @@ export default function AdminDashboard() {
 
   // Radar chart data (use avgSkills if provided, otherwise mock)
   const mockSkills = [
-    { label: 'ตรรกะและการวิเคราะห์', score: 81.2, icon: '🧠', color: '#6366f1' },
-    { label: 'การสื่อสารและภาษา',    score: 74.4, icon: '💬', color: '#0ea5e9' },
-    { label: 'เทคโนโลยีและดิจิทัล',  score: 92.0, icon: '💻', color: '#38ef7d' },
-    { label: 'ความคิดสร้างสรรค์',    score: 78.8, icon: '🎨', color: '#f59e0b' },
-    { label: 'การจัดการและผู้นำ',    score: 68.4, icon: '🏆', color: '#f43f5e' },
-    { label: 'ความเข้าใจสังคม',      score: 72.0, icon: '🤝', color: '#a855f7' },
-    { label: 'ปฏิบัติการและวินัย',   score: 80.0, icon: '🏃', color: '#14b8a6' },
-    { label: 'จิตบริการและการดูแล', score: 75.5, icon: '❤️', color: '#ec4899' }
+    { label: 'การวิเคราะห์', score: 81.2, icon: '🧠', color: '#6366f1' },
+    { label: 'การสื่อสาร',    score: 74.4, icon: '💬', color: '#0ea5e9' },
+    { label: 'เทคโนโลยี',  score: 92.0, icon: '💻', color: '#38ef7d' },
+    { label: 'สร้างสรรค์',    score: 78.8, icon: '🎨', color: '#f59e0b' },
+    { label: 'ภาวะผู้นำ',    score: 68.4, icon: '🏆', color: '#f43f5e' },
+    { label: 'ธุรกิจ',      score: 72.0, icon: '📊', color: '#06b6d4' },
+    { label: 'ปฏิบัติการ',   score: 80.0, icon: '🏃', color: '#10b981' },
+    { label: 'จิตบริการ', score: 75.5, icon: '❤️', color: '#a78bfa' }
   ];
   // iconMap และ colorMap สำหรับเติมให้ข้อมูลจริงจาก Apps Script ที่ไม่มี icon/color
   const metaMap = {
-    'เทคโนโลยีและดิจิทัล':  { icon: '💻', color: '#38ef7d' },
-    'ตรรกะและการวิเคราะห์': { icon: '🧠', color: '#6366f1' },
-    'ความคิดสร้างสรรค์':    { icon: '🎨', color: '#f59e0b' },
-    'การจัดการและผู้นำ':    { icon: '🏆', color: '#f43f5e' },
-    'การสื่อสารและภาษา':    { icon: '💬', color: '#0ea5e9' },
-    'ความเข้าใจสังคม':      { icon: '🤝', color: '#a855f7' },
-    'ปฏิบัติการและวินัย':   { icon: '🏃', color: '#14b8a6' },
-    'จิตบริการและการดูแล': { icon: '❤️', color: '#ec4899' }
+    'เทคโนโลยี':  { icon: '💻', color: '#38ef7d' },
+    'การวิเคราะห์': { icon: '🧠', color: '#6366f1' },
+    'สร้างสรรค์':    { icon: '🎨', color: '#f59e0b' },
+    'ภาวะผู้นำ':    { icon: '🏆', color: '#f43f5e' },
+    'การสื่อสาร':    { icon: '💬', color: '#0ea5e9' },
+    'ธุรกิจ':      { icon: '📊', color: '#06b6d4' },
+    'ปฏิบัติการ':   { icon: '🏃', color: '#10b981' },
+    'จิตบริการ': { icon: '❤️', color: '#a78bfa' }
   };
   
   let rawSkills = (avgSkills && avgSkills.length > 0) ? avgSkills : mockSkills;
