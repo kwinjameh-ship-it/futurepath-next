@@ -2,7 +2,24 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec";
 
@@ -15,7 +32,7 @@ export default function AdminLayout({ children }) {
   useEffect(() => {
     const email = localStorage.getItem('futurepath_user_email');
     if (!email) {
-      toast.error('คุณต้องเข้าสู่ระบบก่อน');
+      showModal('error', 'แจ้งเตือน', 'คุณต้องเข้าสู่ระบบก่อน');
       router.push('/login');
       return;
     }
@@ -40,14 +57,14 @@ export default function AdminLayout({ children }) {
           setIsAdmin(true);
           setLoading(false);
         } else if (data.status === 'error') {
-          toast.error('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + data.message + '\nกรุณาลองเข้าใหม่อีกครั้ง');
+          showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + data.message + '\nกรุณาลองเข้าใหม่อีกครั้ง');
           router.push('/home');
         } else {
-          toast.error('คุณไม่มีสิทธิ์เข้าถึงหน้า Admin สำหรับอีเมล: ' + email);
+          showModal('error', 'แจ้งเตือน', 'คุณไม่มีสิทธิ์เข้าถึงหน้า Admin สำหรับอีเมล: ' + email);
           router.push('/home');
         }
       } catch (error) {
-        toast.error('เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
+        showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์: ' + error.message);
         router.push('/home');
       }
     };

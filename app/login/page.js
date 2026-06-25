@@ -1,7 +1,24 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 const GOOGLE_SCRIPT_URL =
   'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -46,7 +63,7 @@ export default function LoginPage() {
 
       if (data.status === 'success') {
         if (!isLogin) {
-          toast.success('✨ ลงทะเบียนสำเร็จแล้ว! กรุณาเข้าสู่ระบบด้วยบัญชีของคุณ');
+          showModal('success', 'สำเร็จ', '✨ ลงทะเบียนสำเร็จแล้ว! กรุณาเข้าสู่ระบบด้วยบัญชีของคุณ');
           setIsLogin(true);
         } else {
           localStorage.setItem('futurepath_user_name', data.name);
@@ -54,14 +71,14 @@ export default function LoginPage() {
           if (data.schoolCode) {
             localStorage.setItem('futurepath_school_code', data.schoolCode);
           }
-          toast.success('ยินดีต้อนรับเข้าสู่ระบบ');
+          showModal('success', 'สำเร็จ', 'ยินดีต้อนรับเข้าสู่ระบบ');
           router.push('/home');
         }
       } else {
-        toast.error('🛑 ล้มเหลว: ' + data.message);
+        showModal('error', 'แจ้งเตือน', '🛑 ล้มเหลว: ' + data.message);
       }
     } catch {
-      toast.error('❌ เกิดข้อผิดพลาดในการเชื่อมต่อ');
+      showModal('error', 'แจ้งเตือน', '❌ เกิดข้อผิดพลาดในการเชื่อมต่อ');
     } finally {
       setLoading(false);
     }

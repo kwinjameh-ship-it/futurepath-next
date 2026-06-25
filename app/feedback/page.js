@@ -2,7 +2,24 @@
 import { useState } from 'react';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 const SHEET_WEBAPP_URL =
   'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -54,7 +71,7 @@ export default function FeedbackPage() {
     for (const cat of surveyData) {
       for (const item of cat.items) {
         if (!ratings[item.id]) {
-          toast.error(`กรุณาตอบคำถามข้อ ${item.id.replace('_', '.')} ก่อนครับ`);
+          showModal('error', 'แจ้งเตือน', `กรุณาตอบคำถามข้อ ${item.id.replace('_', '.')} ก่อนครับ`);
           return;
         }
       }
@@ -67,12 +84,12 @@ export default function FeedbackPage() {
       const res  = await fetch(SHEET_WEBAPP_URL, { method: 'POST', body: JSON.stringify(payload) });
       const data = await res.json();
       if (data.status === 'success') {
-        toast.success('ขอบคุณสำหรับความคิดเห็นและการประเมินระบบครับ!');
+        showModal('success', 'สำเร็จ', 'ขอบคุณสำหรับความคิดเห็นและการประเมินระบบครับ!');
         setTimeout(() => {
           window.location.href = '/home';
         }, 1500);
-      } else { toast.error('บันทึกไม่สำเร็จ: ' + data.message); }
-    } catch { toast.error('เกิดข้อผิดพลาดในการเชื่อมต่อ'); }
+      } else { showModal('error', 'แจ้งเตือน', 'บันทึกไม่สำเร็จ: ' + data.message); }
+    } catch { showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดในการเชื่อมต่อ'); }
     setSubmitting(false);
   }
 

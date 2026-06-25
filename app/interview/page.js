@@ -3,7 +3,24 @@ import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 const SYSTEM_PROMPT = (name) =>
   `คุณคือ "คุณวีรพล" เจ้าหน้าที่ฝ่ายบุคคล (HR) อาวุโส จากบริษัทชั้นนำระดับโลก มีประสบการณ์สัมภาษณ์งานมากกว่า 15 ปี บุคลิกภาพ: จริงจัง มืออาชีพ สุภาพแต่เด็ดขาด
@@ -185,7 +202,7 @@ export default function InterviewPage() {
 
   /* ── Mic toggle ── */
   function toggleMic() {
-    if (!recognitionRef.current) { toast.error('เบราว์เซอร์นี้ไม่รองรับระบบเสียง'); return; }
+    if (!recognitionRef.current) { showModal('error', 'แจ้งเตือน', 'เบราว์เซอร์นี้ไม่รองรับระบบเสียง'); return; }
     if (status === 'recording') {
       recognitionRef.current.stop();
     } else {
@@ -197,7 +214,7 @@ export default function InterviewPage() {
   /* ── Reset ── */
   function resetInterview() {
     if (!confirm('เริ่มการสัมภาษณ์ใหม่?')) return;
-    toast.success('เริ่มการสัมภาษณ์ใหม่');
+    showModal('success', 'สำเร็จ', 'เริ่มการสัมภาษณ์ใหม่');
     setMessages([{ sender: 'ai', text: INIT_MSG }]);
     setHistory([
       { role: 'system', parts: [{ text: SYSTEM_PROMPT(user.name) }] },

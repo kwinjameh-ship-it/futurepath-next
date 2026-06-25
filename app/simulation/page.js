@@ -2,7 +2,24 @@
 import { useState } from 'react';
 import GlassNav from '@/components/GlassNav';
 import useAuth from '@/lib/useAuth';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 export default function SimulationPage() {
   const SHEET_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec';
@@ -17,7 +34,7 @@ export default function SimulationPage() {
   const [loadingEval, setLoadingEval] = useState(false);
 
   async function getTask() {
-    if (!jobTitle.trim()) { toast.error('โปรดระบุตำแหน่งงานก่อนครับ'); return; }
+    if (!jobTitle.trim()) { showModal('error', 'แจ้งเตือน', 'โปรดระบุตำแหน่งงานก่อนครับ'); return; }
     setLoadingTask(true);
     try {
       const res  = await fetch('/api/proxy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'get_task', jobTitle }) });
@@ -26,13 +43,13 @@ export default function SimulationPage() {
       if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
         setCurrentTask(data.candidates[0].content.parts[0].text);
         setStep(2);
-      } else { toast.error('ระบบขัดข้อง โปรดลองใหม่'); }
-    } catch { toast.error('เชื่อมต่อ AI ล้มเหลว'); }
+      } else { showModal('error', 'แจ้งเตือน', 'ระบบขัดข้อง โปรดลองใหม่'); }
+    } catch { showModal('error', 'แจ้งเตือน', 'เชื่อมต่อ AI ล้มเหลว'); }
     setLoadingTask(false);
   }
 
   async function submitWork() {
-    if (!userWork.trim()) { toast.error('โปรดพิมพ์ผลงานก่อนส่งครับ'); return; }
+    if (!userWork.trim()) { showModal('error', 'แจ้งเตือน', 'โปรดพิมพ์ผลงานก่อนส่งครับ'); return; }
     setLoadingEval(true);
     try {
       const res  = await fetch('/api/proxy', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'evaluate_work', jobTitle, task: currentTask, userWork }) });
@@ -61,8 +78,8 @@ export default function SimulationPage() {
         } catch (e) { console.error(e); }
 
         setStep(3);
-      } else { toast.error('ระบบขัดข้อง'); }
-    } catch { toast.error('เกิดข้อผิดพลาดในการแปลผล AI'); }
+      } else { showModal('error', 'แจ้งเตือน', 'ระบบขัดข้อง'); }
+    } catch { showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดในการแปลผล AI'); }
     setLoadingEval(false);
   }
 

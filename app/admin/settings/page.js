@@ -1,6 +1,23 @@
 'use client';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
+
+const showModal = (icon, title, text) => {
+  Swal.fire({
+    icon,
+    title,
+    text,
+    background: '#12102e',
+    color: '#f0f4ff',
+    confirmButtonColor: '#ff7a00',
+    customClass: {
+      popup: 'rounded-2xl border border-white/10 shadow-[0_0_40px_rgba(255,122,0,0.15)]',
+      title: 'font-kanit',
+      htmlContainer: 'font-kanit text-white/70',
+      confirmButton: 'font-kanit rounded-xl px-6 py-2'
+    }
+  });
+};
 
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxoZo8hs8SKeVF7mnEQYWoxbZSJRL9Fe9h_Tcz0Bwsd6h_UA1JPjaKPqKdyL5mBEHHWHg/exec";
 
@@ -41,9 +58,9 @@ export default function AdminSettings() {
       // Since no-cors doesn't return JSON cleanly, we just assume success and re-fetch after delay
       setNewEmail('');
       setTimeout(() => fetchAdmins(), 1500);
-      toast.success('ส่งคำสั่งเพิ่ม Admin แล้ว (รีเฟรชสักครู่)');
+      showModal('success', 'สำเร็จ', 'ส่งคำสั่งเพิ่ม Admin แล้ว (รีเฟรชสักครู่)');
     } catch (error) {
-      toast.error('เกิดข้อผิดพลาดในการเพิ่ม Admin');
+      showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดในการเพิ่ม Admin');
     }
   };
 
@@ -60,10 +77,10 @@ export default function AdminSettings() {
       
       setTimeout(() => {
         fetchAdmins();
-        toast.success('ลบสิทธิ์ Admin เรียบร้อยแล้ว');
+        showModal('success', 'สำเร็จ', 'ลบสิทธิ์ Admin เรียบร้อยแล้ว');
       }, 1500);
     } catch (error) {
-      toast.error('เกิดข้อผิดพลาดในการลบ Admin');
+      showModal('error', 'แจ้งเตือน', 'เกิดข้อผิดพลาดในการลบ Admin');
     }
   };
 
