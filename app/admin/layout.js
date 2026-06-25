@@ -68,6 +68,7 @@ export default function AdminLayout({ children }) {
     { name: 'แดชบอร์ด',           path: '/admin',         icon: 'fa-chart-pie' },
     { name: 'ผลการประเมิน',        path: '/admin/results', icon: 'fa-table-list' },
     { name: 'School Command Center', path: '/admin/school', icon: 'fa-building' },
+    { name: 'ผลความพึงพอใจ',       path: '/admin/satisfaction', icon: 'fa-star' },
     { name: 'จัดการแอดมิน',        path: '/admin/settings', icon: 'fa-users-gear' },
     { name: 'กลับสู่หน้าหลัก',     path: '/home',          icon: 'fa-house' }
   ];
