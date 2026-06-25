@@ -24,6 +24,13 @@ const surveyMap = {
   '4.5': 'คุณจะแนะนำระบบนี้ให้แก่เพื่อนหรือคนรู้จักใช้งานต่อ'
 };
 
+const categoryMap = {
+  '1': { title: 'หมวดที่ 1: การออกแบบและการใช้งาน (UI/UX)', icon: 'fa-palette', color: '#3b82f6' },
+  '2': { title: 'หมวดที่ 2: ประสิทธิภาพและความเสถียรของระบบ', icon: 'fa-server', color: '#10b981' },
+  '3': { title: 'หมวดที่ 3: คุณภาพของ AI และเนื้อหา', icon: 'fa-brain', color: '#8b5cf6' },
+  '4': { title: 'หมวดที่ 4: ความพึงพอใจโดยรวม', icon: 'fa-star', color: '#f59e0b' }
+};
+
 export default function SatisfactionSurvey() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,12 +50,23 @@ export default function SatisfactionSurvey() {
           const mapped = (data.questions || []).map(q => {
             const qCode = q.question.toString().trim();
             const fullText = surveyMap[qCode];
+            const catId = qCode.charAt(0);
             return {
               ...q,
-              displayTitle: fullText ? `${qCode} ${fullText}` : qCode
+              displayTitle: fullText ? `${qCode} ${fullText}` : qCode,
+              categoryId: catId
             };
           });
-          setQuestions(mapped);
+          
+          // Group by category
+          const grouped = {};
+          mapped.forEach(q => {
+            const cat = q.categoryId || 'other';
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push(q);
+          });
+          
+          setQuestions(grouped);
         } else {
           setErrorMsg(data.message || 'เกิดข้อผิดพลาดในการดึงข้อมูล');
         }
@@ -84,49 +102,58 @@ export default function SatisfactionSurvey() {
         </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {questions.map((q, idx) => (
-          <div key={idx} style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#1e293b', marginBottom: '16px', display: 'flex', justifyContent: 'space-between' }}>
-              <span>{idx + 1}. {q.displayTitle || q.question}</span>
-              <span style={{ color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <i className="fa-solid fa-star"></i> {q.average} <span style={{ fontSize: '0.9rem', color: '#94a3b8' }}>({q.total} คน)</span>
-              </span>
-            </h3>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {[5, 4, 3, 2, 1].map(star => {
-                const count = q.tallies[star.toString()] || 0;
-                const pct = q.total > 0 ? (count / q.total) * 100 : 0;
-                const respondents = (q.responses || []).filter(r => r.score === star).map(r => r.name);
-                return (
-                  <div key={star} style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '4px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem' }}>
-                      <div style={{ width: '60px', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
-                        <span>{star}</span> <i className="fa-solid fa-star" style={{ color: '#cbd5e1', fontSize: '0.8rem' }}></i>
-                      </div>
-                      <div style={{ flex: 1, background: '#f1f5f9', height: '12px', borderRadius: '6px', overflow: 'hidden', margin: '0 16px' }}>
-                        <div style={{ width: `${pct}%`, height: '100%', background: star >= 4 ? '#10b981' : star === 3 ? '#f59e0b' : '#ef4444', borderRadius: '6px', transition: 'width 1s ease-out' }}></div>
-                      </div>
-                      <div style={{ width: '60px', textAlign: 'right', color: '#475569', fontWeight: 500 }}>
-                        {count} คน
-                      </div>
-                      <div style={{ width: '50px', textAlign: 'right', color: '#94a3b8', fontSize: '0.8rem' }}>
-                        {pct.toFixed(0)}%
-                      </div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+        {Object.keys(questions).sort().map(catId => {
+          const catInfo = categoryMap[catId] || { title: `หมวดอื่นๆ (${catId})`, icon: 'fa-list', color: '#64748b' };
+          const catQuestions = questions[catId];
+          
+          return (
+            <div key={catId} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', padding: '12px 20px', background: `${catInfo.color}15`, borderRadius: '12px', borderLeft: `4px solid ${catInfo.color}` }}>
+                <i className={`fa-solid ${catInfo.icon} fa-lg`} style={{ color: catInfo.color, marginRight: '16px' }}></i>
+                <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>{catInfo.title}</h2>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))', gap: '20px' }}>
+                {catQuestions.map((q, idx) => (
+                  <div key={idx} style={{ background: '#fff', borderRadius: '16px', border: '1px solid #e2e8f0', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }}>
+                    <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: '#1e293b', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                      <span style={{ lineHeight: 1.4 }}>{q.displayTitle || q.question}</span>
+                      <span style={{ color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap', background: '#fffbeb', padding: '4px 10px', borderRadius: '20px', fontSize: '0.95rem' }}>
+                        <i className="fa-solid fa-star"></i> {q.average} <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>({q.total})</span>
+                      </span>
+                    </h3>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                      {[5, 4, 3, 2, 1].map(star => {
+                        const count = q.tallies[star.toString()] || 0;
+                        const pct = q.total > 0 ? (count / q.total) * 100 : 0;
+                        return (
+                          <div key={star} style={{ display: 'flex', alignItems: 'center', fontSize: '0.9rem' }}>
+                            <div style={{ width: '50px', display: 'flex', alignItems: 'center', gap: '4px', color: '#64748b' }}>
+                              <span>{star}</span> <i className="fa-solid fa-star" style={{ color: '#cbd5e1', fontSize: '0.8rem' }}></i>
+                            </div>
+                            <div style={{ flex: 1, background: '#f1f5f9', height: '10px', borderRadius: '5px', overflow: 'hidden', margin: '0 12px' }}>
+                              <div style={{ width: `${pct}%`, height: '100%', background: star >= 4 ? '#10b981' : star === 3 ? '#f59e0b' : '#ef4444', borderRadius: '5px', transition: 'width 1s ease-out' }}></div>
+                            </div>
+                            <div style={{ width: '45px', textAlign: 'right', color: '#475569', fontWeight: 500, fontSize: '0.85rem' }}>
+                              {count} คน
+                            </div>
+                            <div style={{ width: '40px', textAlign: 'right', color: '#94a3b8', fontSize: '0.8rem' }}>
+                              {pct.toFixed(0)}%
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                    {respondents.length > 0 && (
-                      <div style={{ fontSize: '0.75rem', color: '#94a3b8', paddingLeft: '76px', paddingRight: '110px' }}>
-                        {respondents.join(', ')}
-                      </div>
-                    )}
                   </div>
-                );
-              })}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
-        {questions.length === 0 && (
+          );
+        })}
+        
+        {Object.keys(questions).length === 0 && (
           <div style={{ textAlign: 'center', padding: '40px', color: '#64748b', background: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1' }}>
             ไม่พบข้อมูลคำถาม โปรดตรวจสอบว่ามีผู้ทำแบบประเมินแล้วหรือไม่
           </div>
