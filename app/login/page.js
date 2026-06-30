@@ -95,7 +95,7 @@ export default function LoginPage() {
       <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         <div style={{ 
           position: 'absolute', inset: 0, 
-          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundImage: "url('/img/bg-room1.png')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center',
           opacity: 0.8

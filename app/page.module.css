@@ -16,7 +16,7 @@
 .backgroundImage {
   position: absolute;
   inset: 0;
-  background-image: url('/img/bg-room.jpg');
+  background-image: url('/img/bg-room1.png');
   background-size: cover;
   background-position: center;
   opacity: 0.8;

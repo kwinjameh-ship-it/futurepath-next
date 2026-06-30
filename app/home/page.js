@@ -138,7 +138,7 @@ export default function HomePage() {
         {/* Main Sci-Fi Image */}
         <div style={{ 
           position: 'absolute', inset: 0, 
-          backgroundImage: "url('/img/bg-room.jpg')", 
+          backgroundImage: "url('/img/bg-room1.png')", 
           backgroundSize: 'cover', 
           backgroundPosition: 'center',
           opacity: 0.8
