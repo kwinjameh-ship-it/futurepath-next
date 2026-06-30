@@ -1231,7 +1231,7 @@ export default function AssessmentPage() {
                         letterSpacing: '0.03em',
                       }}
                     >
-                      {cfg.label}
+                      {v} - {cfg.label}
                     </div>
                   </div>
                 </div>
