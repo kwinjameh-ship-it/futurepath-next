@@ -16,7 +16,7 @@
 .backgroundImage {
   position: absolute;
   inset: 0;
-  background-image: url('/img/bg-room1.png');
+  background-image: url('/img/bg-room2.png');
   background-size: cover;
   background-position: center;
   opacity: 0.8;
@@ -34,7 +34,7 @@
   left: -15%;
   width: 60vw;
   height: 60vw;
-  background: radial-gradient(circle, rgba(255,122,0,0.35) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,122,0,0.15) 0%, transparent 70%);
   filter: blur(80px);
   mix-blend-mode: screen;
 }
@@ -45,7 +45,7 @@
   right: -15%;
   width: 70vw;
   height: 70vw;
-  background: radial-gradient(circle, rgba(255,75,0,0.3) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,75,0,0.1) 0%, transparent 70%);
   filter: blur(100px);
   mix-blend-mode: screen;
 }
