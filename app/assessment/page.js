@@ -1203,12 +1203,12 @@ export default function AssessmentPage() {
                     border: '1px solid var(--card-border)',
                   }}
                 >
-                  <div style={{ marginBottom: '12px' }}>
-                    <span style={{ fontWeight: 600, fontSize: '0.97rem', color: 'var(--text-main)' }}>
-                      {qi + 1}. {q.en}
+                  <div style={{ marginBottom: '16px' }}>
+                    <span style={{ display: 'block', fontWeight: 600, fontSize: '1.05rem', color: 'var(--text-main)', marginBottom: '4px' }}>
+                      {qi + 1}. {q.th}
                     </span>
-                    <span style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: '2px' }}>
-                      {q.th}
+                    <span style={{ display: 'block', fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                      ({q.en})
                     </span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
