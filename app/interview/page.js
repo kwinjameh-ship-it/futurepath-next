@@ -211,14 +211,27 @@ export default function InterviewPage() {
 
       for (const chunk of chunks) {
         if (!chunk) continue;
-        await new Promise((resolve) => {
-          const url = `/api/tts?text=${encodeURIComponent(chunk)}`;
-          const audio = new Audio(url);
-          audio.playbackRate = 1.35;       // พูดเร็วขึ้น
-          audio.preservesPitch = false;    // pitch ต่ำลงตามความเร็ว → เสียงผู้ชาย
-          audio.onended = () => resolve();
-          audio.onerror = () => resolve();
-          audio.play().catch(() => resolve());
+        await new Promise(async (resolve) => {
+          try {
+            const url = `/api/tts?text=${encodeURIComponent(chunk)}`;
+            const response = await fetch(url);
+            const arrayBuffer = await response.arrayBuffer();
+
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+
+            const source = audioCtx.createBufferSource();
+            source.buffer = audioBuffer;
+            // ลด pitch ลง -350 cents = เสียงทุ้มเข้ม เหมือนผู้ชาย อายุผู้ใหญ่
+            source.detune.value = -350;
+            // ความเร็วในการพูด (1.15 = เร็วขึ้น 15% แต่ pitch ไม่เปลี่ยนเพราะเราใช้ detune ควบคุมแยก)
+            source.playbackRate.value = 1.15;
+            source.connect(audioCtx.destination);
+            source.onended = () => { audioCtx.close(); resolve(); };
+            source.start(0);
+          } catch {
+            resolve();
+          }
         });
       }
 
