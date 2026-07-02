@@ -85,18 +85,6 @@ export default function InterviewPage() {
       if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
     };
   }, []);
-    if (camActive) {
-      if (videoRef.current && videoRef.current.srcObject) {
-        videoRef.current.srcObject.getTracks().forEach(t => t.stop());
-        videoRef.current.srcObject = null;
-      }
-      setCamActive(false);
-    } else {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
   /* ── Webcam toggle ── */
   async function toggleCamera() {
     if (camActive) {
@@ -217,6 +205,11 @@ export default function InterviewPage() {
 
   useEffect(() => { voiceModeRef.current = voiceMode; }, [voiceMode]);
   useEffect(() => { handleSendRef.current = handleSend; });
+
+  /* ── Cleanup audio on unmount (when leaving the page) ── */
+  useEffect(() => {
+    return () => stopAllAudio();
+  }, []);
 
   async function speakTextWithCallback(text, onDone) {
     // หยุดเสียงที่กำลังเล่นอยู่ทั้งหมดก่อน
