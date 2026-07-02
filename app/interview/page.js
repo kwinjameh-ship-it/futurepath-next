@@ -28,7 +28,7 @@ const showModal = (icon, title, text) => {
 
 
 const SYSTEM_PROMPT = (name) =>
-  `คุณคือ "คุณวีรพล" เจ้าหน้าที่ฝ่ายบุคคล (HR) อาวุโส จากบริษัทชั้นนำระดับโลก มีประสบการณ์สัมภาษณ์งานมากกว่า 15 ปี บุคลิกภาพ: จริงจัง มืออาชีพ สุภาพแต่เด็ดขาด
+  `คุณคือ "คุณสุภาพร" ผู้จัดการฝ่ายบุคคล (HR Manager) อาวุโส จากบริษัทชั้นนำระดับโลก มีประสบการณ์สัมภาษณ์งานมากกว่า 15 ปี บุคลิกภาพ: เก่งกาจ เชี่ยวชาญ ใจดีแต่เข้มงวด ไม่ยอมใครผ่านในผลงานที่ไม่ดี
 
 คุณกำลังสัมภาษณ์ผู้สมัครชื่อ "${name}" โดยมีเป้าหมายเพื่อวัดและฝึกฝน:
 1. ทักษะการตอบคำถามสัมภาษณ์
@@ -41,7 +41,7 @@ const SYSTEM_PROMPT = (name) =>
 - นำข้อมูลจากคำตอบที่ผ่านมาต่อยอดถามเจาะลึก (follow-up)
 - เริ่มจากคำถามทั่วไป → ค่อยๆ ยกระดับความยาก
 - หลังจากผู้สมัครตอบ ให้ feedback สั้นๆ ว่าดีหรือควรปรับตรงไหน แล้วถามต่อ
-- ใช้ภาษาไทยสุภาพ ทางการ แต่เป็นกันเอง ห้ามสลับภาษาอังกฤษ
+- ใช้ภาษาไทยสุภาพ ทางการ แต่เข้มงวด ห้ามสลับภาษาอังกฤษ
 - ห้ามพูดซ้ำหรือวกวน
 - หากผู้สมัครยังไม่ได้บอกอาชีพที่ต้องการ ให้ถามก่อนเป็นคำถามแรก
 - ตอบสั้น กระชับ ไม่เกิน 3-4 ประโยค เพื่อให้ฟังออกทางเสียงได้ง่าย`;
@@ -49,7 +49,7 @@ const SYSTEM_PROMPT = (name) =>
 export default function InterviewPage() {
   const { user, loading } = useAuth();
 
-  const INIT_MSG = 'สวัสดีครับ ผมคุณวีรพล ตัวแทนฝ่ายบุคคล (HR) ยินดีต้อนรับสู่การสัมภาษณ์จำลองครับ\n\nวันนี้เราจะฝึกทักษะการสัมภาษณ์งาน ทั้งการตอบคำถาม การแก้ปัญหาเฉพาะหน้า และไหวพริบของคุณ\n\nก่อนเริ่ม ขอถามหน่อยนะครับ — **คุณสนใจสมัครงานในสายอาชีพไหน** หรืออาชีพเป้าหมายของคุณคืออะไรครับ?';
+  const INIT_MSG = 'สวัสดีค่ะ ดิฉันคุณสุภาพร ผู้จัดการฝ่ายบุคคล (HR Manager) ยินดีต้อนรับสู่การสัมภาษณ์จำลองค่ะ\n\nวันนี้เราจะฝึกทักษะการสัมภาษณ์งาน ทั้งการตอบคำถาม การแก้ปัญหาเฉพาะหน้า และไหวพริบของคุณ\n\nก่อนเริ่ม ขอถามหน่อยนะคะ — **คุณสนใจสมัครงานในสายอาชีพไหน** หรืออาชีพเป้าหมายของคุณคืออะไรคะ?';
 
   const [messages, setMessages]   = useState([{ sender: 'ai', text: INIT_MSG }]);
   const [history, setHistory]     = useState([]);
@@ -223,7 +223,7 @@ export default function InterviewPage() {
             const source = audioCtx.createBufferSource();
             source.buffer = audioBuffer;
             // ลด pitch ลง -350 cents = เสียงทุ้มเข้ม เหมือนผู้ชาย อายุผู้ใหญ่
-            source.detune.value = -700;
+            source.detune.value = +150;  // เสียงสูงขึ้นเล็กน้อย = เสียงผู้หญิง
             // ความเร็วในการพูด (1.15 = เร็วขึ้น 15% แต่ pitch ไม่เปลี่ยนเพราะเราใช้ detune ควบคุมแยก)
             source.playbackRate.value = 1.4;
             source.connect(audioCtx.destination);
@@ -422,33 +422,47 @@ export default function InterviewPage() {
                 }}>
                   {/* SVG Face */}
                   <svg width="54" height="54" viewBox="0 0 54 54" fill="none">
-                    {/* Hair */}
-                    <ellipse cx="27" cy="10" rx="17" ry="10" fill="#1a2840"/>
+                    {/* Long hair */}
+                    <ellipse cx="27" cy="9" rx="17" ry="10" fill="#3d1f00"/>
+                    <rect x="10" y="8" width="6" height="26" rx="3" fill="#3d1f00"/>
+                    <rect x="38" y="8" width="6" height="26" rx="3" fill="#3d1f00"/>
                     {/* Face */}
-                    <ellipse cx="27" cy="28" rx="15" ry="18" fill="#f5c89a"/>
+                    <ellipse cx="27" cy="27" rx="14" ry="17" fill="#f5c89a"/>
                     {/* Forehead hair line */}
-                    <path d="M13 18 Q27 8 41 18" stroke="#2d3a52" strokeWidth="6" strokeLinecap="round" fill="none"/>
-                    {/* Eyebrows */}
-                    <path d="M18 19 Q21 17 24 19" stroke="#4a3520" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                    <path d="M30 19 Q33 17 36 19" stroke="#4a3520" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
-                    {/* Eyes */}
-                    <ellipse cx="21" cy="23" rx="2.5" ry={speaking && mouthOpen ? "2.2" : "2.5"} fill="#2d1f14"/>
-                    <ellipse cx="33" cy="23" rx="2.5" ry={speaking && mouthOpen ? "2.2" : "2.5"} fill="#2d1f14"/>
+                    <path d="M13 17 Q27 6 41 17" stroke="#3d1f00" strokeWidth="5" strokeLinecap="round" fill="none"/>
+                    {/* Eyebrows - thin arched */}
+                    <path d="M18 19 Q21 16.5 24 18.5" stroke="#5c3317" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                    <path d="M30 18.5 Q33 16.5 36 19" stroke="#5c3317" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                    {/* Eyes with lashes */}
+                    <ellipse cx="21" cy="23" rx="2.8" ry={speaking && mouthOpen ? "2" : "2.5"} fill="#2d1f14"/>
+                    <ellipse cx="33" cy="23" rx="2.8" ry={speaking && mouthOpen ? "2" : "2.5"} fill="#2d1f14"/>
                     {/* Eye shine */}
-                    <circle cx="22.2" cy="22" r="0.8" fill="white"/>
-                    <circle cx="34.2" cy="22" r="0.8" fill="white"/>
-                    {/* Nose */}
-                    <path d="M25.5 27 Q27 30 28.5 27" stroke="#c99a7a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
-                    {/* Mouth - animated */}
+                    <circle cx="22" cy="21.8" r="0.9" fill="white"/>
+                    <circle cx="34" cy="21.8" r="0.9" fill="white"/>
+                    {/* Eyelashes top */}
+                    <path d="M18.5 21 L17.5 19.5" stroke="#2d1f14" strokeWidth="0.8"/>
+                    <path d="M20 20.3 L19.5 18.8" stroke="#2d1f14" strokeWidth="0.8"/>
+                    <path d="M30.5 20.3 L30 18.8" stroke="#2d1f14" strokeWidth="0.8"/>
+                    <path d="M32 21 L31 19.5" stroke="#2d1f14" strokeWidth="0.8"/>
+                    {/* Nose - small */}
+                    <circle cx="25.5" cy="28" r="0.8" fill="#e8a882" opacity="0.6"/>
+                    <circle cx="28.5" cy="28" r="0.8" fill="#e8a882" opacity="0.6"/>
+                    {/* Lips */}
                     {speaking && mouthOpen ? (
-                      <ellipse cx="27" cy="35" rx="5" ry="3.5" fill="#8B3A3A"/>
+                      <ellipse cx="27" cy="34" rx="4.5" ry="3" fill="#c0395a"/>
                     ) : (
-                      <path d="M22 34 Q27 37.5 32 34" stroke="#c27a5a" strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+                      <>
+                        <path d="M22.5 33 Q27 31 31.5 33" stroke="#c0395a" strokeWidth="1.5" strokeLinecap="round" fill="none"/>
+                        <path d="M22.5 33 Q27 36 31.5 33" stroke="#d4547a" strokeWidth="1.2" strokeLinecap="round" fill="none"/>
+                      </>
                     )}
-                    {/* Shirt collar */}
-                    <path d="M12 50 L20 40 L27 44 L34 40 L42 50" fill="#1a3a6a" stroke="#1a3a6a" strokeWidth="1"/>
-                    {/* Tie */}
-                    <path d="M25 42 L27 50 L29 42 L27 39Z" fill="#c0392b"/>
+                    {/* Blush */}
+                    <ellipse cx="18" cy="28" rx="3.5" ry="2" fill="#ffb3c1" opacity="0.35"/>
+                    <ellipse cx="36" cy="28" rx="3.5" ry="2" fill="#ffb3c1" opacity="0.35"/>
+                    {/* Blazer / formal jacket */}
+                    <path d="M10 54 L16 40 L27 45 L38 40 L44 54" fill="#8b1a4a" stroke="#8b1a4a" strokeWidth="1"/>
+                    {/* Collar */}
+                    <path d="M22 40 L27 45 L32 40" fill="white" stroke="#ddd" strokeWidth="0.5"/>
                   </svg>
                 </div>
 
@@ -462,8 +476,8 @@ export default function InterviewPage() {
                 }} />
               </div>
 
-              <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-main)', marginBottom: '2px' }}>คุณวีรพล</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.04em', marginBottom: '14px' }}>ฝ่ายบุคคล (HR)</div>
+              <div style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--text-main)', marginBottom: '2px' }}>คุณสุภาพร</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--accent-color)', letterSpacing: '0.04em', marginBottom: '14px' }}>HR Manager</div>
 
               {/* Sound wave bars when speaking */}
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-end', gap: '3px', height: '24px', marginBottom: '10px' }}>
