@@ -225,7 +225,7 @@ export default function InterviewPage() {
             // ลด pitch ลง -350 cents = เสียงทุ้มเข้ม เหมือนผู้ชาย อายุผู้ใหญ่
             source.detune.value = -350;
             // ความเร็วในการพูด (1.15 = เร็วขึ้น 15% แต่ pitch ไม่เปลี่ยนเพราะเราใช้ detune ควบคุมแยก)
-            source.playbackRate.value = 1.15;
+            source.playbackRate.value = 1.4;
             source.connect(audioCtx.destination);
             source.onended = () => { audioCtx.close(); resolve(); };
             source.start(0);
