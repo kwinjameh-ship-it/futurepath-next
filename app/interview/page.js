@@ -214,6 +214,8 @@ export default function InterviewPage() {
         await new Promise((resolve) => {
           const url = `/api/tts?text=${encodeURIComponent(chunk)}`;
           const audio = new Audio(url);
+          audio.playbackRate = 1.35;       // พูดเร็วขึ้น
+          audio.preservesPitch = false;    // pitch ต่ำลงตามความเร็ว → เสียงผู้ชาย
           audio.onended = () => resolve();
           audio.onerror = () => resolve();
           audio.play().catch(() => resolve());
