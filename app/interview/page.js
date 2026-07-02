@@ -54,11 +54,12 @@ export default function InterviewPage() {
   const [messages, setMessages]   = useState([{ sender: 'ai', text: INIT_MSG }]);
   const [history, setHistory]     = useState([]);
   const [inputText, setInputText] = useState('');
-  const [status, setStatus]       = useState('idle'); // idle | recording | processing
+  const [status, setStatus]       = useState('idle');
   const [qCount, setQCount]       = useState(0);
   const [speaking, setSpeaking]   = useState(false);
   const [mouthOpen, setMouthOpen] = useState(false);
   const [voiceReady, setVoiceReady] = useState(false);
+  const [interviewMode, setInterviewMode] = useState(null); // null | 'chat' | 'voice'
   const selectedVoiceRef = useRef(null);
   const mouthTimerRef    = useRef(null);
 
@@ -341,6 +342,73 @@ export default function InterviewPage() {
     </div>
   );
 
+  /* ── Mode Selection Screen ── */
+  if (!interviewMode) return (
+    <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif", display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+      {/* BG */}
+      <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: "url('/img/bg-room2.png')", backgroundSize: 'cover', backgroundPosition: 'center', opacity: 0.8 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(18,12,10,0.7)' }} />
+      </div>
+      <GlassNav />
+      <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', padding: '24px 20px', maxWidth: '600px', width: '100%' }}>
+        {/* HR Avatar */}
+        <div style={{ width: '96px', height: '96px', borderRadius: '50%', background: 'rgba(255,122,0,0.1)', border: '2px solid var(--accent-color)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 0 32px rgba(255,122,0,0.3)' }}>
+          <span style={{ fontSize: '2.8rem' }}>👩‍💼</span>
+        </div>
+        <p style={{ fontSize: '0.75rem', color: 'var(--accent-color)', letterSpacing: '0.12em', textTransform: 'uppercase', fontWeight: 700, marginBottom: '8px' }}>HR Interview Simulator</p>
+        <h1 style={{ fontSize: 'clamp(1.6rem, 4vw, 2.4rem)', fontWeight: 900, background: 'linear-gradient(135deg, #fff 0%, var(--accent-color) 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginBottom: '8px' }}>
+          สวัสดีค่ะ ดิฉันคุณสุภาพร
+        </h1>
+        <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1rem', marginBottom: '40px', lineHeight: 1.7 }}>
+          วันนี้คุณอยากฝึกสัมภาษณ์รูปแบบไหนคะ?
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+          {/* Chat Mode */}
+          <button
+            onClick={() => {
+              setInterviewMode('chat');
+              setTimeout(() => speakTextWithCallback(INIT_MSG, null), 800);
+            }}
+            style={{ padding: '28px 20px', borderRadius: '20px', background: 'rgba(255,255,255,0.05)', border: '1.5px solid rgba(255,255,255,0.15)', cursor: 'pointer', fontFamily: 'Kanit,sans-serif', color: '#fff', textAlign: 'center', transition: 'all 0.3s ease' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.35)'; e.currentTarget.style.transform = 'translateY(-4px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.transform = 'translateY(0)'; }}
+          >
+            <div style={{ fontSize: '3rem', marginBottom: '12px' }}>💬</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '6px' }}>พิมพ์แชท</div>
+            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>พิมพ์โต้-ตอบกับ HR
+ไม่ต้องใช้ไมค์หรือกล้อง</div>
+          </button>
+          {/* Voice Mode */}
+          <button
+            onClick={async () => {
+              setInterviewMode('voice');
+              setVoiceMode(true);
+              try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                if (videoRef.current) videoRef.current.srcObject = stream;
+                setCamActive(true);
+              } catch {}
+              setTimeout(() => {
+                speakTextWithCallback(INIT_MSG, () => {
+                  if (recognitionRef.current) try { recognitionRef.current.start(); } catch {}
+                });
+              }, 800);
+            }}
+            style={{ padding: '28px 20px', borderRadius: '20px', background: 'rgba(255,122,0,0.08)', border: '1.5px solid rgba(255,122,0,0.4)', cursor: 'pointer', fontFamily: 'Kanit,sans-serif', color: '#fff', textAlign: 'center', transition: 'all 0.3s ease' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,122,0,0.18)'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(255,122,0,0.25)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,122,0,0.08)'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <div style={{ fontSize: '3rem', marginBottom: '12px' }}>🎤</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '6px', color: 'var(--accent-color)' }}>เสมือนจริง</div>
+            <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>พูดคุยภาษาไทยกับ AI HR
+เปิดกล้องเช็คเสียงอัตโนมัติ</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div style={{ minHeight: '100vh', background: '#120c0a', color: '#fff', fontFamily: "'Kanit', sans-serif", paddingTop: '64px', display: 'flex', flexDirection: 'column' }}>
       {/* Image Background & Corner Gradients */}
@@ -507,22 +575,31 @@ export default function InterviewPage() {
                 </ul>
               </div>
               
-              {/* Webcam Area */}
-              <div style={{ marginTop: '20px', padding: '12px', borderRadius: '12px', background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>
-                <button 
-                  onClick={toggleCamera} 
-                  style={{ width: '100%', padding: '8px', borderRadius: '8px', background: camActive ? 'rgba(255, 77, 77, 0.15)' : 'rgba(38, 222, 129, 0.15)', color: camActive ? '#ff4d4d' : '#26de81', border: `1px solid ${camActive ? '#ff4d4d' : '#26de81'}`, fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', marginBottom: camActive ? '10px' : '0', transition: 'all 0.3s ease' }}
-                >
-                  <i className={`fa-solid ${camActive ? 'fa-video-slash' : 'fa-video'} mr-2`} />
-                  {camActive ? 'ปิดกล้อง' : 'เปิดกล้อง (เสมือนจริง)'}
-                </button>
-                <video 
-                  ref={videoRef} 
-                  autoPlay 
-                  playsInline 
-                  muted 
-                  style={{ width: '100%', borderRadius: '8px', display: camActive ? 'block' : 'none', transform: 'scaleX(-1)' }} 
-                />
+              {/* Webcam Area - ใหญ่ขึ้นเมื่อ Voice Mode */}
+              <div style={{ marginTop: '16px' }}>
+                {!camActive && (
+                  <button
+                    onClick={toggleCamera}
+                    style={{ width: '100%', padding: '8px', borderRadius: '8px', background: 'rgba(38,222,129,0.1)', color: '#26de81', border: '1px solid #26de81', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s ease' }}
+                  >
+                    <i className="fa-solid fa-video mr-2" />เปิดกล้อง
+                  </button>
+                )}
+                {camActive && (
+                  <div style={{ position: 'relative' }}>
+                    <video
+                      ref={videoRef}
+                      autoPlay playsInline muted
+                      style={{ width: '100%', borderRadius: '12px', transform: 'scaleX(-1)', display: 'block', boxShadow: '0 0 16px rgba(255,122,0,0.3)' }}
+                    />
+                    <button
+                      onClick={toggleCamera}
+                      style={{ position: 'absolute', top: '6px', right: '6px', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', color: '#ff4d4d', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <i className="fa-solid fa-xmark" />
+                    </button>
+                  </div>
+                )}
               </div>
 
             </div>
