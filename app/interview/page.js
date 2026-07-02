@@ -36,13 +36,15 @@ const SYSTEM_PROMPT = (name) =>
 3. ไหวพริบและการคิดเชิงวิเคราะห์
 
 กฎสำคัญ:
+- **ตอบเป็นภาษาไทยเท่านั้น ห้ามใช้ภาษาอังกฤษโดยเด็ดขาด แม้แต่คำเดียว**
 - ถามทีละ 1 คำถามเท่านั้น รอฟังคำตอบก่อนถามต่อ
 - นำข้อมูลจากคำตอบที่ผ่านมาต่อยอดถามเจาะลึก (follow-up)
 - เริ่มจากคำถามทั่วไป → ค่อยๆ ยกระดับความยาก
 - หลังจากผู้สมัครตอบ ให้ feedback สั้นๆ ว่าดีหรือควรปรับตรงไหน แล้วถามต่อ
-- ใช้ภาษาสุภาพ ทางการ แต่เป็นกันเอง
+- ใช้ภาษาไทยสุภาพ ทางการ แต่เป็นกันเอง ห้ามสลับภาษาอังกฤษ
 - ห้ามพูดซ้ำหรือวกวน
-- หากผู้สมัครยังไม่ได้บอกอาชีพที่ต้องการ ให้ถามก่อนเป็นคำถามแรก`;
+- หากผู้สมัครยังไม่ได้บอกอาชีพที่ต้องการ ให้ถามก่อนเป็นคำถามแรก
+- ตอบสั้น กระชับ ไม่เกิน 3-4 ประโยค เพื่อให้ฟังออกทางเสียงได้ง่าย`;
 
 export default function InterviewPage() {
   const { user, loading } = useAuth();
@@ -184,26 +186,29 @@ export default function InterviewPage() {
     setSpeaking(true);
     startMouthAnim();
 
-    if (typeof window !== 'undefined' && window.responsiveVoice && window.responsiveVoice.voiceSupport()) {
-      window.responsiveVoice.cancel();
-      window.responsiveVoice.speak(clean, 'Thai Male', {
-        rate: 0.9, pitch: 0.8, volume: 1,
-        onstart: () => { setSpeaking(true); startMouthAnim(); },
-        onend:   () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); },
-        onerror: () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); },
-      });
-      return;
+    if (!('speechSynthesis' in window)) {
+      setSpeaking(false); stopMouthAnim(); onDone && onDone(); return;
     }
 
-    if (!('speechSynthesis' in window)) { setSpeaking(false); stopMouthAnim(); onDone && onDone(); return; }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(clean);
-    if (selectedVoiceRef.current) { u.voice = selectedVoiceRef.current; u.lang = selectedVoiceRef.current.lang; }
-    else { u.lang = 'th-TH'; }
-    u.rate = 0.92; u.pitch = 0.85; u.volume = 1.0;
+
+    // Try to find the best Thai voice available
+    const allVoices = window.speechSynthesis.getVoices();
+    const thaiVoice = allVoices.find(v => v.lang === 'th-TH' || v.lang === 'th') ||
+                      allVoices.find(v => v.lang.startsWith('th'));
+    if (thaiVoice) {
+      u.voice = thaiVoice;
+      u.lang  = thaiVoice.lang;
+    } else {
+      u.lang = 'th-TH';
+    }
+    u.rate   = 0.88;
+    u.pitch  = 0.9;
+    u.volume = 1.0;
     u.onstart = () => { setSpeaking(true);  startMouthAnim(); };
-    u.onend   = () => { setSpeaking(false); stopMouthAnim();  onDone && onDone(); };
-    u.onerror = () => { setSpeaking(false); stopMouthAnim();  onDone && onDone(); };
+    u.onend   = () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); };
+    u.onerror = () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); };
     window.speechSynthesis.speak(u);
   }
 
