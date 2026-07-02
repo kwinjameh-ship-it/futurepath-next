@@ -223,7 +223,7 @@ export default function InterviewPage() {
             const source = audioCtx.createBufferSource();
             source.buffer = audioBuffer;
             // ลด pitch ลง -350 cents = เสียงทุ้มเข้ม เหมือนผู้ชาย อายุผู้ใหญ่
-            source.detune.value = -350;
+            source.detune.value = -700;
             // ความเร็วในการพูด (1.15 = เร็วขึ้น 15% แต่ pitch ไม่เปลี่ยนเพราะเราใช้ detune ควบคุมแยก)
             source.playbackRate.value = 1.4;
             source.connect(audioCtx.destination);
