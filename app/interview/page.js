@@ -175,11 +175,35 @@ export default function InterviewPage() {
   }
 
   /* ── TTS: Google Translate (primary) + Web Speech API (fallback) ── */
-  const voiceModeRef = useRef(false);
+  const voiceModeRef      = useRef(false);
+  const currentAudioCtx   = useRef(null); // ติดตาม AudioContext ที่กำลังเล่นอยู่
+  const currentSource     = useRef(null); // ติดตาม source node ที่กำลังเล่นอยู่
+  const isSpeakingRef     = useRef(false); // ป้องกัน overlap
+
+  function stopAllAudio() {
+    // หยุด Web Speech API
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    // หยุด AudioBufferSource ที่กำลังเล่นอยู่
+    if (currentSource.current) {
+      try { currentSource.current.stop(); } catch {}
+      currentSource.current = null;
+    }
+    if (currentAudioCtx.current) {
+      try { currentAudioCtx.current.close(); } catch {}
+      currentAudioCtx.current = null;
+    }
+    isSpeakingRef.current = false;
+    setSpeaking(false);
+    stopMouthAnim();
+  }
+
   useEffect(() => { voiceModeRef.current = voiceMode; }, [voiceMode]);
   useEffect(() => { handleSendRef.current = handleSend; });
 
   async function speakTextWithCallback(text, onDone) {
+    // หยุดเสียงที่กำลังเล่นอยู่ทั้งหมดก่อน
+    stopAllAudio();
+    isSpeakingRef.current = true;
     const clean = text
       .replace(/\*\*(.*?)\*\*/g, '$1')
       .replace(/\*/g, '')
@@ -212,23 +236,32 @@ export default function InterviewPage() {
 
       for (const chunk of chunks) {
         if (!chunk) continue;
+        // ถ้ามีการสั่งหยุด (เช่น เริ่มเสียงใหม่ก่อน) หยุดเลย
+        if (!isSpeakingRef.current) break;
         await new Promise(async (resolve) => {
           try {
             const url = `/api/tts?text=${encodeURIComponent(chunk)}`;
             const response = await fetch(url);
             const arrayBuffer = await response.arrayBuffer();
 
+            if (!isSpeakingRef.current) { resolve(); return; }
+
             const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            currentAudioCtx.current = audioCtx;
             const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 
             const source = audioCtx.createBufferSource();
+            currentSource.current = source;
             source.buffer = audioBuffer;
-            // ลด pitch ลง -350 cents = เสียงทุ้มเข้ม เหมือนผู้ชาย อายุผู้ใหญ่
-            source.detune.value = -200;  // เสียงทุ้มนุ่ม เหมือนผู้หญิงวัยผู้ใหญ่
-            // ความเร็วในการพูด (1.15 = เร็วขึ้น 15% แต่ pitch ไม่เปลี่ยนเพราะเราใช้ detune ควบคุมแยก)
+            source.detune.value = -200;
             source.playbackRate.value = 1.4;
             source.connect(audioCtx.destination);
-            source.onended = () => { audioCtx.close(); resolve(); };
+            source.onended = () => {
+              audioCtx.close();
+              currentSource.current = null;
+              currentAudioCtx.current = null;
+              resolve();
+            };
             source.start(0);
           } catch {
             resolve();
