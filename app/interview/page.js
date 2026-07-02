@@ -64,7 +64,9 @@ export default function InterviewPage() {
   const recognitionRef = useRef(null);
   const inputRef       = useRef(null);
   const videoRef       = useRef(null);
+  const handleSendRef  = useRef(null); // ref to handleSend for use inside callbacks
   const [camActive, setCamActive] = useState(false);
+  const [voiceMode, setVoiceMode] = useState(false); // full voice conversation mode
 
   /* ── Webcam Logic ── */
   async function toggleCamera() {
@@ -132,9 +134,15 @@ export default function InterviewPage() {
         r.onstart  = () => setStatus('recording');
         r.onresult = (e) => {
           const t = e.results[0][0].transcript.trim();
-          if (t) { setInputText(t); }
+          if (t) {
+            setInputText(t);
+            // Auto-send after voice recognition
+            setTimeout(() => {
+              handleSendRef.current(t);
+            }, 300);
+          }
         };
-        r.onend = () => setStatus('idle');
+        r.onend = () => setStatus(prev => prev === 'recording' ? 'idle' : prev);
         recognitionRef.current = r;
       }
     }
@@ -157,55 +165,56 @@ export default function InterviewPage() {
     setMouthOpen(false);
   }
 
-  /* ── TTS ── */
-  function speakText(text) {
+  /* ── TTS with callback ── */
+  const voiceModeRef = useRef(false);
+  // Keep voiceModeRef in sync with voiceMode state
+  useEffect(() => { voiceModeRef.current = voiceMode; }, [voiceMode]);
+  // Keep handleSendRef in sync
+  useEffect(() => { handleSendRef.current = handleSend; });
+
+  function speakTextWithCallback(text, onDone) {
     const clean = text
       .replace(/\*\*(.*?)\*\*/g, '$1')
       .replace(/\*/g, '')
       .replace(/<br>/g, ' ')
       .replace(/<[^>]+>/g, '')
       .trim();
-    if (!clean) return;
+    if (!clean) { onDone && onDone(); return; }
 
     setSpeaking(true);
     startMouthAnim();
 
-    // ── ResponsiveVoice (Thai Male) ──
     if (typeof window !== 'undefined' && window.responsiveVoice && window.responsiveVoice.voiceSupport()) {
       window.responsiveVoice.cancel();
       window.responsiveVoice.speak(clean, 'Thai Male', {
-        rate: 0.9,
-        pitch: 0.8,
-        volume: 1,
+        rate: 0.9, pitch: 0.8, volume: 1,
         onstart: () => { setSpeaking(true); startMouthAnim(); },
-        onend:   () => { setSpeaking(false); stopMouthAnim(); },
-        onerror: () => { setSpeaking(false); stopMouthAnim(); },
+        onend:   () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); },
+        onerror: () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); },
       });
       return;
     }
 
-    // ── Fallback: Web Speech API ──
-    if (!('speechSynthesis' in window)) { setSpeaking(false); stopMouthAnim(); return; }
+    if (!('speechSynthesis' in window)) { setSpeaking(false); stopMouthAnim(); onDone && onDone(); return; }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(clean);
-    if (selectedVoiceRef.current) {
-      u.voice = selectedVoiceRef.current;
-      u.lang  = selectedVoiceRef.current.lang;
-    } else {
-      u.lang = 'th-TH';
-    }
-    u.rate   = 0.92;
-    u.pitch  = 0.85;
-    u.volume = 1.0;
+    if (selectedVoiceRef.current) { u.voice = selectedVoiceRef.current; u.lang = selectedVoiceRef.current.lang; }
+    else { u.lang = 'th-TH'; }
+    u.rate = 0.92; u.pitch = 0.85; u.volume = 1.0;
     u.onstart = () => { setSpeaking(true);  startMouthAnim(); };
-    u.onend   = () => { setSpeaking(false); stopMouthAnim();  };
-    u.onerror = () => { setSpeaking(false); stopMouthAnim();  };
+    u.onend   = () => { setSpeaking(false); stopMouthAnim();  onDone && onDone(); };
+    u.onerror = () => { setSpeaking(false); stopMouthAnim();  onDone && onDone(); };
     window.speechSynthesis.speak(u);
   }
 
-  /* ── Send message ── */
-  async function handleSend() {
-    const text = inputText.trim();
+  function speakText(text) { speakTextWithCallback(text, null); }
+
+
+
+
+  /* ── Send message (accepts optional text arg from voice) ── */
+  async function handleSend(voiceText) {
+    const text = (typeof voiceText === 'string' ? voiceText : inputText).trim();
     if (!text || status === 'processing') return;
 
     setInputText('');
@@ -231,8 +240,17 @@ export default function InterviewPage() {
     setHistory(prev => [...prev, { role: 'model', parts: [{ text: aiReply }] }]);
     setMessages(prev => [...prev, { sender: 'ai', text: aiReply }]);
     setQCount(c => c + 1);
-    speakText(aiReply);
     setStatus('idle');
+
+    // Speak AI reply — then if voiceMode, auto-open mic again
+    speakTextWithCallback(aiReply, () => {
+      if (voiceModeRef.current && recognitionRef.current) {
+        setTimeout(() => {
+          try { recognitionRef.current.start(); } catch {}
+        }, 600);
+      }
+    });
+
     setTimeout(() => inputRef.current?.focus(), 100);
   }
 
@@ -593,11 +611,49 @@ export default function InterviewPage() {
                 <i className="fa-solid fa-paper-plane" />
                 ส่ง
               </button>
+
+              {/* Voice Mode toggle */}
+              <button
+                onClick={() => {
+                  const newMode = !voiceMode;
+                  setVoiceMode(newMode);
+                  if (newMode) {
+                    // Start first listen
+                    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+                    if (recognitionRef.current) {
+                      try { recognitionRef.current.start(); } catch {}
+                    }
+                  } else {
+                    // Stop listening
+                    if (recognitionRef.current) {
+                      try { recognitionRef.current.stop(); } catch {}
+                    }
+                  }
+                }}
+                title={voiceMode ? 'ปิดโหมดเสียง' : 'เปิดโหมดคุยด้วยเสียงได้เลย'}
+                style={{
+                  height: '50px', padding: '0 16px', borderRadius: '16px', flexShrink: 0,
+                  cursor: 'pointer', fontFamily: 'Kanit,sans-serif', fontWeight: 700, fontSize: '0.82rem',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  transition: 'all 0.3s ease',
+                  background: voiceMode ? 'rgba(255, 75, 0, 0.15)' : 'rgba(38, 222, 129, 0.1)',
+                  border: `1px solid ${voiceMode ? '#ff4b00' : '#26de81'}`,
+                  color: voiceMode ? '#ff4b00' : '#26de81',
+                  boxShadow: voiceMode ? '0 0 12px rgba(255,75,0,0.3)' : 'none',
+                  animation: voiceMode ? 'pulse 1.5s ease infinite' : 'none',
+                }}
+              >
+                <i className={`fa-solid ${voiceMode ? 'fa-comment-slash' : 'fa-comments'}`} />
+                {voiceMode ? 'กำลังฟัง...' : 'คุยแบบเสียง'}
+              </button>
             </div>
 
             {/* Hint */}
             <p style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textAlign: 'center', margin: 0 }}>
-              Enter เพื่อส่ง  •  Shift+Enter ขึ้นบรรทัดใหม่  •  🎙️ กดไมค์เพื่อพูด
+              {voiceMode
+                ? '🟢 โหมดคุยเสียงเปิดอยู่ — พูดออกมาเลย ระบบจะส่งให้ AI ตอบแล้วเปิดไมค์ต่อเองอัตโนมัติ'
+                : 'Enter เพื่อส่ง  •  Shift+Enter ขึ้นบรรทัดใหม่  •  🎤 อัดเสียง  •  💬 คุยแบบเสียง'
+              }
             </p>
           </div>
         </div>
