@@ -63,6 +63,37 @@ export default function InterviewPage() {
   const chatRef        = useRef(null);
   const recognitionRef = useRef(null);
   const inputRef       = useRef(null);
+  const videoRef       = useRef(null);
+  const [camActive, setCamActive] = useState(false);
+
+  /* ── Webcam Logic ── */
+  async function toggleCamera() {
+    if (camActive) {
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(t => t.stop());
+        videoRef.current.srcObject = null;
+      }
+      setCamActive(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        setCamActive(true);
+      } catch (err) {
+        showModal('error', 'เปิดกล้องไม่ได้', 'กรุณาอนุญาตให้เบราว์เซอร์เข้าถึงกล้องของคุณบน Address Bar ครับ');
+      }
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        videoRef.current.srcObject.getTracks().forEach(t => t.stop());
+      }
+    };
+  }, []);
 
   /* ── Load & pick best Thai voice ── */
   useEffect(() => {
@@ -391,6 +422,25 @@ export default function InterviewPage() {
                   ))}
                 </ul>
               </div>
+              
+              {/* Webcam Area */}
+              <div style={{ marginTop: '20px', padding: '12px', borderRadius: '12px', background: 'var(--card-bg)', border: '1px solid var(--card-border)' }}>
+                <button 
+                  onClick={toggleCamera} 
+                  style={{ width: '100%', padding: '8px', borderRadius: '8px', background: camActive ? 'rgba(255, 77, 77, 0.15)' : 'rgba(38, 222, 129, 0.15)', color: camActive ? '#ff4d4d' : '#26de81', border: `1px solid ${camActive ? '#ff4d4d' : '#26de81'}`, fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', marginBottom: camActive ? '10px' : '0', transition: 'all 0.3s ease' }}
+                >
+                  <i className={`fa-solid ${camActive ? 'fa-video-slash' : 'fa-video'} mr-2`} />
+                  {camActive ? 'ปิดกล้อง' : 'เปิดกล้อง (เสมือนจริง)'}
+                </button>
+                <video 
+                  ref={videoRef} 
+                  autoPlay 
+                  playsInline 
+                  muted 
+                  style={{ width: '100%', borderRadius: '8px', display: camActive ? 'block' : 'none', transform: 'scaleX(-1)' }} 
+                />
+              </div>
+
             </div>
           </div>
 
