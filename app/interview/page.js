@@ -503,11 +503,26 @@ export default function InterviewPage() {
         </div>
 
         {/* ── Main Layout ── */}
-        <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: '20px', alignItems: 'start' }}>
+        <div style={
+          interviewMode === 'voice'
+            ? { display: 'flex', flexDirection: 'column', gap: '24px' }
+            : { display: 'grid', gridTemplateColumns: '200px 1fr', gap: '20px', alignItems: 'start' }
+        }>
 
-          {/* ── HR Avatar Panel ── */}
-          <div className="fade-in-up" style={{ animationDelay: '0.1s' }}>
-            <div style={{ borderRadius: '20px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', padding: '24px 16px', textAlign: 'center', backdropFilter: 'blur(12px)' }}>
+          {/* ── Top Section (Voice) or Sidebar (Chat) ── */}
+          <div style={
+            interviewMode === 'voice'
+              ? { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', minHeight: '45vh' }
+              : { width: '100%' }
+          }>
+            {/* ── HR Avatar Panel ── */}
+            <div className="fade-in-up" style={{ animationDelay: '0.1s' }}>
+              <div style={{ 
+                borderRadius: '20px', background: 'var(--card-bg)', border: '1px solid var(--card-border)', 
+                padding: interviewMode === 'voice' ? '40px 20px' : '24px 16px', 
+                textAlign: 'center', backdropFilter: 'blur(12px)',
+                height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+              }}>
               {/* ── Animated Avatar ── */}
               <div style={{ position: 'relative', marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
 
@@ -619,35 +634,81 @@ export default function InterviewPage() {
                 </ul>
               </div>
               
-              {/* Webcam Area - ใหญ่ขึ้นเมื่อ Voice Mode */}
-              <div style={{ marginTop: '16px' }}>
+              {/* Webcam Area - Small (Only for Chat Mode if they want to turn it on) */}
+              {interviewMode !== 'voice' && (
+                <div style={{ marginTop: '16px', width: '100%' }}>
+                  {!camActive && (
+                    <button
+                      onClick={toggleCamera}
+                      style={{ width: '100%', padding: '8px', borderRadius: '8px', background: 'rgba(38,222,129,0.1)', color: '#26de81', border: '1px solid #26de81', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s ease' }}
+                    >
+                      <i className="fa-solid fa-video mr-2" />เปิดกล้อง
+                    </button>
+                  )}
+                  {camActive && (
+                    <div style={{ position: 'relative' }}>
+                      <video
+                        ref={videoRef}
+                        autoPlay playsInline muted
+                        style={{ width: '100%', borderRadius: '12px', transform: 'scaleX(-1)', display: 'block', boxShadow: '0 0 16px rgba(255,122,0,0.3)' }}
+                      />
+                      <button
+                        onClick={toggleCamera}
+                        style={{ position: 'absolute', top: '6px', right: '6px', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', color: '#ff4d4d', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <i className="fa-solid fa-xmark" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── User Camera Panel (Only for Voice Mode) ── */}
+          {interviewMode === 'voice' && (
+            <div className="fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div style={{ 
+                borderRadius: '20px', background: '#080504', border: '1px solid var(--card-border)', 
+                height: '100%', position: 'relative', overflow: 'hidden',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: camActive ? '0 0 40px rgba(38,222,129,0.1)' : 'none'
+              }}>
                 {!camActive && (
                   <button
                     onClick={toggleCamera}
-                    style={{ width: '100%', padding: '8px', borderRadius: '8px', background: 'rgba(38,222,129,0.1)', color: '#26de81', border: '1px solid #26de81', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s ease' }}
+                    style={{ padding: '16px 32px', borderRadius: '12px', background: 'rgba(38,222,129,0.15)', color: '#26de81', border: '2px solid #26de81', fontSize: '1.1rem', fontWeight: 700, cursor: 'pointer', transition: 'all 0.3s ease', display: 'flex', alignItems: 'center', gap: '10px' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(38,222,129,0.25)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(38,222,129,0.15)'; e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
-                    <i className="fa-solid fa-video mr-2" />เปิดกล้อง
+                    <i className="fa-solid fa-video" /> เปิดกล้องผู้สมัคร
                   </button>
                 )}
                 {camActive && (
-                  <div style={{ position: 'relative' }}>
+                  <>
                     <video
                       ref={videoRef}
                       autoPlay playsInline muted
-                      style={{ width: '100%', borderRadius: '12px', transform: 'scaleX(-1)', display: 'block', boxShadow: '0 0 16px rgba(255,122,0,0.3)' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transform: 'scaleX(-1)', display: 'block' }}
                     />
+                    {/* User Name Tag */}
+                    <div style={{ position: 'absolute', bottom: '16px', left: '16px', background: 'rgba(0,0,0,0.6)', padding: '6px 14px', borderRadius: '10px', color: '#fff', fontSize: '0.9rem', fontWeight: 600, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                      {user?.name || 'ผู้สมัคร'}
+                    </div>
+                    {/* Close Camera btn */}
                     <button
                       onClick={toggleCamera}
-                      style={{ position: 'absolute', top: '6px', right: '6px', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: 'none', color: '#ff4d4d', cursor: 'pointer', fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{ position: 'absolute', top: '16px', right: '16px', width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(0,0,0,0.6)', border: '1px solid rgba(255,255,255,0.2)', color: '#ff4d4d', cursor: 'pointer', fontSize: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}
                     >
-                      <i className="fa-solid fa-xmark" />
+                      <i className="fa-solid fa-video-slash" />
                     </button>
-                  </div>
+                  </>
                 )}
               </div>
-
             </div>
-          </div>
+          )}
+
+        </div>
 
 
           {/* ── Chat Area ── */}
@@ -657,7 +718,7 @@ export default function InterviewPage() {
             <div
               ref={chatRef}
               style={{
-                height: '55vh', overflowY: 'auto',
+                height: interviewMode === 'voice' ? '30vh' : '55vh', overflowY: 'auto',
                 borderRadius: '20px',
                 background: 'var(--card-bg)',
                 backdropFilter: 'blur(20px)',
