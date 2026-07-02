@@ -127,6 +127,12 @@ export default function InterviewPage() {
         { role: 'model',  parts: [{ text: INIT_MSG }] },
       ]);
 
+      // Speak the opening greeting after voices are loaded
+      setTimeout(() => {
+        speakTextWithCallback(INIT_MSG, null);
+      }, 1200);
+
+
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (SR) {
         const r = new SR();
