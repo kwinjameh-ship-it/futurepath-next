@@ -173,45 +173,67 @@ export default function InterviewPage() {
     setMouthOpen(false);
   }
 
-  /* ── TTS with callback ── */
+  /* ── TTS: Google Translate (primary) + Web Speech API (fallback) ── */
   const voiceModeRef = useRef(false);
-  // Keep voiceModeRef in sync with voiceMode state
   useEffect(() => { voiceModeRef.current = voiceMode; }, [voiceMode]);
-  // Keep handleSendRef in sync
   useEffect(() => { handleSendRef.current = handleSend; });
 
-  function speakTextWithCallback(text, onDone) {
+  async function speakTextWithCallback(text, onDone) {
     const clean = text
       .replace(/\*\*(.*?)\*\*/g, '$1')
       .replace(/\*/g, '')
       .replace(/<br>/g, ' ')
       .replace(/<[^>]+>/g, '')
+      .replace(/[\u{1F600}-\u{1F9FF}]/gu, '') // strip emoji
       .trim();
     if (!clean) { onDone && onDone(); return; }
 
     setSpeaking(true);
     startMouthAnim();
 
+    // — Primary: Google Translate TTS (ภาษาไทย 100%) —
+    try {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+      // Split into chunks max 200 chars to avoid URL limits
+      const chunks = [];
+      let remaining = clean;
+      while (remaining.length > 0) {
+        const chunk = remaining.slice(0, 200);
+        chunks.push(chunk);
+        remaining = remaining.slice(200);
+      }
+
+      for (let i = 0; i < chunks.length; i++) {
+        await new Promise((resolve) => {
+          const encoded = encodeURIComponent(chunks[i]);
+          const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=th&client=tw-ob`;
+          const audio = new Audio(url);
+          audio.rate = 1;
+          audio.onended = () => resolve();
+          audio.onerror = () => resolve(); // fallback silently
+          audio.play().catch(() => resolve());
+        });
+      }
+
+      setSpeaking(false);
+      stopMouthAnim();
+      onDone && onDone();
+      return;
+    } catch {}
+
+    // — Fallback: Web Speech API —
     if (!('speechSynthesis' in window)) {
       setSpeaking(false); stopMouthAnim(); onDone && onDone(); return;
     }
-
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(clean);
-
-    // Try to find the best Thai voice available
-    const allVoices = window.speechSynthesis.getVoices();
-    const thaiVoice = allVoices.find(v => v.lang === 'th-TH' || v.lang === 'th') ||
-                      allVoices.find(v => v.lang.startsWith('th'));
-    if (thaiVoice) {
-      u.voice = thaiVoice;
-      u.lang  = thaiVoice.lang;
-    } else {
-      u.lang = 'th-TH';
-    }
-    u.rate   = 0.88;
-    u.pitch  = 0.9;
-    u.volume = 1.0;
+    // Use cached Thai voice or search again
+    const voice = selectedVoiceRef.current ||
+      window.speechSynthesis.getVoices().find(v => v.lang.startsWith('th'));
+    if (voice) { u.voice = voice; u.lang = voice.lang; }
+    else { u.lang = 'th-TH'; }
+    u.rate = 0.88; u.pitch = 0.9; u.volume = 1.0;
     u.onstart = () => { setSpeaking(true);  startMouthAnim(); };
     u.onend   = () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); };
     u.onerror = () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); };
@@ -219,8 +241,6 @@ export default function InterviewPage() {
   }
 
   function speakText(text) { speakTextWithCallback(text, null); }
-
-
 
 
   /* ── Send message (accepts optional text arg from voice) ── */
