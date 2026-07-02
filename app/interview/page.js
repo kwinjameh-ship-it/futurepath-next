@@ -184,34 +184,38 @@ export default function InterviewPage() {
       .replace(/\*/g, '')
       .replace(/<br>/g, ' ')
       .replace(/<[^>]+>/g, '')
-      .replace(/[\u{1F600}-\u{1F9FF}]/gu, '') // strip emoji
+      .replace(/[^\u0000-\u007F\u0E00-\u0E7F\s]/g, '') // keep ASCII + Thai only
       .trim();
     if (!clean) { onDone && onDone(); return; }
 
     setSpeaking(true);
     startMouthAnim();
 
-    // — Primary: Google Translate TTS (ภาษาไทย 100%) —
+    // — Primary: /api/tts proxy → Google TTS (ภาษาไทย 100%) —
     try {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
-      // Split into chunks max 200 chars to avoid URL limits
+      // แบ่งข้อความเป็น chunk ไม่เกิน 180 ตัวอักษร
       const chunks = [];
       let remaining = clean;
       while (remaining.length > 0) {
-        const chunk = remaining.slice(0, 200);
-        chunks.push(chunk);
-        remaining = remaining.slice(200);
+        // ตัดที่ช่องว่างเพื่อไม่ให้คำขาดกลาง
+        let cutAt = Math.min(180, remaining.length);
+        if (cutAt < remaining.length) {
+          const lastSpace = remaining.lastIndexOf(' ', cutAt);
+          if (lastSpace > 80) cutAt = lastSpace;
+        }
+        chunks.push(remaining.slice(0, cutAt).trim());
+        remaining = remaining.slice(cutAt).trim();
       }
 
-      for (let i = 0; i < chunks.length; i++) {
+      for (const chunk of chunks) {
+        if (!chunk) continue;
         await new Promise((resolve) => {
-          const encoded = encodeURIComponent(chunks[i]);
-          const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encoded}&tl=th&client=tw-ob`;
+          const url = `/api/tts?text=${encodeURIComponent(chunk)}`;
           const audio = new Audio(url);
-          audio.rate = 1;
           audio.onended = () => resolve();
-          audio.onerror = () => resolve(); // fallback silently
+          audio.onerror = () => resolve();
           audio.play().catch(() => resolve());
         });
       }
@@ -220,7 +224,9 @@ export default function InterviewPage() {
       stopMouthAnim();
       onDone && onDone();
       return;
-    } catch {}
+    } catch {
+      // ถ้า proxy ล้มเหลว ใช้ Web Speech API
+    }
 
     // — Fallback: Web Speech API —
     if (!('speechSynthesis' in window)) {
@@ -228,7 +234,6 @@ export default function InterviewPage() {
     }
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(clean);
-    // Use cached Thai voice or search again
     const voice = selectedVoiceRef.current ||
       window.speechSynthesis.getVoices().find(v => v.lang.startsWith('th'));
     if (voice) { u.voice = voice; u.lang = voice.lang; }
@@ -239,6 +244,7 @@ export default function InterviewPage() {
     u.onerror = () => { setSpeaking(false); stopMouthAnim(); onDone && onDone(); };
     window.speechSynthesis.speak(u);
   }
+
 
   function speakText(text) { speakTextWithCallback(text, null); }
 
