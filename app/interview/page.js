@@ -67,12 +67,24 @@ export default function InterviewPage() {
   const recognitionRef = useRef(null);
   const inputRef       = useRef(null);
   const videoRef       = useRef(null);
-  const handleSendRef  = useRef(null); // ref to handleSend for use inside callbacks
+  const streamRef      = useRef(null); // เก็บ stream ไว้ก่อน videoRef จะ render
+  const handleSendRef  = useRef(null);
   const [camActive, setCamActive] = useState(false);
-  const [voiceMode, setVoiceMode] = useState(false); // full voice conversation mode
+  const [voiceMode, setVoiceMode] = useState(false);
 
-  /* ── Webcam Logic ── */
-  async function toggleCamera() {
+  /* ── Attach camera stream to video element once it renders ── */
+  useEffect(() => {
+    if (camActive && streamRef.current && videoRef.current && !videoRef.current.srcObject) {
+      videoRef.current.srcObject = streamRef.current;
+    }
+  }, [camActive, interviewMode]);
+
+  /* ── Cleanup camera on unmount ── */
+  useEffect(() => {
+    return () => {
+      if (streamRef.current) streamRef.current.getTracks().forEach(t => t.stop());
+    };
+  }, []);
     if (camActive) {
       if (videoRef.current && videoRef.current.srcObject) {
         videoRef.current.srcObject.getTracks().forEach(t => t.stop());
@@ -85,20 +97,26 @@ export default function InterviewPage() {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+  /* ── Webcam toggle ── */
+  async function toggleCamera() {
+    if (camActive) {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(t => t.stop());
+        streamRef.current = null;
+      }
+      if (videoRef.current) videoRef.current.srcObject = null;
+      setCamActive(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        streamRef.current = stream;
+        if (videoRef.current) videoRef.current.srcObject = stream;
         setCamActive(true);
-      } catch (err) {
-        showModal('error', 'เปิดกล้องไม่ได้', 'กรุณาอนุญาตให้เบราว์เซอร์เข้าถึงกล้องของคุณบน Address Bar ครับ');
+      } catch {
+        showModal('error', 'เปิดกล้องไม่ได้', 'กรุณาอนุญาตให้เบราว์เซอร์เข้าถึงกล้องบน Address Bar ค่ะ');
       }
     }
   }
-
-  useEffect(() => {
-    return () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        videoRef.current.srcObject.getTracks().forEach(t => t.stop());
-      }
-    };
-  }, []);
 
   /* ── Load & pick best Thai voice ── */
   useEffect(() => {
