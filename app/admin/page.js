@@ -18,10 +18,9 @@ export default function AdminDashboard() {
   const [selectedSchool, setSelectedSchool] = useState('all');
 
   useEffect(() => {
-    fetch(GOOGLE_SCRIPT_URL, {
+    fetch('/api/sheet-proxy', {
       method: 'POST',
-      mode: 'cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ action: 'getDashboardData' })
     })
       .then(res => res.json())
